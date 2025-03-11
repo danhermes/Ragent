@@ -6,6 +6,8 @@ import soundfile as sf
 from commands import CommandAgent
 from agents import DEFAULT_AGENT
 from agents.base_agent import AgentType
+from speech_to_text import LocalWhisperSTT, OpenAIWhisperSTT, VoskSTT
+from llm import BaseLLM, ChatGPTLLM, TinyLlamaLLM
 import re
 import time
 import torch
@@ -43,27 +45,32 @@ class AudioView:
         self.stream = None
         self.should_stop = False
 
-        # Initialize Whisper only if not already in session state
-        if 'whisper_model' not in st.session_state:
+        # Initialize STT model only if not already in session state
+        if 'stt_model' not in st.session_state:
             try:
-                print("Loading Whisper model...")  # Debug print
-                from faster_whisper import WhisperModel
-                model_size = "base"  # Options: tiny, base, small, medium, large
-                # Use CUDA if available, else CPU
-                device = "cuda" if torch.cuda.is_available() else "cpu"
-                compute_type = "float16" if device == "cuda" else "int8"
-                print(f"Using device: {device}, compute_type: {compute_type}")  # Debug print
-                st.session_state.whisper_model = WhisperModel(model_size, device=device, compute_type=compute_type)
-                print("Whisper model loaded successfully")  # Debug print
-            except ImportError as e:
-                print(f"Error importing faster-whisper: {str(e)}")  # Debug print
-                st.error("Please install faster-whisper: pip install faster-whisper")
-                raise
+                print("Initializing speech-to-text model...")
+                stt = LocalWhisperSTT()  # Default to local Whisper
+                stt.initialize()
+                st.session_state.stt_model = stt
+                print("Speech-to-text model initialized successfully")
             except Exception as e:
-                print(f"Error loading Whisper model: {str(e)}")  # Debug print
+                print(f"Error initializing speech-to-text: {str(e)}")
                 raise
         
-        self.whisper = st.session_state.whisper_model
+        # Initialize LLM only if not already in session state
+        if 'llm_model' not in st.session_state:
+            try:
+                print("Initializing language model...")
+                llm = ChatGPTLLM()  # Default to ChatGPT
+                llm.initialize()
+                st.session_state.llm_model = llm
+                print("Language model initialized successfully")
+            except Exception as e:
+                print(f"Error initializing language model: {str(e)}")
+                raise
+        
+        self.stt = st.session_state.stt_model
+        self.llm = st.session_state.llm_model
         self.is_speaking = False
         self.silence_frames = 0
         self.max_silence_frames = 20  # 1 second of silence (20 * 50ms)
@@ -241,7 +248,7 @@ class AudioView:
             return np.zeros((frames, 1), dtype=np.float32), fs
 
     def process_audio_chunk(self, chunk, fs):
-        """Process audio chunk using local Whisper"""
+        """Process audio chunk using speech-to-text and LLM"""
         print(f"\n🔍 Starting processing of audio chunk: {len(chunk)/fs:.2f}s")
         
         # Safety check for invalid audio data
@@ -279,62 +286,41 @@ class AudioView:
                     return None
                 
                 # Start STT timing
-                stt_start = time.time()
-                print("🎯 Starting Whisper transcription...")
+                print("🎯 Starting speech-to-text transcription...")
                 
                 try:
-                    # Transcribe with local Whisper - Less aggressive settings
-                    segments, info = self.whisper.transcribe(
-                        temp_file, 
-                        beam_size=5,  # Increased beam size for better accuracy
-                        language="en",  # Force English
-                        vad_filter=True,  # Keep VAD filter
-                        vad_parameters=dict(
-                            min_silence_duration_ms=100,  # Even shorter silence detection
-                            speech_pad_ms=200,  # More padding around speech
-                            threshold=0.1  # Much more lenient threshold
-                        ),
-                        condition_on_previous_text=False,  # Don't condition on previous text
-                        compression_ratio_threshold=2.4,  # More lenient compression ratio
-                        temperature=0.0  # No temperature needed for short clips
-                    )
-                    
-                    # Join all segments
-                    text = " ".join([s.text for s in segments]).strip()
-                    stt_time = time.time() - stt_start
+                    # Transcribe audio
+                    text, stt_time = self.stt.transcribe(temp_file)
                     print(f"✨ Transcription result: '{text}'")
                     
                     if text:  # Only process if there's actual text
-                        # Start ChatGPT timing
-                        gpt_start = time.time()
-                        print("\n🤖 Starting GPT processing...")
+                        # Start LLM timing
+                        print("\n🤖 Starting LLM processing...")
                         print("=" * 50)
-                        print("Sending prompt to ChatGPT:")
-                        print(f"Command: chat")
+                        print("Sending prompt to LLM:")
                         print(f"Text: {text}")
                         print("=" * 50)
                         
                         try:
-                            response = self.command_agent.process_text_command("chat", text)
-                            gpt_time = time.time() - gpt_start
+                            response, llm_time = self.llm.generate_response(text)
                             
-                            print("\n💬 ChatGPT Response:")
+                            print("\n💬 LLM Response:")
                             print("=" * 50)
                             print(response)
                             print("=" * 50)
                             
-                            print(f"⏱️ TIMING - STT: {stt_time:.2f}s, GPT: {gpt_time:.2f}s, Total: {(stt_time + gpt_time):.2f}s")
+                            print(f"⏱️ TIMING - STT: {stt_time:.2f}s, LLM: {llm_time:.2f}s, Total: {(stt_time + llm_time):.2f}s")
                             
                             return response
                         except Exception as e:
-                            print(f"❌ Error in GPT processing: {str(e)}")
+                            print(f"❌ Error in LLM processing: {str(e)}")
                             return None
                     else:
                         print("❌ No text detected in audio")
                         return None
                         
                 except Exception as e:
-                    print(f"❌ Error in Whisper transcription: {str(e)}")
+                    print(f"❌ Error in speech-to-text transcription: {str(e)}")
                     return None
                 
             except Exception as e:
