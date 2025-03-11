@@ -5,7 +5,7 @@
 ## The RAgents So Far
 1. Nevil - a talking PiCar robot built using a Raspberry Pi (8GB RAM) and onboard SST and LLM (TinyLlama)
 2. Blake - a smart but slow agent that employs API calls for TTS (Whisper) and ChatGPT (Nevil may employ Blake for advanced questions and situations)
-2. Cliff - a PC-based web agent that listens to conversations and provides a browser-based HUD for technical terms emplying a local STT (Whisper/Vosk) and ChatGPT
+2. Cliff - a PC-based web agent that listens to conversations and provides a browser-based HUD for technical terms employing a local STT (Whisper/Vosk) and ChatGPT
 
 ## RAgent Options
 - Speech-to-Text - OpenAI Whisper API, Whisper local, and Vosk
