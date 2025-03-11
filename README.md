@@ -1,4 +1,4 @@
-#RAgent (Robot Agent)
+# RAgent (Robot Agent)
 
 **RAgent (Robot Agent)** is for creating agents that can hold LLM-powered STT/TTS conversations, provide a web interface, and even be physically mobile. RAgent runs on a core audio loop where it listens for speech and records it, converts it to text, then sends it as a prompt to an LLM along with instructions. The resulting text output is either converted to speech or displayed in a web browser. 
 
