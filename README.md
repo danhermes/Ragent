@@ -8,5 +8,6 @@
 2. Cliff - a PC-based web agent that listens to conversations and provides a browser-based HUD for technical terms employing a local STT (Whisper/Vosk) and ChatGPT
 
 ## RAgent Options
-- Speech-to-Text - OpenAI Whisper API, Whisper local, and Vosk
-- LLM - ChatGPT, TinyLlama (for Raspberry Pi-driven robots)
+- Interface: Speech(mic/speaker w/ STT/TTS), Text on web browser 
+- Speech-to-Text: OpenAI Whisper API, Whisper local, and Vosk
+- LLM: ChatGPT, TinyLlama (for Raspberry Pi-driven robots)
