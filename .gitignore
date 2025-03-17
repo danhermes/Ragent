@@ -37,3 +37,7 @@ Thumbs.db
 # Project specific
 ~$*
 *.rtf 
+
+streamlit_debug.log
+__pycache__/commands.cpython-38.pyc
+__pycache__/view.cpython-38.pyc
