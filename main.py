@@ -5,11 +5,15 @@ import os
 from view import AudioView
 from dotenv import load_dotenv
 from agents import DEFAULT_AGENT, AgentCliff, AgentNevil
+import logging
 
 
 #RUN: streamlit run main.py --logger.level=debug        
 # Load environment variables
 load_dotenv()
+
+logger = logging.getLogger("main")
+logger.setLevel(logging.DEBUG)
 
 # Configure Streamlit page
 st.set_page_config(initial_sidebar_state="collapsed")
