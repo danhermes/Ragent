@@ -23,7 +23,7 @@ class CommandAgent:
                 text = self.transcribe_audio(input_file) or "" 
                 logger.debug("Transcribed text: " + text)
                 if text:
-                    # 2. Get ChatGPT response
+                    # 2. Get LLM response
                     response = self.chat_agent.get_chat_response(text) or "" 
                     logger.debug(response)
                     if response:
