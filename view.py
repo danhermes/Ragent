@@ -12,6 +12,8 @@ import re
 import time
 import torch
 import logging
+import sys
+import psutil
 
 # Configure logging
 logger = logging.getLogger("streamlit")
@@ -24,14 +26,27 @@ console_handler.setFormatter(formatter)
 if not logger.handlers:
     logger.addHandler(console_handler)
 
+def force_stop_streamlit():
+    """Force stop all Streamlit and Python processes"""
+    try:
+        for proc in psutil.process_iter(['pid', 'name']):
+            try:
+                if 'streamlit' in proc.info['name'].lower() or 'python' in proc.info['name'].lower():
+                    proc.kill()
+                    logger.info(f"Killed process: {proc.info['pid']} - {proc.info['name']}")
+            except (psutil.NoSuchProcess, psutil.AccessDenied):
+                pass
+    except Exception as e:
+        logger.error(f"Error killing processes: {e}")
+
 class AudioView:
     def __init__(self, agent=None):
         # Check if already initialized
         if 'audio_view_instance' in st.session_state:
-            print("⚠️ AudioView already initialized, reusing existing instance")
+            logger.debug("⚠️ AudioView already initialized, reusing existing instance")
             return
             
-        print("Initializing AudioView...")  # Debug print
+        logger.debug("Initializing AudioView...")
         st.session_state.audio_view_instance = True
         
         self.agent = agent if agent else DEFAULT_AGENT()
@@ -44,29 +59,30 @@ class AudioView:
         # Initialize audio stream
         self.stream = None
         self.should_stop = False
+        self.is_running = False
 
         # Initialize STT model only if not already in session state
         if 'stt_model' not in st.session_state:
             try:
-                print("Initializing speech-to-text model...")
+                logger.debug("Initializing speech-to-text model...")
                 stt = LocalWhisperSTT()  # Default to local Whisper
                 stt.initialize()
                 st.session_state.stt_model = stt
-                print("Speech-to-text model initialized successfully")
+                logger.debug("Speech-to-text model initialized successfully")
             except Exception as e:
-                print(f"Error initializing speech-to-text: {str(e)}")
+                logger.error(f"Error initializing speech-to-text: {str(e)}")
                 raise
         
         # Initialize LLM only if not already in session state
         if 'llm_model' not in st.session_state:
             try:
-                print("Initializing language model...")
+                logger.debug("Initializing language model...")
                 llm = ChatGPTLLM()  # Default to ChatGPT
                 llm.initialize()
                 st.session_state.llm_model = llm
-                print("Language model initialized successfully")
+                logger.debug("Language model initialized successfully")
             except Exception as e:
-                print(f"Error initializing language model: {str(e)}")
+                logger.error(f"Error initializing language model: {str(e)}")
                 raise
         
         self.stt = st.session_state.stt_model
@@ -209,16 +225,23 @@ class AudioView:
 
     def cleanup(self):
         """Clean up resources"""
-        print("Cleaning up resources...")
+        logger.info("Cleaning up resources...")
         try:
+            self.is_running = False
             if self.stream:
                 self.stream.abort()  # Force stop immediately
                 self.stream.close()
                 self.stream = None
             sd.stop()  # Stop all sounddevice streams
+            if 'audio_view_running' in st.session_state:
+                st.session_state.audio_view_running = False
+            if 'audio_view_instance' in st.session_state:
+                st.session_state.audio_view_instance = None
+            # Force stop any remaining processes
+            force_stop_streamlit()
         except Exception as e:
-            print(f"Error during cleanup: {e}")
-        print("Cleanup complete")
+            logger.error(f"Error during cleanup: {e}")
+        logger.info("Cleanup complete")
 
     def record_audio_chunk(self, duration=0.05):  # 50ms chunks
         """Record a chunk of audio and return the numpy array and sample rate"""
@@ -341,10 +364,10 @@ class AudioView:
     def audio_view(self):
         # Check if audio view is already running
         if 'audio_view_running' in st.session_state and st.session_state.audio_view_running:
-            print("⚠️ Audio view already running, skipping initialization")
+            logger.warning("⚠️ Audio view already running, skipping initialization")
             return
             
-        print("\n🚀 Starting audio view - Press Ctrl+C to stop\n")
+        logger.info("\n🚀 Starting audio view\n")
         st.session_state.audio_view_running = True
         
         try:
@@ -474,64 +497,64 @@ class AudioView:
                         if self.is_speech(chunk):
                             # Only print buffer size every 50 chunks
                             if len(st.session_state.audio_buffer) % 50 == 0:
-                                print(f"📝 Recording... ({len(st.session_state.audio_buffer)} chunks)")
+                                logger.debug(f"📝 Recording... ({len(st.session_state.audio_buffer)} chunks)")
                             st.session_state.audio_buffer.append(chunk)
                         elif self.is_speaking and self.silence_frames >= self.max_silence_frames:
-                            print(f"\n🔄 Processing speech - {len(st.session_state.audio_buffer)} chunks collected")
+                            logger.info(f"\n🔄 Processing speech - {len(st.session_state.audio_buffer)} chunks collected")
                             if st.session_state.audio_buffer:
                                 try:
-                                    print("⚡ Attempting to concatenate audio chunks...")
+                                    logger.debug("⚡ Attempting to concatenate audio chunks...")
                                     # Debug buffer contents
-                                    print(f"📈 First chunk shape: {st.session_state.audio_buffer[0].shape}")
-                                    print(f"📈 Last chunk shape: {st.session_state.audio_buffer[-1].shape}")
-                                    print(f"📈 Number of chunks: {len(st.session_state.audio_buffer)}")
+                                    logger.debug(f"📈 First chunk shape: {st.session_state.audio_buffer[0].shape}")
+                                    logger.debug(f"📈 Last chunk shape: {st.session_state.audio_buffer[-1].shape}")
+                                    logger.debug(f"📈 Number of chunks: {len(st.session_state.audio_buffer)}")
                                     
                                     try:
                                         combined_audio = np.concatenate(st.session_state.audio_buffer)
-                                        print(f"✅ Concatenation successful")
+                                        logger.debug(f"✅ Concatenation successful")
                                     except Exception as e:
-                                        print(f"❌ Concatenation failed: {str(e)}")
-                                        print(f"📈 Chunk shapes: {[chunk.shape for chunk in st.session_state.audio_buffer]}")
+                                        logger.error(f"❌ Concatenation failed: {str(e)}")
+                                        logger.error(f"📈 Chunk shapes: {[chunk.shape for chunk in st.session_state.audio_buffer]}")
                                         raise
                                     
                                     duration = len(combined_audio)/fs
-                                    print(f"📊 Audio length: {duration:.2f}s ({len(combined_audio)} samples)")
-                                    print(f"📊 Combined shape: {combined_audio.shape}")
+                                    logger.debug(f"📊 Audio length: {duration:.2f}s ({len(combined_audio)} samples)")
+                                    logger.debug(f"📊 Combined shape: {combined_audio.shape}")
                                     
-                                    print("🚀 About to call process_audio_chunk...")
+                                    logger.debug("🚀 About to call process_audio_chunk...")
                                     response = self.process_audio_chunk(combined_audio, fs)
-                                    print("✅ process_audio_chunk completed")
+                                    logger.debug("✅ process_audio_chunk completed")
                                     
                                     if response:
-                                        print("📝 Got response, updating UI...")
+                                        logger.info("📝 Got response, updating UI...")
                                         if self.agent.agent_type == AgentType.TEXT:
                                             self.display_text_response(response)
                                         else:
                                             st.audio(response, format='audio/wav', start_time=0)
                                 except Exception as e:
-                                    print(f"❌ Error during audio processing: {str(e)}")
+                                    logger.error(f"❌ Error during audio processing: {str(e)}")
                                     import traceback
-                                    print(traceback.format_exc())
+                                    logger.error(traceback.format_exc())
                                 finally:
                                     # Clear buffer and reset state after processing
                                     st.session_state.audio_buffer = []
                                     st.session_state.last_process_time = time.time()
                                     self.is_speaking = False  # Set is_speaking to False here, after processing
                     except KeyboardInterrupt:
-                        print("\n⛔ Stopping audio recording...")
+                        logger.info("\n⛔ Stopping audio recording...")
                         break
                     except Exception as e:
-                        print(f"Error in audio loop: {str(e)}")
+                        logger.error(f"Error in audio loop: {str(e)}")
                         continue
                     
             finally:
                 sd.stop()
                 st.session_state.audio_view_running = False
-                print("Audio view stopped") 
+                logger.info("Audio view stopped") 
         except Exception as e:
-            print(f"Error in audio view: {str(e)}")
+            logger.error(f"Error in audio view: {str(e)}")
             raise  # Re-raise the exception after cleanup
         finally:
             sd.stop()
             st.session_state.audio_view_running = False
-            print("Audio view stopped") 
+            logger.info("Audio view stopped") 
