@@ -169,8 +169,7 @@ class GemmaAgent(BaseChatAgent):
                  model_name: str = "google/gemma-2b-it",
                  max_length: int = 200,
                  temperature: float = 0.7,
-                 use_auth_token: bool = True,
-                 quantization: str = "4bit"):
+                 use_auth_token: bool = True):
         super().__init__()
         
         self.model_name = model_name
@@ -190,27 +189,15 @@ class GemmaAgent(BaseChatAgent):
             )
             self.logger.debug("Model configuration loaded successfully")
             
-            # Setup quantization parameters
-            if quantization == "4bit":
-                self.logger.debug("Using 4-bit quantization...")
-                quantization_config = {"load_in_4bit": True, 
-                                     "bnb_4bit_compute_dtype": torch.float16}
-            elif quantization == "8bit":
-                self.logger.debug("Using 8-bit quantization...")
-                quantization_config = {"load_in_8bit": True}
-            else:
-                self.logger.debug("Using full precision...")
-                quantization_config = {}
-            
-            # Load model with quantization
+            # Load model with CPU offloading
             self.logger.debug("Loading model (this may take several minutes)...")
             self.model = AutoModelForCausalLM.from_pretrained(
                 model_name,
                 config=config,
                 trust_remote_code=True,
                 token=use_auth_token,
-                device_map="auto",  # Changed back to auto for better device utilization
-                **quantization_config  # Apply quantization settings
+                device_map="cpu",  # Use CPU instead of auto device mapping
+                torch_dtype=torch.float32  # Use float32 for CPU compatibility
             )
             self.logger.debug("Model loaded successfully")
             
