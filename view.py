@@ -339,36 +339,199 @@ class AudioView:
                 pass
 
     def audio_view(self):
+        # Check if audio view is already running
+        if 'audio_view_running' in st.session_state and st.session_state.audio_view_running:
+            print("⚠️ Audio view already running, skipping initialization")
+            return
+            
+        print("\n🚀 Starting audio view - Press Ctrl+C to stop\n")
+        st.session_state.audio_view_running = True
+        
+        try:
+            # Initialize session state variables
+            if 'audio_buffer' not in st.session_state:
+                st.session_state.audio_buffer = []
+            if 'chat_container' not in st.session_state:
+                st.session_state.chat_container = st.container()
+            if 'last_process_time' not in st.session_state:
+                st.session_state.last_process_time = time.time()
+            
+            # Format agent name
+            agent_name = "Agent " + self.agent.__class__.__name__.replace("Agent", "")
+            
+            # Create header once
+            st.markdown("""
+            <style>
+            /* Remove default Streamlit padding */
+            .block-container {
+                padding-top: 0 !important;
+                padding-bottom: 0 !important;
+                margin-top: 0 !important;
+            }
+            
+            /* Fixed header */
+            .header-container {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 60px;
+                background: #ffffff;
+                z-index: 1000;  /* Increased z-index */
+                padding: 1rem;
+                border-bottom: 1px solid #eee;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);  /* Added shadow for visual separation */
+            }
+            
+            .header-container h1 {
+                margin: 0;
+                font-size: 24px;
+                font-weight: 600;
+                color: #000000;
+            }
+            
+            /* Chat container positioning */
+            .chat-container {
+                position: relative;
+                margin-top: 80px !important;  /* Increased margin to ensure content starts below header */
+                padding: 1rem;
+                font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+                color: #000000;
+                z-index: 1;  /* Lower z-index than header */
+            }
+            
+            .chat-message {
+                margin-bottom: 2rem;
+                background: #ffffff;  /* Ensure messages have white background */
+                padding: 1rem;
+                border-radius: 8px;
+                box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            }
+            
+            .term {
+                font-size: 28px;
+                font-weight: 600;
+                margin-bottom: 0.7rem;
+                color: #000000;
+            }
+            
+            .first-sentence {
+                font-size: 18px;
+                margin-bottom: 0.5rem;
+                color: #000000;
+            }
+            
+            .remaining-text {
+                font-size: 16px;
+                color: #000000;
+                margin-top: 0.5rem;
+                line-height: 1.4;
+            }
 
-        # Upload audio file
-        # uploaded_file = st.file_uploader("Upload an audio file", type=["wav", "mp3"])
+            /* Ensure Streamlit components don't overlap */
+            .stApp {
+                margin-top: 60px;  /* Match header height */
+            }
+            </style>
+            """, unsafe_allow_html=True)
 
-        # if uploaded_file is not None:
-        #     # Save the uploaded file temporarily
-        #     input_file = "uploaded_audio.wav"
-        #     with open(input_file, "wb") as f:
-        #         f.write(uploaded_file.getbuffer())
-        #     st.success("File uploaded successfully!")
-
-        #     # Send to ChatGPT button
-        #     if st.button("Send to ChatGPT"):
-        #         response_file = self.command_agent.process_audio_command("chat", input_file)
-        #         if response_file:
-        #             st.success("Received response from ChatGPT!")
-        #             self.play_audio(response_file)
-        #         else:
-        #             st.error("Failed to get response from ChatGPT")
-
-        # Record audio button
-        # if st.button("Record"):
-        #     record_file = "recorded_audio.wav"
-        #     self.record_audio(record_file)
-            #st.success("Audio recorded successfully!")
-
-            # Automatically send to ChatGPT
-            # response_file = self.command_agent.process_audio_command("chat", record_file)
-            # if response_file:
-            #     #st.success("Received response from ChatGPT!")
-            #     st.audio(response_file, format='audio/wav', start_time=0, autoplay=True)
-            else:
-                st.error("Failed to get response from ChatGPT") 
+            # Create main container with header
+            st.markdown("""
+            <div class="header-container">
+                <h1>Agent Cliff</h1>
+            </div>
+            """, unsafe_allow_html=True)
+            
+            # Create chat container with explicit height
+            if 'chat_container' not in st.session_state:
+                st.session_state.chat_container = st.container()
+            
+            # Initialize chat container with current history
+            chat_html = '<div class="chat-container">'
+            # First pass: collect all terms
+            terms_messages = []
+            other_messages = []
+            for message in st.session_state.chat_history:
+                formatted = self.format_message(message)
+                if '<div class="term">' in formatted:
+                    terms_messages.append(formatted)
+                else:
+                    other_messages.append(formatted)
+            
+            # Combine terms first, then other messages
+            chat_html += ''.join(terms_messages)
+            chat_html += ''.join(other_messages)
+            chat_html += '</div>'
+            st.session_state.chat_container.markdown(chat_html, unsafe_allow_html=True)
+            
+            try:
+                while True:
+                    try:
+                        # Record small chunk
+                        chunk, fs = self.record_audio_chunk(duration=0.05)
+                        
+                        # Check for speech
+                        if self.is_speech(chunk):
+                            # Only print buffer size every 50 chunks
+                            if len(st.session_state.audio_buffer) % 50 == 0:
+                                print(f"📝 Recording... ({len(st.session_state.audio_buffer)} chunks)")
+                            st.session_state.audio_buffer.append(chunk)
+                        elif self.is_speaking and self.silence_frames >= self.max_silence_frames:
+                            print(f"\n🔄 Processing speech - {len(st.session_state.audio_buffer)} chunks collected")
+                            if st.session_state.audio_buffer:
+                                try:
+                                    print("⚡ Attempting to concatenate audio chunks...")
+                                    # Debug buffer contents
+                                    print(f"📈 First chunk shape: {st.session_state.audio_buffer[0].shape}")
+                                    print(f"📈 Last chunk shape: {st.session_state.audio_buffer[-1].shape}")
+                                    print(f"📈 Number of chunks: {len(st.session_state.audio_buffer)}")
+                                    
+                                    try:
+                                        combined_audio = np.concatenate(st.session_state.audio_buffer)
+                                        print(f"✅ Concatenation successful")
+                                    except Exception as e:
+                                        print(f"❌ Concatenation failed: {str(e)}")
+                                        print(f"📈 Chunk shapes: {[chunk.shape for chunk in st.session_state.audio_buffer]}")
+                                        raise
+                                    
+                                    duration = len(combined_audio)/fs
+                                    print(f"📊 Audio length: {duration:.2f}s ({len(combined_audio)} samples)")
+                                    print(f"📊 Combined shape: {combined_audio.shape}")
+                                    
+                                    print("🚀 About to call process_audio_chunk...")
+                                    response = self.process_audio_chunk(combined_audio, fs)
+                                    print("✅ process_audio_chunk completed")
+                                    
+                                    if response:
+                                        print("📝 Got response, updating UI...")
+                                        if self.agent.agent_type == AgentType.TEXT:
+                                            self.display_text_response(response)
+                                        else:
+                                            st.audio(response, format='audio/wav', start_time=0)
+                                except Exception as e:
+                                    print(f"❌ Error during audio processing: {str(e)}")
+                                    import traceback
+                                    print(traceback.format_exc())
+                                finally:
+                                    # Clear buffer and reset state after processing
+                                    st.session_state.audio_buffer = []
+                                    st.session_state.last_process_time = time.time()
+                                    self.is_speaking = False  # Set is_speaking to False here, after processing
+                    except KeyboardInterrupt:
+                        print("\n⛔ Stopping audio recording...")
+                        break
+                    except Exception as e:
+                        print(f"Error in audio loop: {str(e)}")
+                        continue
+                    
+            finally:
+                sd.stop()
+                st.session_state.audio_view_running = False
+                print("Audio view stopped") 
+        except Exception as e:
+            print(f"Error in audio view: {str(e)}")
+            raise  # Re-raise the exception after cleanup
+        finally:
+            sd.stop()
+            st.session_state.audio_view_running = False
+            print("Audio view stopped") 
