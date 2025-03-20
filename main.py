@@ -48,4 +48,6 @@ def main():
         st.session_state.agent_view = AgentView(agent)
 
 if __name__ == "__main__":
+    print("Starting script...")  # Immediate print to verify execution
     main()
+    print("Script finished")  # Immediate print to verify execution
