@@ -1,43 +1,51 @@
 # Ragents/main.py
 
 import streamlit as st
-import os
-from view import AudioView
 from dotenv import load_dotenv
-from agents import DEFAULT_AGENT, AgentCliff, AgentNevil
-
+import os
+from views.agent_view import AgentView
+from agents.agent_cliff import AgentCliff
+from agents.agent_nevil import AgentNevil
 
 #RUN: streamlit run main.py --logger.level=debug        
-# Load environment variables
-load_dotenv()
-
-# Configure Streamlit page
-st.set_page_config(initial_sidebar_state="collapsed")
-
-# Get API key from environment variable
-api_key = os.getenv("OPENAI_API_KEY")
-if not api_key:
-    st.error("Please set OPENAI_API_KEY in your .env file")
-    st.stop()
 
 def main():
-    # Initialize AudioView only once using session state
-    if 'audio_view' not in st.session_state:
-        # Add agent selection
-        agent_type = st.sidebar.radio(
-            "Choose your agent:",
-            ("Cliff", "Nevil"),
-            index=0  # Default to Cliff
-        )
-        
-        # Initialize the appropriate agent
-        agent = AgentCliff() if agent_type == "Cliff" else AgentNevil()
-        
-        # Initialize AudioView with the selected agent
-        st.session_state.audio_view = AudioView(agent=agent)
+    # Load environment variables
+    load_dotenv()
     
-    # Use the existing AudioView instance
-    st.session_state.audio_view.audio_view()
+    # Configure page
+    st.set_page_config(
+        page_title="AI Agents",
+        page_icon="🤖",
+        layout="wide",
+        initial_sidebar_state="collapsed"
+    )
+    
+    # Check for OpenAI API key
+    if not os.getenv("OPENAI_API_KEY"):
+        st.error("Please set your OpenAI API key in the .env file")
+        return
+    
+    # Sidebar for agent selection
+    with st.sidebar:
+        st.title("Select Agent")
+        agent_type = st.radio(
+            "Choose your agent:",
+            ["Cliff", "Nevil"],
+            index=0,
+            label_visibility="collapsed"
+        )
+    
+    # Initialize AgentView if not already in session state
+    if "agent_view" not in st.session_state:
+        # Create appropriate agent based on selection
+        if agent_type == "Cliff":
+            agent = AgentCliff()
+        else:
+            agent = AgentNevil()
+            
+        # Initialize AgentView with the selected agent
+        st.session_state.agent_view = AgentView(agent)
 
 if __name__ == "__main__":
     main()
