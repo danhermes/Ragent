@@ -4,6 +4,11 @@ import os
 import time
 from typing import Optional, Tuple
 import numpy as np
+import re
+import openai
+import logging
+
+logger = logging.getLogger("streamlit")
 
 class SpeechToText(ABC):
     """Base class for speech-to-text implementations"""
@@ -72,15 +77,22 @@ class LocalWhisperSTT(SpeechToText):
                     speech_pad_ms=200,
                     threshold=0.1
                 ),
-                condition_on_previous_text=False,
+                condition_on_previous_text=True,
                 compression_ratio_threshold=2.4,
-                temperature=0.0
+                temperature=0.0,
+                word_timestamps=True,
+                no_speech_threshold=0.6,
+                best_of=5,
+                fp16=False,
+                initial_prompt="The following is a clear, well-enunciated speech:"
             )
             
-            # Join all segments
             text = " ".join([s.text for s in segments]).strip()
-            process_time = time.time() - start_time
+            text = re.sub(r'\s+', ' ', text)
+            text = re.sub(r'([.!?])\s*([A-Z])', r'\1 \2', text)
+            text = re.sub(r'([a-z])([A-Z])', r'\1 \2', text)
             
+            process_time = time.time() - start_time
             return text, process_time
             
         except Exception as e:
@@ -88,37 +100,45 @@ class LocalWhisperSTT(SpeechToText):
             return "", time.time() - start_time
 
 class OpenAIWhisperSTT(SpeechToText):
-    """OpenAI Whisper API implementation"""
+    """Speech-to-text using OpenAI's Whisper API"""
     
-    def __init__(self, api_key: Optional[str] = None):
-        self.api_key = api_key or os.getenv("OPENAI_API_KEY")
+    def __init__(self):
+        self.model = "whisper-1"
+        self.initialized = False
         
-    def initialize(self) -> None:
-        try:
-            import openai
-            if not self.api_key:
-                raise ValueError("OpenAI API key not provided")
-            openai.api_key = self.api_key
-        except ImportError:
-            raise ImportError("openai package not installed. Run: pip install openai")
-            
+    def initialize(self):
+        """Initialize the STT service"""
+        if not self.initialized:
+            try:
+                # Verify API key is set
+                if not os.getenv("OPENAI_API_KEY"):
+                    raise ValueError("OPENAI_API_KEY environment variable not set")
+                    
+                self.initialized = True
+                logger.info("OpenAI Whisper STT initialized successfully")
+            except Exception as e:
+                logger.error(f"Error initializing OpenAI Whisper STT: {str(e)}")
+                raise
+                
     def transcribe(self, audio_file: str) -> Tuple[str, float]:
-        import openai
-        
+        """Transcribe audio file using OpenAI's Whisper API"""
+        if not self.initialized:
+            self.initialize()
+            
         start_time = time.time()
         try:
-            with open(audio_file, "rb") as f:
-                response = openai.Audio.transcribe(
-                    model="whisper-1",
-                    file=f,
-                    language="en"
+            with open(audio_file, "rb") as file:
+                response = openai.audio.transcriptions.create(
+                    model=self.model,
+                    file=file,
+                    language="en",
+                    response_format="text"
                 )
-            text = response.get("text", "").strip()
-            process_time = time.time() - start_time
-            return text, process_time
-            
+                process_time = time.time() - start_time
+                return response, process_time
+                
         except Exception as e:
-            print(f"Error in OpenAI Whisper transcription: {str(e)}")
+            logger.error(f"Error in OpenAI Whisper transcription: {str(e)}")
             return "", time.time() - start_time
 
 class VoskSTT(SpeechToText):
