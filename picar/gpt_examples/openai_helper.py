@@ -2,8 +2,8 @@ from openai import OpenAI
 import time
 import shutil
 import os
+from utils import *
 
-# utils
 # =================================================================
 def chat_print(label, message):
     width = shutil.get_terminal_size().columns
@@ -200,9 +200,9 @@ class OpenAiHelper():
             print(run.status)
 
 
-    def text_to_speech(self, text, output_file, voice='alloy', response_format="mp3", speed=1):
+    def text_to_speech(self, text, output_file, voice='shimmer', response_format="mp3", speed=.9):
         '''
-        voice: alloy, echo, fable, onyx, nova, and shimmer
+        voice: ash, alloy, echo, fable, onyx, nova, and shimmer
         '''
         try:
             # check dir
@@ -212,10 +212,11 @@ class OpenAiHelper():
             elif not os.path.isdir(dir):
                 raise FileExistsError(f"\'{dir}\' is not a directory")
 
+            gray_print(f'{voice}')      
             # tts
             with self.client.audio.speech.with_streaming_response.create(
                 model="tts-1",
-                voice=voice,
+                voice="onyx", #hard coded
                 input=text,
                 response_format=response_format,
                 speed=speed,

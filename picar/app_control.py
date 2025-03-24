@@ -111,11 +111,13 @@ def main():
 
     ip = utils.get_ip()
     print('ip : %s'%ip)
-    sc.set('video','http://'+ip+':9000/mjpg')
+    #sc.set('video','http://'+ip+':9000/mjpg')
 
     Vilib.camera_start(vflip=False,hflip=False)
     Vilib.display(local=False, web=True)
     speak = None
+    avoid_obstacles_switch = True
+    line_track_switch = False
     while True:
         # --- send data ---
         sc.set("A", speed)
@@ -128,11 +130,11 @@ def main():
 
         # --- control ---
 
-        # # horn
+        # horn
         if sc.get('M') == True:
             horn()
 
-        # speaker
+        #speaker
         if sc.get('J') != None:
             speak=sc.get('J')
             print(f'speaker: {speak}')
@@ -156,11 +158,11 @@ def main():
             px.stop()
 
         # line_track and avoid_obstacles
-        line_track_switch = sc.get('I')
-        avoid_obstacles_switch = sc.get('E')
-        if line_track_switch == True:
-            speed = LINE_TRACK_SPEED
-            line_track()
+            line_track_switch = sc.get('I')
+            avoid_obstacles_switch = sc.get('E')
+            if line_track_switch == True:
+             speed = LINE_TRACK_SPEED
+             line_track()
         elif avoid_obstacles_switch == True:
             speed = AVOID_OBSTACLES_SPEED
             avoid_obstacles()
