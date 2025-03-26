@@ -12,14 +12,14 @@ def with_obstacle_check(func):
         def check_distance():
             distance = car.get_distance()
             if distance >= car.SafeDistance:
-                car.set_dir_servo_angle(0)
+                #car.set_dir_servo_angle(0)
                 return "safe"
             elif distance >= car.DangerDistance:
                 car.set_dir_servo_angle(30)
                 return "caution"
             else:
                 car.set_dir_servo_angle(-30)
-                car.backward(car.speed)
+                move_backward_this_way(car, 10, car.speed)
                 sleep(0.5)
                 return "danger"
             
@@ -213,7 +213,6 @@ def rub_hands(car):
 
 def think(car):
     car.reset()
-
     for i in range(11):
         car.set_cam_pan_angle(i*3)
         car.set_cam_tilt_angle(-i*2)
