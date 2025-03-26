@@ -1,12 +1,22 @@
 import openai
 import logging
 from .base_agent import BaseAgent, AgentType
+from helpers.speech_to_text import OpenAIWhisperSTT, LocalWhisperSTT, VoskSTT
+from helpers.LLMs import ChatGPTLLM
 
 class AgentCliff(BaseAgent):
     """Cliff: A friendly, knowledgeable guide with a touch of humor"""
     
     def __init__(self):
-        super().__init__(AgentType.TEXT)
+        # Initialize services
+        stt = OpenAIWhisperSTT() #LocalWhisperSTT() #OpenAIWhisperSTT()
+        stt.initialize()
+        
+        llm = ChatGPTLLM()
+        llm.initialize()
+        
+        # Initialize base agent with services
+        super().__init__(AgentType.TEXT, stt_service=stt, llm_service=llm)
     
     def get_chat_response(self, text: str) -> str:
         try:
