@@ -43,3 +43,10 @@ streamlit_debug.log
 __pycache__/commands.cpython-38.pyc
 __pycache__/view.cpython-38.pyc
 .goals
+
+# Ignore all files in the conversations directory
+conversations/*
+# Ignore all files in the deliverables directory
+deliverables/* 
+
+orchestrator.log
