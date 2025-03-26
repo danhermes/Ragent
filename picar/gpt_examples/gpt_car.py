@@ -8,7 +8,8 @@ import speech_recognition as sr
 import os
 import sys
 from dotenv import load_dotenv
-from time import sleep  # Add this import
+from time import sleep
+import numpy as np
 
 # Load environment variables from .env file
 load_dotenv()
@@ -23,6 +24,7 @@ from get_topics import GetTopics
 
 class PiCar:
     def __init__(self):
+        self.force_quit = False  # Add force quit flag
         try:
             # First try to cleanup any existing resources
             from robot_hat import reset_mcu
@@ -116,12 +118,21 @@ class PiCar:
 
     def init_speech(self):
         self.recognizer = sr.Recognizer()
-        # More moderate energy threshold for noisy environments
-        self.recognizer.energy_threshold = 300  # Make it adjust more quickly to background noise
-        self.recognizer.dynamic_energy_adjustment_damping = 0.1  # Default 0.16, lower means faster adjustment
-        self.recognizer.dynamic_energy_ratio = 1.7  # Default 1.6, increase for better noise handling
-        self.recognizer.pause_threshold = 2  # Shorter pause threshold to detect end of speech faster
-        self.recognizer.operation_timeout = 10  #None     No timeout
+        
+        # Configure speech recognition parameters
+        self.recognizer.energy_threshold = 300      # Minimum audio energy level required to detect speech. Lower values (50-4000 range) increase sensitivity to quiet speech but may pick up more background noise
+        self.recognizer.dynamic_energy_adjustment_damping = 0.1  # Controls adaptation rate of energy threshold to ambient noise (0-1 range). 0 means instant adaptation, 1 means no adaptation. Lower values better for varying noise environments
+        self.recognizer.dynamic_energy_ratio = 1.2  # How much louder speech must be vs ambient noise. At 1.2, speech needs to be 20% louder than background. Higher values reduce false detections but require clearer speech
+        self.recognizer.pause_threshold = .5        # Duration of silence in seconds needed to mark end of phrase. 0.5s balances responsiveness with natural speech pauses
+        self.recognizer.operation_timeout = 18      # Maximum seconds to wait for speech input before timeout. Balances giving users enough time while preventing indefinite waits
+        self.phrase_threshold = 0.5  # minimum seconds of speaking audio before we consider the speaking audio a phrase - values below this are ignored (for filtering out clicks and pops)
+        self.non_speaking_duration = 0.5  # seconds of non-speaking audio to keep on both sides of the recording
+
+        # Configure audio with default device - don't try to be clever
+        import pyaudio
+        self.audio = pyaudio.PyAudio()
+        self.audio_device = None  # Use system default
+        self.chunk_size = 32768
         
         # Speech handler variables
         self.speech_loaded = False
@@ -131,6 +142,12 @@ class PiCar:
     def init_sound_effects(self):
         self.SOUND_EFFECT_ACTIONS = ["honking", "start engine"]
         self.sound_effects_queue = []
+        
+        # Initialize mixer once at startup
+        try:
+            self.music.pygame.mixer.init(frequency=44100, size=-16, channels=2)
+        except Exception as e:
+            print(f"Mixer initialization error: {e}")
 
     def init_threads(self):
         # Action thread variables
@@ -138,19 +155,19 @@ class PiCar:
         self.led_status = 'standby'
         self.last_action_status = 'standby'
         self.last_led_status = 'standby'
-        self.LED_DOUBLE_BLINK_INTERVAL = 0.8
+        self.LED_DOUBLE_BLINK_INTERVAL = 1.2
         self.LED_BLINK_INTERVAL = 0.1
         self.actions_to_be_done = []
         self.action_lock = threading.Lock()
 
         # Create and start threads
         self.speak_thread = threading.Thread(target=self.speech_handler)
-        self.speak_thread.daemon = True
-        self.speak_thread.start()  # Actually start the thread
+        self.speak_thread.daemon = False  # Change to non-daemon
+        self.speak_thread.start()
         
         self.action_thread = threading.Thread(target=self.action_handler)
-        self.action_thread.daemon = True
-        self.action_thread.start()  # Actually start the thread
+        self.action_thread.daemon = False  # Change to non-daemon
+        self.action_thread.start()
 
     def init_topics(self):
         self.topics = GetTopics().get_topics()
@@ -158,42 +175,67 @@ class PiCar:
     def init_movement(self):
         self.ACTIONS = actions_dict
 
-    def play_audio(self, music, tts_file):
+    def play_audio_file(self, music, tts_file):
         try:
             if os.path.exists(tts_file):
                 music.music_play(tts_file)
                 while music.pygame.mixer.music.get_busy():
                     time.sleep(0.1)
-                music.music_stop()  # Stop the music explicitly
-                music.pygame.mixer.quit()  # Release the audio device
-                music.pygame.mixer.init()  # Reinitialize for next use
+                music.music_stop()
                 os.remove(tts_file)
         except Exception as e:
             print(f"Error playing TTS: {e}")
 
-    def speech_handler(self): #Speech thread: audio loop waiting for speech_loaded to be true
+    def play_audio_data(self, audio_data):
+        """Play AudioData object and clean up temp files"""
+        # Convert AudioData to wav file format that pygame can play
+        temp_wav = "./tts/temp_recording.wav"
+        with open(temp_wav, "wb") as f:
+            f.write(audio_data.get_wav_data())  # Convert AudioData to WAV format
+        temp_wav_vol = "./tts/temp_recording_vol.wav"
+        status = sox_volume(temp_wav, temp_wav_vol, self.VOLUME_DB)
+        
+        # Play the temporary wav file
+        self.music.music_play(temp_wav_vol)
+        while self.music.pygame.mixer.music.get_busy():
+            time.sleep(0.1)
+        self.music.music_stop()
+        
+        # Clean up temporary files
+        try:
+            os.remove(temp_wav)
+            os.remove(temp_wav_vol)
+        except:
+            pass
+
+    def speech_handler(self):
         while True:
+            with self.action_lock:
+                if self.action_status == 'shutdown':
+                    gray_print("Speech thread shutting down...")
+                    break
+            
             with self.speech_lock:
                 _isloaded = self.speech_loaded
 
-            if _isloaded:   
-                gray_print("Speech loaded, handling it!!!")             
+            if _isloaded:             
                 # Handle sound effects first
-                _sound_effects = list(self.sound_effects_queue)  # Get copy of queue
-                self.sound_effects_queue.clear()  # Clear queue
+                _sound_effects = list(self.sound_effects_queue)
+                self.sound_effects_queue.clear()
                 if _sound_effects:
                     gray_print(f"Playing sound effects: {_sound_effects}")
                     for sound in _sound_effects:
                         try:
                             gray_print(f"  Playing sound: {sound}")
                             sounds_dict[sound](self.music)
+                            while self.music.pygame.mixer.music.get_busy():
+                                time.sleep(0.1)
                         except Exception as e:
                             print(f'Sound effect error: {e}')
-                    
+                
                 # Then handle TTS
                 gray_print(f"Playing TTS file: {self.tts_file}")
-                self.play_audio(self.music, self.tts_file)
-                gray_print("TTS playback complete")
+                self.play_audio_file(self.music, self.tts_file)
                 with self.speech_lock:
                     self.speech_loaded = False
             
@@ -258,48 +300,46 @@ class PiCar:
         # Handle other actions
         return response, None
 
-    def action_handler(self): #Action thread: action loop waiting for action_status to be actions
+    def action_handler(self):
         standby_actions = ['act cute', 'nod', 'depressed']
         standby_weights = [1, 0.3, 0.1]
         action_interval = 20 # seconds
         last_action_time = time.time()
         last_led_time = time.time()
 
-        while True: # the action loop
+        while True:
             with self.action_lock:
-                _state = self.action_status # the signal to execute actions
+                _state = self.action_status
             
-            # led
-            # ------------------------------
+            if _state == 'shutdown':
+                gray_print("Action thread shutting down...")
+                break
+            
+            # led handling
             self.led_status = _state
             last_led_time = self.handle_led_status(_state, last_led_time)
 
             # actions
-            # ------------------------------
             if _state == 'standby':
                 if self.last_action_status != 'standby':
                     gray_print("Entering standby state")
                 self.last_action_status = 'standby'
-                if time.time() - last_action_time > action_interval:
-                    last_action_time = time.time()
-                    action_interval = random.randint(8, 40)
-                    _standby_action = random.choices(standby_actions, weights=standby_weights)[0]
-                    gray_print(f"Performing standby action: {_standby_action}")
-                    self.ACTIONS[_standby_action](self.my_car)
-
+                # Don't do random actions while in standby - they interfere with audio recording
+            
             elif _state == 'think':
                 if self.last_action_status != 'think':
                     gray_print("Entering think state")
                     self.last_action_status = 'think'
-                    self.ACTIONS["think"](self.my_car)
+                    self.ACTIONS["keep think"](self.my_car)
 
             elif _state == 'actions':
                 if self.last_action_status != 'actions':
                     gray_print("Entering actions state")
                 self.last_action_status = 'actions'
                 with self.action_lock:
-                    gray_print(f'actionsT: {self.actions_to_be_done}')
+                    gray_print(f'actions: {self.actions_to_be_done}')
                     _actions = self.actions_to_be_done
+                    self.ACTIONS["think"](self.my_car)
                 for _action in _actions:
                     try:
                         gray_print(f'actionT: {_action}')
@@ -332,29 +372,57 @@ class PiCar:
 
                 # listen
                 # ----------------------------------------------------------------
-                gray_print("listening ...")
-
                 with self.action_lock:
                     self.action_status = 'standby'
 
+                gray_print("Listening ...")
                 listen_start = time.time()
                 _stderr_back = redirect_error_2_null()
-                with sr.Microphone(chunk_size=8192) as source:
+                with sr.Microphone(device_index=self.audio_device, 
+                                  chunk_size=self.chunk_size,
+                                  sample_rate=44100) as source: #16000
                     cancel_redirect_error(_stderr_back)
                     self.recognizer.adjust_for_ambient_noise(source)
                     audio = self.recognizer.listen(source)
+
                 gray_print(f"Listen time: {time.time() - listen_start:.3f}s")
+
+                # For Debugging only - Play back the recorded audio
+                #self.play_audio_data(audio)
 
                 # stt
                 # ----------------------------------------------------------------
                 stt_start = time.time()
-                _result = self.openai_helper.stt(audio, language=self.LANGUAGE)
+                
+                audio_data = None
+                rms_energy = 0
+                try:
+                    audio_data = np.frombuffer(audio.get_raw_data(), dtype=np.int16)
+                    # Normalize to -1.0 to 1.0 range
+                    normalized_data = audio_data.astype(np.float32) / 32768.0
+                    rms_energy = np.sqrt(np.mean(np.square(normalized_data)))
+                    print("RMS Energy:", rms_energy)
+                except Exception as e:
+                    print(f"Error checking audio RMS energy: {e}")
+
+                # Define your threshold for what you consider 'real' speech
+                if rms_energy < 0.009:  # Threshold for normalized values
+                    print("Silence detected: skipping transcription.")
+                    _result = ""
+                else:
+                    _result = self.openai_helper.stt(audio, language=self.LANGUAGE)
+                    print("Transcript:", _result)
+
+                
                 gray_print(f"STT time: {time.time() - stt_start:.3f}s")
 
                 if _result == False or _result == "":
                     print() # new line
                     continue
-
+                if "shut down" in _result.lower():
+                    gray_print("Shutting down ...")
+                    raise KeyboardInterrupt()
+            
             elif self.input_mode == 'keyboard':
                 self.my_car.set_cam_tilt_angle(self.DEFAULT_HEAD_TILT)
 
@@ -366,6 +434,9 @@ class PiCar:
                 if _result == False or _result == "":
                     print() # new line
                     continue
+                if _result.lower() == "shut down":
+                    gray_print("Shutting down ...")
+                    raise KeyboardInterrupt()
 
             else:
                 raise ValueError("Invalid input mode")
@@ -394,34 +465,26 @@ class PiCar:
             _sound_actions = [] 
             try:
                 if isinstance(response, dict):
-                    gray_print(f'response-isinstance1: {response}')
                     if 'actions' in response:
                         actions = list(response['actions'])
                     else:
                         actions = ['stop']
-                    gray_print(f'actions-isinstance1: {actions}')
                     if 'answer' in response:
                         answer = response['answer']
                     else:
                         answer = ''
-                    gray_print(f'answer-isinstance1: {answer}')
                     if len(answer) > 0:
                         _actions = list.copy(actions)
-                        gray_print(f'_actions-isinstance2: {_actions}')
                         for _action in _actions:
                             if _action in self.SOUND_EFFECT_ACTIONS:
                                 _sound_actions.append(_action)
                                 actions.remove(_action)
-                    gray_print(f'answer2: {answer}')
-                    gray_print(f'actions-isinstance2: {actions}')
-                    gray_print(f'sound actions2: {_sound_actions}')
                 else:
                     response = str(response)
                     if len(response) > 0:
                         actions = []
                         answer = response
             except Exception as e:
-                gray_print(f"Response parsing error: {str(e)}")
                 actions = []
                 answer = ''
             gray_print(f"Parse time: {time.time() - parse_start:.3f}s")
@@ -440,18 +503,16 @@ class PiCar:
                     if _tts_status:
                         self.tts_file = f"./tts/{_time}_{self.VOLUME_DB}dB.wav"
                         _tts_status = sox_volume(_tts_f, self.tts_file, self.VOLUME_DB)
+                        os.remove(_tts_f)
                 gray_print(f'TTS generation time: {time.time() - tts_start:.3f}s')
 
-                # Actions
+                # Actions and Speech
                 # ----------------------------------------------------------------
                 action_start = time.time()
                 with self.action_lock:
                     self.actions_to_be_done = actions
-                    gray_print(f'actions: {self.actions_to_be_done}')
                     self.action_status = 'actions'
 
-                # Speech and sound effects
-                # ----------------------------------------------------------------
                 for _sound in _sound_actions:
                     with self.speech_lock:
                         self.sound_effects_queue.append(_sound)
@@ -460,12 +521,10 @@ class PiCar:
                     with self.speech_lock:
                         self.speech_loaded = True
 
-                print() # new line
-
             except Exception as e:
                 print(f'actions or TTS error: {e}')
             
-            # Wait for speech and actions to complete
+            # Wait for completion
             # ----------------------------------------------------------------
             wait_start = time.time()
             if _tts_status:
@@ -485,19 +544,105 @@ class PiCar:
 
     def cleanup(self):
         """Add this method for cleanup"""
-        if hasattr(self, 'my_car'):
-            self.my_car.reset()
-        from robot_hat import reset_mcu
-        reset_mcu()
+        try:
+            # Signal threads to stop
+            with self.action_lock:
+                self.action_status = 'shutdown'
+            
+            with self.speech_lock:
+                self.speech_loaded = False
+            
+            # Give threads time to finish
+            time.sleep(0.5)
+            
+            # Stop audio first since it's independent
+            if hasattr(self, 'music'):
+                try:
+                    self.music.music_stop()
+                    self.music.pygame.mixer.quit()
+                except:
+                    pass
+                
+            # Close PyAudio
+            if hasattr(self, 'audio'):
+                try:
+                    self.audio.terminate()
+                except:
+                    pass
+
+            # Wait for threads to finish before GPIO cleanup
+            gray_print("Waiting for threads to finish...")
+            try:
+                self.speak_thread.join(timeout=1.0)
+                self.action_thread.join(timeout=1.0)
+            except KeyboardInterrupt:
+                pass  # Continue cleanup even if interrupted
+
+            # Let robot_hat handle GPIO cleanup
+            try:
+                from robot_hat import reset_mcu
+                reset_mcu()
+                time.sleep(0.2)
+            except:
+                pass
+
+            gray_print("Cleanup complete")
+            sys.exit(0)  # Use sys.exit instead of os._exit
+            
+        except Exception as e:
+            print(f"Cleanup error: {e}")
+            sys.exit(1)
+
+    @staticmethod
+    def reset_all():
+        """Reset all hardware before starting"""
+        try:
+            # Kill other gpt_car.py processes but not our own or the grep
+            current_pid = os.getpid()
+            os.system("ps aux | grep python | grep -v gpt_car.py | grep -v grep | grep -v $$ | awk '{print $2}' | xargs -r kill -9")
+            time.sleep(1)  # Give time for processes to die
+            
+            # # Reset audio
+            # os.system("sudo alsactl restore")
+            # time.sleep(0.2)
+            
+            # # Try GPIO cleanup
+            # try:
+            #     import RPi.GPIO as GPIO
+            #     GPIO.setwarnings(False)
+            #     gray_print("Cleaning up GPIO")
+            #     GPIO.cleanup()
+            # except:
+            #     pass
+            # time.sleep(0.2)
+            
+            # Reset MCU last
+            try:
+                from robot_hat import reset_mcu
+                reset_mcu()
+            except Exception as e:
+                print(f"MCU reset error: {e}")
+            time.sleep(0.5)
+            
+        except Exception as e:
+            print(f"Reset error: {e}")
 
 if __name__ == "__main__":
     car = None
     try:
+        # Don't reset everything - it's using too much memory
+        # PiCar.reset_all()
+        
         car = PiCar()
         car.main()
     except KeyboardInterrupt:
         print("\nShutting down gracefully...")
+    except Exception as e:
+        print(f"Error: {e}")
     finally:
-        if car:
-            car.cleanup()  # Add cleanup call
+        try:
+            if car:
+                car.cleanup()
+        except KeyboardInterrupt:
+            print("Forced shutdown")
 
