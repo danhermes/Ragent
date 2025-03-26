@@ -23,6 +23,7 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*_raw.wav
 
 # IDE
 .idea/
