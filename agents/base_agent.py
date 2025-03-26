@@ -6,14 +6,15 @@ from enum import Enum
 logging.basicConfig(level=logging.DEBUG)
 
 class AgentType(Enum):
-    SPEECH = "speech"
     TEXT = "text"
+    CODE = "code"
 
 class BaseAgent:
-    """Base agent class with common functionality"""
+    """Base class for all agents"""
     
     def __init__(self, agent_type: AgentType):
         self.agent_type = agent_type
+        self.logger = logging.getLogger(self.__class__.__name__)
     
     def transcribe_audio(self, file_path):
         """Transcribe audio file to text using OpenAI's Whisper model."""
@@ -49,5 +50,9 @@ class BaseAgent:
             return None
 
     def get_chat_response(self, text: str) -> str:
-        """Base method to be overridden by specific agents"""
-        raise NotImplementedError("Subclasses must implement get_chat_response") 
+        """Get a response from the agent"""
+        # For testing, return a simple response based on the agent type
+        if self.agent_type == AgentType.TEXT:
+            return f"I am {self.__class__.__name__} and I received your message: {text}"
+        else:
+            return f"Code agent {self.__class__.__name__} received: {text}" 

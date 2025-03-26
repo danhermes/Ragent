@@ -11,7 +11,7 @@ class AgentCliff(BaseAgent):
     def get_chat_response(self, text: str) -> str:
         try:
             response = openai.chat.completions.create(
-                model="gpt-4",
+                model="gpt-4o",
                 messages=[
                     {"role": "system", "content": "OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook."},
                     {"role": "system", "content": "When you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:"},
