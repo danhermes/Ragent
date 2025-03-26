@@ -4,7 +4,7 @@ import streamlit as st
 import os
 from view import AudioView
 from dotenv import load_dotenv
-from agents import DEFAULT_AGENT, AgentCliff, AgentNevil
+from agents import DEFAULT_AGENT, AgentCliff, AgentDee, AgentDum, AgentBlane
 import logging
 import sys
 
@@ -55,13 +55,18 @@ def main():
             logger.debug("Setting up agent selection...")
             agent_type = st.sidebar.radio(
                 "Choose your agent:",
-                ("Cliff", "Nevil"),
-                index=0  # Default to Cliff
+                ("Blane", "Dee", "Dum"),
+                index=0  # Default to Blane
             )
             
             # Initialize the appropriate agent
             logger.debug(f"Initializing {agent_type} agent...")
-            agent = AgentCliff() if agent_type == "Cliff" else AgentNevil()
+            if agent_type == "Blane":
+                agent = AgentBlane()
+            elif agent_type == "Dee":
+                agent = AgentDee()
+            else:  # Dum
+                agent = AgentDum()
             logger.info(f"Agent initialized: {agent.__class__.__name__}")
             
             # Initialize AudioView with the selected agent
