@@ -11,16 +11,17 @@ logger = logging.getLogger("streamlit")
 logger.setLevel(logging.DEBUG)
 
 class AgentType(Enum):
-    SPEECH = "speech"
     TEXT = "text"
+    CODE = "code"
 
 class BaseAgent:
-    """Base agent class with common functionality"""
+    """Base class for all agents"""
     
     def __init__(self, agent_type: AgentType, stt_service: SpeechToText = None, llm_service: BaseLLM = None):
         self.agent_type = agent_type
         self.stt_service = stt_service
         self.llm_service = llm_service
+        self.logger = logging.getLogger(self.__class__.__name__)
     
     def transcribe_audio(self, audio_file: str) -> Optional[str]:
         """Transcribe audio file using configured STT service"""
@@ -75,3 +76,9 @@ class BaseAgent:
             raise ValueError("LLM service not configured")
         response, _ = self.llm_service.generate_response(text, messages, file_path)
         return response 
+        """Get a response from the agent"""
+        # For testing, return a simple response based on the agent type
+        if self.agent_type == AgentType.TEXT:
+            return f"I am {self.__class__.__name__} and I received your message: {text}"
+        else:
+            return f"Code agent {self.__class__.__name__} received: {text}" 
