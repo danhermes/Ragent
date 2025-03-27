@@ -4,7 +4,7 @@ from enum import Enum
 from helpers.speech_to_text import SpeechToText
 from helpers.LLMs import BaseLLM
 import re
-from typing import Optional
+from typing import Dict, List, Optional
 
 # Configure logging
 logger = logging.getLogger("streamlit")
@@ -69,9 +69,9 @@ class BaseAgent:
     #         logging.error(f"Error converting text to speech: {str(e)}")
     #         return None
 
-    def get_chat_response(self, text: str) -> str:
+    def get_chat_response(self, text: str, messages: Optional[List[Dict[str, str]]] = None, file_path: Optional[str] = None) -> str:
         """Get response from configured LLM service"""
         if not self.llm_service:
             raise ValueError("LLM service not configured")
-        response, _ = self.llm_service.generate_response(text)
+        response, _ = self.llm_service.generate_response(text, messages, file_path)
         return response 
