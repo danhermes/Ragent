@@ -23,12 +23,15 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+*_raw.wav
 
 # IDE
 .idea/
 .vscode/
 *.swp
 *.swo
+.venv/
+.streamlit/ 
 
 # OS
 .DS_Store
@@ -41,3 +44,12 @@ Thumbs.db
 streamlit_debug.log
 __pycache__/commands.cpython-38.pyc
 __pycache__/view.cpython-38.pyc
+.goals
+
+# Ignore all files in the conversations directory
+conversations/*
+# Ignore all files in the deliverables directory
+deliverables/* 
+
+logs/orchestrator.log
+  
