@@ -30,6 +30,8 @@ wheels/
 .vscode/
 *.swp
 *.swo
+.venv/
+.streamlit/ 
 
 # OS
 .DS_Store
@@ -49,4 +51,5 @@ conversations/*
 # Ignore all files in the deliverables directory
 deliverables/* 
 
-orchestrator.log
+logs/orchestrator.log
+  
