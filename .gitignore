@@ -47,11 +47,11 @@ __pycache__/view.cpython-38.pyc
 .goals
 
 # Ignore all files in the conversations directory
-conversations/*
+conversations/
 # Ignore all files in the deliverables directory
-deliverables/* 
+deliverables/ 
 
 logs/orchestrator.log
-n8n/workflows/*
-n8n/logs/*
+n8n/workflows/
+n8n/logs/
   
