@@ -52,4 +52,6 @@ conversations/*
 deliverables/* 
 
 logs/orchestrator.log
+n8n/workflows/*
+n8n/logs/*
   
