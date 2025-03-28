@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 import os
 import time
-from typing import Optional, Dict, Any, Tuple
+from typing import List, Optional, Dict, Any, Tuple
 
 class BaseLLM(ABC):
     """Base class for Large Language Model implementations"""
@@ -26,10 +26,13 @@ class BaseLLM(ABC):
 class ChatGPTLLM(BaseLLM):
     """ChatGPT implementation using OpenAI's API"""
     
-    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-3.5-turbo"):
+    def __init__(self, api_key: Optional[str] = None, model: str = "gpt-3.5-turbo", assistant_id: Optional[str] = None):
         self.api_key = api_key or os.getenv("OPENAI_API_KEY")
         self.model = model
+        self.assistant_id = assistant_id
         self.client = None
+        self.assistant = None
+        self.thread = None
         
     def initialize(self) -> None:
         try:
@@ -41,29 +44,102 @@ class ChatGPTLLM(BaseLLM):
         except ImportError:
             raise ImportError("openai package not installed. Run: pip install openai")
             
-    def generate_response(self, text: str) -> Tuple[str, float]:
+    def generate_response(self, text: str, messages: Optional[List[Dict[str, str]]] = None, file_path: Optional[str] = None) -> Tuple[str, float]:
         if not self.client:
             raise RuntimeError("ChatGPT not initialized. Call initialize() first.")
             
         start_time = time.time()
         try:
-            response = self.client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are a helpful AI assistant named Cliff."},
-                    {"role": "user", "content": text}
-                ],
-                temperature=0.7,
-                max_tokens=1000
+            # Create a new thread for each conversation
+            self.thread = self.client.beta.threads.create()
+            
+            # Upload file if provided
+            if file_path and os.path.exists(file_path):
+                try:
+                    # Upload the file
+                    with open(file_path, "rb") as file:
+                        file_obj = self.client.files.create(
+                            file=file,
+                            purpose="assistants"
+                        )
+                        print(f"File uploaded with ID: {file_obj.id}")
+                except Exception as e:
+                    print(f"Error uploading file: {str(e)}")
+                    return "", time.time() - start_time
+            
+            # Add messages to thread
+            if messages:
+                for msg in messages:
+                    if msg["role"] == "user":
+                        self.client.beta.threads.messages.create(
+                            thread_id=self.thread.id,
+                            role="user",
+                            content=msg["content"]
+                        )
+                    elif msg["role"] == "system":
+                        # Add system messages to assistant instructions
+                        if self.assistant:
+                            self.assistant = self.client.beta.assistants.update(
+                                assistant_id=self.assistant.id,
+                                instructions=self.assistant.instructions + "\n" + msg["content"]
+                            )
+            
+            # Add the current message
+            self.client.beta.threads.messages.create(
+                thread_id=self.thread.id,
+                role="user",
+                content=text
             )
             
-            response_text = response.choices[0].message.content.strip()
+            # Run the assistant
+            run = self.client.beta.threads.runs.create(
+                thread_id=self.thread.id,
+                assistant_id=self.assistant_id,
+                instructions="Please respond to the user's message."
+            )
+            
+            # Wait for completion
+            while True:
+                run = self.client.beta.threads.runs.retrieve(
+                    thread_id=self.thread.id,
+                    run_id=run.id
+                )
+                if run.status == "completed":
+                    break
+                elif run.status in ["failed", "cancelled", "expired"]:
+                    print(f"Run failed with status: {run.status}")
+                    return "", time.time() - start_time
+                time.sleep(0.5)
+            
+            # Get the response
+            messages = self.client.beta.threads.messages.list(
+                thread_id=self.thread.id
+            )
+            
+            # Get the last assistant message
+            for msg in messages.data:
+                if msg.role == "assistant":
+                    response_text = msg.content[0].text.value
+                    break
+            else:
+                response_text = ""
+            
             process_time = time.time() - start_time
             return response_text, process_time
             
         except Exception as e:
             print(f"Error in ChatGPT response generation: {str(e)}")
             return "", time.time() - start_time
+            
+    def cleanup(self) -> None:
+        """Clean up resources"""
+        try:
+            if self.assistant and self.client:
+                self.client.beta.assistants.delete(assistant_id=self.assistant.id)
+            if self.thread and self.client:
+                self.client.beta.threads.delete(thread_id=self.thread.id)
+        except Exception as e:
+            print(f"Error cleaning up ChatGPT resources: {str(e)}")
 
 class TinyLlamaLLM(BaseLLM):
     """Local TinyLlama implementation using transformers"""

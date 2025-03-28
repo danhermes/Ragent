@@ -3,37 +3,39 @@ import logging
 from .base_agent import BaseAgent, AgentType
 from helpers.speech_to_text import OpenAIWhisperSTT, LocalWhisperSTT, VoskSTT
 from helpers.LLMs import ChatGPTLLM
+from typing import Optional, List, Dict
 
 class AgentCliff(BaseAgent):
     """Cliff: A friendly, knowledgeable guide with a touch of humor"""
     
     def __init__(self):
-        # Initialize services
+        # Initialize speech-to-text service
         stt = OpenAIWhisperSTT() #LocalWhisperSTT() #OpenAIWhisperSTT()
         stt.initialize()
         
-        llm = ChatGPTLLM()
-        llm.initialize()
+        self.assistant_id = "asst_FqW27FDBYLurUdqWVtV7wblJ"  # Add the Assistant ID here
+        self.llm = ChatGPTLLM(model="gpt-3.5-turbo", assistant_id=self.assistant_id)
+        self.llm.initialize()
         
         # Initialize base agent with services
-        super().__init__(AgentType.TEXT, stt_service=stt, llm_service=llm)
+        super().__init__(AgentType.TEXT, stt_service=stt, llm_service=self.llm)
     
     def get_chat_response(self, text: str) -> str:
         try:
-            response = openai.chat.completions.create(
-                model="gpt-4o",
-                messages=[
-                    {"role": "system", "content": "OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook."},
-                    {"role": "system", "content": "When you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:"},
-                    {"role": "system", "content": "First give the technical term in a large font, beneath that in a smaller font you will give a terse definition of the term in a single sentence."},
-                    {"role": "system", "content": "Beneath that, in an even smaller font, you will give a line of space and then a brief definition of the term in less than five sentences."},
-                    {"role": "system", "content": "Beneath that, in an even smaller font, you will give a single line of space and then a terse example of the term in a sentence or two without saying 'for example'."},
-                    {"role": "system", "content": "Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium"},
-                    {"role": "system", "content": "Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence."},
-                    {"role": "user", "content": text}
-                ]
-            )
-            return response.choices[0].message.content
+            messages = [
+                {"role": "system", "content": "OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook."},
+                {"role": "system", "content": "Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:"},
+                {"role": "system", "content": "First give the technical term, beneath that give a terse definition of the term in a single sentence."},
+                {"role": "system", "content": "Beneath that, give a line of space and then a brief definition of the term in less than five sentences."},
+                {"role": "system", "content": "Beneath that, give a terse example of the term in a sentence or two without saying 'for example'."},
+                {"role": "system", "content": "Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium"},
+                {"role": "system", "content": "Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc."},
+                {"role": "user", "content": text}
+            ]
+            
+            #file_path = "./RAG/ML_LLM.docx" #hard code for now
+            # Pass all parameters to base class in correct order
+            return super().get_chat_response(text, messages) #, file_path)
         except Exception as e:
             logging.error(f"Error getting chat response: {str(e)}")
             return None 
