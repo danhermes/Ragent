@@ -129,6 +129,9 @@ def main():
         st.session_state.agent_view = AgentView(agent)
 
 if __name__ == "__main__":
-    print("Starting script...")  # Immediate print to verify execution
-    main()
-    print("Script finished")  # Immediate print to verify execution
+    try:
+        main()
+    except Exception as e:
+        print(f"Error: {str(e)}")
+        if "agent_view" in st.session_state:
+            st.session_state.agent_view.cleanup()
