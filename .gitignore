@@ -54,4 +54,12 @@ deliverables/
 logs/orchestrator.log
 n8n/workflows/
 n8n/logs/
+autocoder/logs/
+autocoder/generated_code/
+autocoder/weather_data.json
+autocoder/sandbox/
+autocoder/tests/
+autocoder/Dockerfile
+
+
   
