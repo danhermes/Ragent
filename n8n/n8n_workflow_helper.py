@@ -5,6 +5,11 @@ import uuid
 from n8n_api_client import N8nApiClient
 from config import N8nConfig
 
+# Set up logging with more detailed format
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 class N8nWorkflowHelper:
@@ -16,9 +21,11 @@ class N8nWorkflowHelper:
         Args:
             config: Optional N8nConfig instance. If not provided, a new one will be created.
         """
+        logger.debug("Initializing N8nWorkflowHelper")
         self.config = config or N8nConfig()
         self.api_client = N8nApiClient(self.config)
         self.logger = logging.getLogger(__name__)
+        logger.debug(f"Initialized with config: {self.config.__dict__}")
     
     def _create_node_base(self, name: str, type: str, position: List[int], parameters: Dict[str, Any], 
                          credentials: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -34,11 +41,18 @@ class N8nWorkflowHelper:
         Returns:
             Dict containing the complete node structure
         """
+        logger.debug(f"Creating base node: {name} of type {type}")
+        logger.debug(f"Parameters: {json.dumps(parameters, indent=2)}")
+        if credentials:
+            logger.debug(f"Credentials: {json.dumps(credentials, indent=2)}")
+        
         # Clean up parameters to remove None values and duplicates
         clean_params = {}
         for key, value in parameters.items():
             if value is not None and not key.startswith('webhookAuthentication'):
                 clean_params[key] = value
+        
+        logger.debug(f"Cleaned parameters: {json.dumps(clean_params, indent=2)}")
         
         node = {
             "parameters": clean_params,
@@ -52,20 +66,13 @@ class N8nWorkflowHelper:
         if credentials:
             node["credentials"] = credentials
             
+        logger.debug(f"Created node: {json.dumps(node, indent=2)}")
         return node
     
     def create_schedule_trigger(self, name: str, trigger_at_hour: int = 0, 
                               interval: str = "days") -> Dict[str, Any]:
-        """Create a Schedule Trigger node
-        
-        Args:
-            name: Node name
-            trigger_at_hour: Hour of day to trigger (0-23)
-            interval: Trigger interval (days, weeks, months)
-            
-        Returns:
-            Dict containing the complete node structure
-        """
+        """Create a Schedule Trigger node"""
+        logger.debug(f"Creating schedule trigger: {name} at {trigger_at_hour}:00 {interval}")
         parameters = {
             "rule": {
                 "interval": [
@@ -76,6 +83,7 @@ class N8nWorkflowHelper:
                 ]
             }
         }
+        logger.debug(f"Schedule parameters: {json.dumps(parameters, indent=2)}")
         return self._create_node_base(
             name=name,
             type="n8n-nodes-base.scheduleTrigger",
@@ -85,17 +93,9 @@ class N8nWorkflowHelper:
     
     def create_openai_message(self, name: str, model: str, prompt: str,
                             credentials_id: str = "KcAhGHqBrsmriXlY") -> Dict[str, Any]:
-        """Create an OpenAI node
-        
-        Args:
-            name: Node name
-            model: Model to use (e.g., gpt-4)
-            prompt: Prompt text
-            credentials_id: ID of the OpenAI credentials
-            
-        Returns:
-            Dict containing the complete node structure
-        """
+        """Create an OpenAI node"""
+        logger.debug(f"Creating OpenAI node: {name} with model {model}")
+        logger.debug(f"Prompt: {prompt}")
         parameters = {
             "authentication": "apiKey",
             "model": model,
@@ -113,6 +113,9 @@ class N8nWorkflowHelper:
             }
         }
         
+        logger.debug(f"OpenAI parameters: {json.dumps(parameters, indent=2)}")
+        logger.debug(f"OpenAI credentials: {json.dumps(credentials, indent=2)}")
+        
         return self._create_node_base(
             name=name,
             type="n8n-nodes-base.openAi",
@@ -123,16 +126,9 @@ class N8nWorkflowHelper:
     
     def create_dropbox_list_folder(self, name: str, folder_path: str,
                                  credentials_id: str = "KcAhGHqBrsmriXlY") -> Dict[str, Any]:
-        """Create a Dropbox List Folder node
-        
-        Args:
-            name: Node name
-            folder_path: Path to the folder to list
-            credentials_id: ID of the Dropbox credentials
-            
-        Returns:
-            Dict containing the complete node structure
-        """
+        """Create a Dropbox List Folder node"""
+        logger.debug(f"Creating Dropbox List Folder node: {name}")
+        logger.debug(f"Folder path: {folder_path}")
         parameters = {
             "operation": "list",
             "path": folder_path,
@@ -147,6 +143,9 @@ class N8nWorkflowHelper:
             }
         }
         
+        logger.debug(f"Dropbox parameters: {json.dumps(parameters, indent=2)}")
+        logger.debug(f"Dropbox credentials: {json.dumps(credentials, indent=2)}")
+        
         return self._create_node_base(
             name=name,
             type="n8n-nodes-base.dropbox",
@@ -157,17 +156,9 @@ class N8nWorkflowHelper:
     
     def create_dropbox_upload(self, name: str, folder_path: str, file_name: str,
                             credentials_id: str = "KcAhGHqBrsmriXlY") -> Dict[str, Any]:
-        """Create a Dropbox Upload File node
-        
-        Args:
-            name: Node name
-            folder_path: Path to upload to
-            file_name: Name of the file to upload
-            credentials_id: ID of the Dropbox credentials
-            
-        Returns:
-            Dict containing the complete node structure
-        """
+        """Create a Dropbox Upload File node"""
+        logger.debug(f"Creating Dropbox Upload node: {name}")
+        logger.debug(f"Upload path: {folder_path}/{file_name}")
         parameters = {
             "operation": "upload",
             "path": folder_path + "/" + file_name,
@@ -182,6 +173,9 @@ class N8nWorkflowHelper:
             }
         }
         
+        logger.debug(f"Dropbox upload parameters: {json.dumps(parameters, indent=2)}")
+        logger.debug(f"Dropbox credentials: {json.dumps(credentials, indent=2)}")
+        
         return self._create_node_base(
             name=name,
             type="n8n-nodes-base.dropbox",
@@ -192,18 +186,10 @@ class N8nWorkflowHelper:
     
     def create_send_email(self, name: str, to_email: str, subject: str, body: str,
                          credentials_id: str = "JTbu1l5Wfqw1zrie") -> Dict[str, Any]:
-        """Create a Send Email node
-        
-        Args:
-            name: Node name
-            to_email: Recipient email address
-            subject: Email subject
-            body: Email body text
-            credentials_id: ID of the SMTP credentials
-            
-        Returns:
-            Dict containing the complete node structure
-        """
+        """Create a Send Email node"""
+        logger.debug(f"Creating Email node: {name}")
+        logger.debug(f"To: {to_email}")
+        logger.debug(f"Subject: {subject}")
         parameters = {
             "fromEmail": "dan@lexicon.systems",
             "to": to_email,
@@ -219,6 +205,9 @@ class N8nWorkflowHelper:
             }
         }
         
+        logger.debug(f"Email parameters: {json.dumps(parameters, indent=2)}")
+        logger.debug(f"Email credentials: {json.dumps(credentials, indent=2)}")
+        
         return self._create_node_base(
             name=name,
             type="n8n-nodes-base.emailSend",
@@ -228,16 +217,9 @@ class N8nWorkflowHelper:
         )
     
     def create_extract_xlsx(self, name: str, sheet_name: str, range: str) -> Dict[str, Any]:
-        """Create a Spreadsheet File node for reading XLSX
-        
-        Args:
-            name: Node name
-            sheet_name: Name of the sheet to extract from
-            range: Excel range to extract (e.g., 'A1:B10')
-            
-        Returns:
-            Dict containing the complete node structure
-        """
+        """Create a Spreadsheet File node for reading XLSX"""
+        logger.debug(f"Creating Extract XLSX node: {name}")
+        logger.debug(f"Sheet: {sheet_name}, Range: {range}")
         parameters = {
             "operation": "read",
             "fileFormat": "xlsx",
@@ -246,6 +228,8 @@ class N8nWorkflowHelper:
                 "sheet": sheet_name
             }
         }
+        
+        logger.debug(f"XLSX parameters: {json.dumps(parameters, indent=2)}")
         
         return self._create_node_base(
             name=name,
@@ -256,16 +240,10 @@ class N8nWorkflowHelper:
     
     def create_filter(self, name: str, conditions: List[Dict[str, Any]], 
                      combinator: str = "and") -> Dict[str, Any]:
-        """Create a Filter node
-        
-        Args:
-            name: Node name
-            conditions: List of filter conditions
-            combinator: How to combine conditions (and/or)
-            
-        Returns:
-            Dict containing the complete node structure
-        """
+        """Create a Filter node"""
+        logger.debug(f"Creating Filter node: {name}")
+        logger.debug(f"Conditions: {json.dumps(conditions, indent=2)}")
+        logger.debug(f"Combinator: {combinator}")
         parameters = {
             "conditions": {
                 "options": {
@@ -281,6 +259,8 @@ class N8nWorkflowHelper:
             "options": {}
         }
         
+        logger.debug(f"Filter parameters: {json.dumps(parameters, indent=2)}")
+        
         return self._create_node_base(
             name=name,
             type="n8n-nodes-base.filter",
@@ -288,45 +268,15 @@ class N8nWorkflowHelper:
             parameters=parameters
         )
     
-    def create_if(self, name: str, conditions: List[Dict[str, Any]], 
-                  combinator: str = "and") -> Dict[str, Any]:
-        """Create an If node
-        
-        Args:
-            name: Node name
-            conditions: List of if conditions
-            combinator: How to combine conditions (and/or)
-            
-        Returns:
-            Dict containing the complete node structure
-        """
-        parameters = {
-            "conditions": {
-                "conditions": conditions,
-                "combinator": combinator
-            }
-        }
-        
-        return self._create_node_base(
-            name=name,
-            type="n8n-nodes-base.if",
-            position=[-620, -260],
-            parameters=parameters
-        )
-    
     def create_edit_fields(self, name: str, fields: Dict[str, Any]) -> Dict[str, Any]:
-        """Create an Edit Fields node
-        
-        Args:
-            name: Node name
-            fields: Fields to edit
-            
-        Returns:
-            Dict containing the complete node structure
-        """
+        """Create an Edit Fields node"""
+        logger.debug(f"Creating Edit Fields node: {name}")
+        logger.debug(f"Fields to edit: {json.dumps(fields, indent=2)}")
         parameters = {
             "fields": fields
         }
+        
+        logger.debug(f"Edit Fields parameters: {json.dumps(parameters, indent=2)}")
         
         return self._create_node_base(
             name=name,
@@ -336,15 +286,9 @@ class N8nWorkflowHelper:
         )
     
     def create_convert_to_xlsx(self, name: str, sheet_name: str) -> Dict[str, Any]:
-        """Create a Spreadsheet File node for writing XLSX
-        
-        Args:
-            name: Node name
-            sheet_name: Name of the sheet to write to
-            
-        Returns:
-            Dict containing the complete node structure
-        """
+        """Create a Spreadsheet File node for writing XLSX"""
+        logger.debug(f"Creating Convert to XLSX node: {name}")
+        logger.debug(f"Sheet name: {sheet_name}")
         parameters = {
             "operation": "write",
             "fileFormat": "xlsx",
@@ -352,6 +296,8 @@ class N8nWorkflowHelper:
                 "sheet": sheet_name
             }
         }
+        
+        logger.debug(f"Convert XLSX parameters: {json.dumps(parameters, indent=2)}")
         
         return self._create_node_base(
             name=name,
@@ -361,16 +307,9 @@ class N8nWorkflowHelper:
         )
     
     def connect_nodes(self, from_node: str, to_node: str) -> Dict[str, Any]:
-        """Connect two nodes in the workflow
-        
-        Args:
-            from_node: Name of the source node
-            to_node: Name of the target node
-            
-        Returns:
-            Dict containing the connection data
-        """
-        return {
+        """Connect two nodes in the workflow"""
+        logger.debug(f"Creating connection from {from_node} to {to_node}")
+        connection = {
             from_node: {
                 "main": [
                     [
@@ -382,27 +321,26 @@ class N8nWorkflowHelper:
                 ]
             }
         }
+        logger.debug(f"Connection data: {json.dumps(connection, indent=2)}")
+        return connection
     
     def create_workflow(self, name: str, nodes: List[Dict[str, Any]], 
                        connections: Dict[str, Any]) -> Dict[str, Any]:
-        """Create a complete workflow with nodes and connections
+        """Create a complete workflow with nodes and connections"""
+        logger.debug(f"Creating workflow: {name}")
+        logger.debug(f"Number of nodes: {len(nodes)}")
+        logger.debug(f"Number of connections: {len(connections)}")
         
-        Args:
-            name: Workflow name
-            nodes: List of node definitions
-            connections: Dictionary of node connections
-            
-        Returns:
-            Dict containing the complete workflow definition
-        """
         # Create a mapping of node names to their IDs
         node_id_map = {node["name"]: node["id"] for node in nodes}
+        logger.debug(f"Node ID mapping: {json.dumps(node_id_map, indent=2)}")
         
         # Update connections to use node IDs instead of names
         updated_connections = {}
         for from_name, connection_data in connections.items():
             from_id = node_id_map.get(from_name)
             if not from_id:
+                logger.error(f"Node name '{from_name}' not found in nodes list")
                 raise ValueError(f"Node name '{from_name}' not found in nodes list")
                 
             updated_connections[from_id] = {
@@ -418,6 +356,8 @@ class N8nWorkflowHelper:
                 ]
             }
         
+        logger.debug(f"Updated connections: {json.dumps(updated_connections, indent=2)}")
+        
         workflow_data = {
             "name": name,
             "nodes": nodes,
@@ -431,4 +371,6 @@ class N8nWorkflowHelper:
                 "timezone": "UTC"
             }
         }
+        
+        logger.debug(f"Final workflow data: {json.dumps(workflow_data, indent=2)}")
         return self.api_client.create_workflow(workflow_data) 

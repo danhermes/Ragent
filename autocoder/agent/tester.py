@@ -1,0 +1,164 @@
+import openai
+from utils.file_ops import save_code, clean_code_block
+import os
+import logging
+from typing import Optional
+from .runner_docker import run_code_in_docker
+import json
+
+logger = logging.getLogger(__name__)
+
+class Tester:
+    """Handles code testing and validation"""
+    
+    def __init__(self):
+        """Initialize the tester"""
+        logger.debug("Initializing Tester")
+        logger.info("Tester initialized")
+        
+    def generate_tests(self, code_path: str) -> str:
+        """Generate pytest test cases for the given code file.
+        
+        Args:
+            code_path: Path to the Python file to generate tests for
+            
+        Returns:
+            str: Generated test code as a string
+        """
+        with open(code_path, 'r', encoding='utf-8') as f:
+            code = f.read()
+            
+        client = openai.OpenAI()
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a Python testing expert. Generate pytest test cases for the given code."},
+                {"role": "user", "content": f"""
+    Please generate pytest test cases for this code. The test file should:
+    1. Include test cases for success and error scenarios
+    2. Test edge cases and invalid inputs
+    3. Use descriptive test names
+    4. Include docstrings explaining what each test verifies
+    5. Return ONLY the test code, no markdown, no explanations
+    6. DO NOT include any import statements - they will be added automatically
+    7. Use the exact function names from the code (fetch_weather_data, fetch_weather_data_for_cities, save_weather_data_to_json)
+    8. Use requests_mock for mocking HTTP requests
+
+    Here is the code to test:
+
+    {code}
+    """}
+            ],
+            temperature=0.7
+        )
+        
+        test_code = response.choices[0].message.content
+        
+        # Extract just the Python code if it's wrapped in markdown code blocks
+        if "```python" in test_code:
+            test_code = test_code.split("```python")[1].split("```")[0].strip()
+        elif "```" in test_code:
+            test_code = test_code.split("```")[1].strip()
+        
+        # Remove any existing import statements
+        lines = test_code.split('\n')
+        test_code = '\n'.join(line for line in lines if not line.startswith('import ') and not line.startswith('from '))
+        
+        # Add import statements at the top
+        import_lines = [
+            "import pytest",
+            "from requests_mock import Mocker",
+            "from temp_code import *",
+            "",
+            test_code
+        ]
+        test_code = "\n".join(import_lines)
+        
+        # Create tests directory in the autocoder directory
+        tests_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'tests')
+        os.makedirs(tests_dir, exist_ok=True)
+        
+        # Save test file with UTF-8 encoding
+        test_file = os.path.join(tests_dir, 'test_generated.py')
+        with open(test_file, 'w', encoding='utf-8') as f:
+            f.write(test_code)
+            
+        return test_file
+
+    def run_pytests(self, test_file: str) -> bool:
+        """Run pytest on the given test file in Docker container
+        Args:
+            test_file: Path to the test file
+        Returns:
+            bool: True if tests pass, False otherwise
+        """
+        logger.debug(f"Running tests from: {test_file}")
+        
+        try:
+            # Run pytest in Docker container
+            stdout, stderr = run_code_in_docker(test_file, cleanup=True)
+            logger.debug(f"Test output: {stdout}")
+            if stderr:
+                logger.warning(f"Test stderr: {stderr}")
+            
+            # Check for test results in the output
+            if "[100%]" in stdout:      #TODO: Add more checks for different test results
+                logger.info("Tests passed")
+                return True
+            else:
+                logger.error("Tests failed")
+                return False
+                #logger.warning("No clear test results found in output")
+                #return False
+                
+        except Exception as e:
+            logger.error(f"Error running tests: {str(e)}", exc_info=True)
+            return False
+
+    def test_manager(self, code: str) -> bool:
+        """Run tests for the generated code in Docker container
+        
+        Args:
+            code: Code string to test
+            
+        Returns:
+            bool: True if tests pass, False otherwise
+        """
+        try:
+            logger.info("Starting test execution in Docker container.")
+            
+            # Create sandbox directory in the autocoder directory
+            sandbox_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sandbox')
+            logger.debug(f"Creating sandbox directory at: {sandbox_dir}")
+            os.makedirs(sandbox_dir, exist_ok=True)
+            
+            # Save code to temp file in sandbox
+            temp_code_path = os.path.join(sandbox_dir, 'temp_code.py')
+            logger.debug(f"Saving code to sandbox: {temp_code_path}")
+            with open(temp_code_path, 'w', encoding='utf-8') as f:
+                f.write(code)
+            logger.debug("Code saved successfully")
+            
+            # Generate tests
+            logger.info("Generating tests...")
+            test_file = self.generate_tests(temp_code_path)
+            logger.debug(f"Tests generated at: {test_file}")
+            
+            # Copy test file to sandbox
+            sandbox_test_path = os.path.join(sandbox_dir, 'test_generated.py')
+            with open(test_file, 'r', encoding='utf-8') as src, open(sandbox_test_path, 'w', encoding='utf-8') as dst:
+                dst.write(src.read())
+            logger.debug("Test file copied to sandbox")
+            
+            # Run the generated tests in Docker container
+            logger.info("Running generated tests in Docker container...")
+            if not self.run_pytests(sandbox_test_path):
+                logger.error("Tests failed")
+                return False
+                
+            logger.info("All tests passed!")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error during testing: {str(e)}", exc_info=True)
+            return False
