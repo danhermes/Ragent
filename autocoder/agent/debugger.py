@@ -17,7 +17,8 @@ The following Python code has an error. Analyze the error and revise the code to
 Please provide the entire corrected Python code file only. Do not include explanations or markdown.
 """
 
-    response = openai.ChatCompletion.create(
+    client = openai.OpenAI()
+    response = client.chat.completions.create(
         model="gpt-4",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.2,

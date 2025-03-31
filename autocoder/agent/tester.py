@@ -7,6 +7,11 @@ from .runner_docker import run_code_in_docker
 from . import debugger
 from typing import Tuple
 
+# Suppress OpenAI client logging
+logging.getLogger("openai").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+
 logger = logging.getLogger(__name__)
 
 class Tester:
@@ -14,8 +19,7 @@ class Tester:
     
     def __init__(self):
         """Initialize the tester"""
-        logger.debug("Initializing Tester")
-        logger.info("Tester initialized")
+        pass
         
     def generate_tests(self, code_path: str) -> str:
         """Generate pytest test cases for the given code file.
@@ -44,6 +48,9 @@ class Tester:
     6. DO NOT include any import statements - they will be added automatically
     7. Use the exact function names from the code (fetch_weather_data, fetch_weather_data_for_cities, save_weather_data_to_json)
     8. Use requests_mock for mocking HTTP requests
+    9. Use proper list syntax for mock responses, e.g. mock_responses = [{{"weather": [{{"main": "Clear"}}]}}, {{"weather": [{{"main": "Clouds"}}]}}]  # Note the closing bracket
+    10. Always close all brackets and parentheses
+    11. Use proper Python syntax for all data structures
 
     Here is the code to test:
 
@@ -78,16 +85,7 @@ class Tester:
         ]
         test_code = "\n".join(import_lines)
         
-        # Create tests directory in the autocoder directory
-        tests_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'tests')
-        os.makedirs(tests_dir, exist_ok=True)
-        
-        # Save test file with UTF-8 encoding
-        test_file = os.path.join(tests_dir, 'test_generated.py')
-        with open(test_file, 'w', encoding='utf-8') as f:
-            f.write(test_code)
-            
-        return test_file
+        return test_code
 
     def run_pytests(self, test_file: str) -> Tuple[bool, str, str]:
         """Run pytest on the given test file in Docker container
@@ -96,28 +94,26 @@ class Tester:
         Returns:
             bool: True if tests pass, False otherwise
         """
-        logger.debug(f"Running tests from: {test_file}")
-        
         try:
             # Run pytest in Docker container
             stdout, stderr = run_code_in_docker(test_file, cleanup=True)
-            logger.debug(f"Test output: {stdout}")
+            
+            # Log the test output
+            logger.info("Test output:")
+            logger.info(stdout)
             if stderr:
-                logger.warning(f"Test stderr: {stderr}")
+                logger.error("Test errors:")
+                logger.error(stderr)
             
             # Check for test results in the output
-            if "[100%]" in stdout:      #TODO: Add more checks for different test results
-                logger.info("Tests passed")
+            if "[100%]" in stdout and "FAILED" not in stdout and "ERROR" not in stdout:
                 return (True, stdout, stderr)
             else:
-                logger.error("Tests failed")
                 return (False, stdout, stderr)
-                #logger.warning("No clear test results found in output")
-                #return False
                 
         except Exception as e:
-            logger.error(f"Error running tests: {str(e)}", exc_info=True)
-            return (False, stdout, stderr)
+            logger.error(f"Error running tests: {str(e)}")
+            return (False, "", str(e))
 
     def test_manager(self, code: str) -> bool:
         """Run tests for the generated code in Docker container with debugging support
@@ -129,38 +125,31 @@ class Tester:
             bool: True if tests pass, False otherwise
         """
         try:
-            logger.info("Starting test execution in Docker container.")
-            
             # Create sandbox directory in the autocoder directory
             sandbox_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sandbox')
-            logger.debug(f"Creating sandbox directory at: {sandbox_dir}")
             os.makedirs(sandbox_dir, exist_ok=True)
             
             # Save code to temp file in sandbox
             temp_code_path = os.path.join(sandbox_dir, 'temp_code.py')
-            logger.debug(f"Saving code to sandbox: {temp_code_path}")
             with open(temp_code_path, 'w', encoding='utf-8') as f:
                 f.write(code)
-            logger.debug("Code saved successfully")
             
             # Generate tests
             logger.info("Generating tests...")
-            test_file = self.generate_tests(temp_code_path)
-            logger.debug(f"Tests generated at: {test_file}")
+            test_code = self.generate_tests(temp_code_path)
             
             # Copy test file to sandbox
             sandbox_test_path = os.path.join(sandbox_dir, 'test_generated.py')
-            with open(test_file, 'r', encoding='utf-8') as src, open(sandbox_test_path, 'w', encoding='utf-8') as dst:
-                dst.write(src.read())
-            logger.debug("Test file copied to sandbox")
+            with open(sandbox_test_path, 'w', encoding='utf-8') as f:
+                f.write(test_code)
             
             # Run tests with up to 3 debugging iterations
             current_code_path = temp_code_path
-            for iteration in range(4):  # 0-based: 0, 1, 2
-                logger.info(f"Running tests (attempt {iteration + 1} of 3)...")
+            for iteration in range(4):  # 0-based: 0, 1, 2, 3
+                logger.info(f"Running tests (attempt {iteration + 1} of 4)...")
                 test_result, stdout, stderr = self.run_pytests(sandbox_test_path)
                 if not test_result:
-                    logger.error(f"Tests failed on attempt {iteration + 1} of 3")
+                    logger.error(f"Tests failed on attempt {iteration + 1} of 4")
                     if iteration < 3:  # Don't debug on last iteration (when iteration is 3)
                         logger.info("Attempting to debug and fix code...")
                         current_code_path = debugger.revise_code_with_error_context(current_code_path, stderr)
@@ -171,12 +160,12 @@ class Tester:
                         with open(sandbox_test_path, 'w', encoding='utf-8') as f:
                             f.write(test_content)
                 else:
-                   logger.info("Tests passed!")
-                   return True
+                    logger.info("Tests passed")
+                    return True
             
-            logger.error("XXXX -- All 3 debugging attempts failed")
+            logger.error("All debugging attempts failed")
             return False
             
         except Exception as e:
-            logger.error(f"Error during testing: {str(e)}", exc_info=True)
+            logger.error(f"Error during testing: {str(e)}")
             return False
