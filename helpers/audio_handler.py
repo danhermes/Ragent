@@ -25,18 +25,22 @@ class AudioHandler:
         self.audio_buffer = []
         self.processing_lock = False
         self.last_process_time = 0
+        self.should_stop = False  # Add flag to control stream
         self.initialize()
         
     def initialize(self):
         """Initialize audio stream"""
         try:
+            # Reset stop flag
+            self.should_stop = False
+            
+            # Configure stream but don't start it yet
             self.stream = sd.InputStream(
                 samplerate=self.sample_rate,
                 channels=self.channels,
                 dtype=self.dtype,
                 callback=self._audio_callback
             )
-            self.stream.start()
             logger.info("Audio stream initialized successfully")
         except Exception as e:
             logger.error(f"Error initializing audio stream: {str(e)}")
@@ -46,6 +50,8 @@ class AudioHandler:
         """Callback for audio stream"""
         if status:
             logger.warning(f"Audio callback status: {status}")
+        if self.should_stop:
+            raise sd.CallbackStop()
             
     def record_audio(self, filename, duration=5):
         """Record audio for a specified duration"""
@@ -57,6 +63,9 @@ class AudioHandler:
     def record_audio_chunk(self, duration: float = 0.05) -> Tuple[np.ndarray, int]:
         """Record a short audio chunk"""
         try:
+            if self.should_stop:
+                return None, self.sample_rate
+                
             frames = int(duration * self.sample_rate)
             audio_data = sd.rec(frames, samplerate=self.sample_rate, channels=self.channels, dtype=self.dtype)
             sd.wait()
@@ -202,10 +211,12 @@ class AudioHandler:
     def process_audio_stream(self, agent, on_response):
         """Process continuous audio stream and handle responses"""
         try:
-            while True:
+            self.stream.start()
+            
+            while not self.should_stop:
                 try:
                     # Get audio chunk
-                    chunk, fs = self.record_audio_chunk()
+                    chunk, fs = self.record_audio_chunk(duration=0.05)
                     if chunk is None:
                         continue
                         
@@ -224,32 +235,10 @@ class AudioHandler:
                         if self.audio_buffer:
                             try:
                                 self.processing_lock = True
-                                logger.info("Attempting to concatenate audio chunks...")
-                                # Debug buffer contents
-                                logger.info(f"First chunk shape: {self.audio_buffer[0].shape}")
-                                logger.info(f"Last chunk shape: {self.audio_buffer[-1].shape}")
-                                logger.info(f"Number of chunks: {len(self.audio_buffer)}")
-                                
-                                try:
-                                    combined_audio = np.concatenate(self.audio_buffer)
-                                    logger.info("Concatenation successful")
-                                except Exception as e:
-                                    logger.error(f"Concatenation failed: {str(e)}")
-                                    logger.error(f"Chunk shapes: {[chunk.shape for chunk in self.audio_buffer]}")
-                                    raise
-                                
-                                duration = len(combined_audio)/fs
-                                logger.info(f"Audio length: {duration:.2f}s ({len(combined_audio)} samples)")
-                                logger.info(f"Combined shape: {combined_audio.shape}")
-                                
-                                logger.info("About to call process_audio...")
+                                combined_audio = np.concatenate(self.audio_buffer)
                                 response = self.process_audio(combined_audio, fs, agent)
-                                logger.info("process_audio completed")
-                                
                                 if response:
-                                    logger.info("Got response, calling callback...")
                                     on_response(response)
-                                    
                             except Exception as e:
                                 logger.error(f"Error during audio processing: {str(e)}")
                                 import traceback
@@ -260,23 +249,22 @@ class AudioHandler:
                                 self.last_process_time = time.time()
                                 self.is_speaking = False
                                 self.processing_lock = False
+                                
                 except KeyboardInterrupt:
-                    logger.info("\nStopping audio recording...")
+                    logger.info("\nReceived KeyboardInterrupt, stopping audio recording...")
+                    self.should_stop = True
                     break
                 except Exception as e:
                     logger.error(f"Error in audio loop: {str(e)}")
                     continue
                 
         finally:
-            self.cleanup()
-            logger.info("Audio processing stopped")
-            
-    def cleanup(self):
-        """Clean up audio resources"""
-        try:
             if self.stream:
                 self.stream.stop()
                 self.stream.close()
-                logger.info("Audio stream cleaned up")
-        except Exception as e:
-            logger.error(f"Error cleaning up audio resources: {str(e)}") 
+                self.stream = None
+            self.audio_buffer = []
+            self.processing_lock = False
+            self.is_speaking = False
+            self.silence_frames = 0
+            logger.info("Audio processing stopped") 
