@@ -46,16 +46,14 @@ __pycache__/commands.cpython-38.pyc
 __pycache__/view.cpython-38.pyc
 .goals
 
-# Ignore all files in the conversations directory
 conversations/
-# Ignore all files in the deliverables directory
 deliverables/ 
-
 logs/orchestrator.log
 n8n/workflows/
 n8n/logs/
 autocoder/logs/
 autocoder/generated_code/
+autocoder/debuglog/
 autocoder/weather_data.json
 autocoder/sandbox/
 autocoder/tests/
