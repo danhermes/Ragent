@@ -233,6 +233,9 @@ class AgentView:
     def cleanup(self):
         """Clean up resources"""
         if hasattr(self, 'audio_handler'):
+            # Set stop flag first
+            self.audio_handler.should_stop = True
+            # Then do cleanup
             self.audio_handler.cleanup()
         if 'audio_view_running' in st.session_state:
             st.session_state.audio_view_running = False
