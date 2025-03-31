@@ -1,5 +1,4 @@
 from openai_helper import OpenAiHelper
-#from keys import OPENAI_API_KEY, OPENAI_ASSISTANT_ID
 from action_helper import actions_dict, sounds_dict, move_forward_this_way as forward, move_backward_this_way as backward, turn_left_in_place, turn_right_in_place, turn_left, turn_right, stop, shake_head, nod, wave_hands, resist, act_cute, rub_hands, think, keep_think, twist_body, celebrate, depressed
 from utils import *
 from robot_hat import TTS
@@ -10,6 +9,7 @@ import sys
 from dotenv import load_dotenv
 from time import sleep
 import numpy as np
+import re
 
 # Load environment variables from .env file
 load_dotenv()
@@ -20,7 +20,7 @@ from robot_hat import Music, Pin
 import time
 import threading
 import random
-from get_topics import GetTopics
+from load_RAG_files import LoadRAGfiles
 
 class PiCar:
     def __init__(self):
@@ -51,6 +51,8 @@ class PiCar:
         self.current_path = os.path.dirname(os.path.abspath(__file__))
         os.chdir(self.current_path)
         self.tts = TTS()
+        self.RAGgeneral =""
+        self.RAGtext =""
 
     def init_input_mode(self):
         self.input_mode = 'voice'
@@ -170,7 +172,7 @@ class PiCar:
         self.action_thread.start()
 
     def init_topics(self):
-        self.topics = GetTopics().get_topics()
+        self.RAGgeneral = LoadRAGfiles().get_files_from_Dropbox(file_type="general")
 
     def init_movement(self):
         self.ACTIONS = actions_dict
@@ -408,18 +410,18 @@ class PiCar:
                 # Define your threshold for what you consider 'real' speech
                 if rms_energy < 0.009:  # Threshold for normalized values
                     print("Silence detected: skipping transcription.")
-                    _result = ""
+                    _user_prompt = ""
                 else:
-                    _result = self.openai_helper.stt(audio, language=self.LANGUAGE)
-                    print("Transcript:", _result)
+                    _user_prompt = self.openai_helper.stt(audio, language=self.LANGUAGE)
+                    print("Transcript:", _user_prompt)
 
                 
                 gray_print(f"STT time: {time.time() - stt_start:.3f}s")
 
-                if _result == False or _result == "":
+                if _user_prompt == False or _user_prompt == "":
                     print() # new line
                     continue
-                if "shut down" in _result.lower():
+                if "shut down" in _user_prompt.lower():
                     gray_print("Shutting down ...")
                     raise KeyboardInterrupt()
             
@@ -429,17 +431,31 @@ class PiCar:
                 with self.action_lock:
                     self.action_status = 'standby'
 
-                _result = input(f'\033[1;30m{"intput: "}\033[0m').encode(sys.stdin.encoding).decode('utf-8')
+                _user_prompt = input(f'\033[1;30m{"intput: "}\033[0m').encode(sys.stdin.encoding).decode('utf-8')
 
-                if _result == False or _result == "":
+                if _user_prompt == False or _user_prompt == "":
                     print() # new line
                     continue
-                if _result.lower() == "shut down":
+                if _user_prompt.lower() == "shut down":
                     gray_print("Shutting down ...")
                     raise KeyboardInterrupt()
 
             else:
                 raise ValueError("Invalid input mode")
+            
+
+            # RAG file downloads
+            # ---------------------------------------------------------------- 
+            self.RAGtext=""
+            search_terms = ["gym", "fit", "pump","The Y", "YMCA", "Tai Chi", "walk", "exercise", "motion", "movement", "skateboarding", "dance", "cardio", "strength", "endurance", "flexibility", "balance", "core", "stretching", "yoga", "pilates", "dance", "cardio", "strength", "endurance", "flexibility", "balance", "core", "stretching"]
+            gym_RAG = bool(re.search('|'.join(map(re.escape, search_terms)), _user_prompt))
+            if gym_RAG:
+                try:
+                    gray_print("Getting fitness schedule")    
+                    self.RAGtext = LoadRAGfiles().get_files_from_Dropbox(file_type="fitness")
+                except Exception as e:  
+                    gray_print(f"Error getting fitness schedule: {e}")
+
 
             # chat-gpt
             # ---------------------------------------------------------------- 
@@ -453,9 +469,9 @@ class PiCar:
                 cv2_start = time.time()
                 self.cv2.imwrite(img_path, self.Vilib.img)
                 gray_print(f"Image capture time: {time.time() - cv2_start:.3f}s")
-                response = self.openai_helper.dialogue_with_img(_result, img_path)
+                response = self.openai_helper.dialogue_with_img(_user_prompt + "   " +self.RAGgeneral + self.RAGtext, img_path)
             else:
-                response = self.openai_helper.dialogue(_result)
+                response = self.openai_helper.dialogue(_user_prompt + "   " + self.RAGgeneral + "   " + self.RAGtext)
 
             gray_print(f'GPT total time: {time.time() - gpt_start:.3f}s')
 
