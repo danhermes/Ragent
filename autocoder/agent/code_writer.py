@@ -39,7 +39,7 @@ class CodeWriter:
             logger.debug(f"Saving code to: {filepath}")
             
             # Save the code
-            with open(filepath, "w") as f:
+            with open(filepath, "w") as f: # Todo: Use save_code function
                 f.write(code)
             
             logger.info(f"Code saved successfully to {filepath}")

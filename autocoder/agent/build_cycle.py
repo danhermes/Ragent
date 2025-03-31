@@ -1,72 +1,72 @@
+import os
+import shutil
 import logging
-from typing import Optional
-from .worker_agent import WorkerAgent
-from .tester import Tester
-from .code_writer import CodeWriter
-
-logger = logging.getLogger(__name__)
+from datetime import datetime
+from . import code_writer
+from . import runner_docker
+from . import tester
+from . import debugger
+from utils.logger import log
 
 class AgentBuildCycle:
-    """Manages the build cycle for code generation"""
-    
-    def __init__(self, agent_task: str, max_iterations: int = 3):
-        """Initialize the build cycle
-        
-        Args:
-            agent_task: The task description
-            max_iterations: Maximum number of build iterations
-        """
-        logger.debug(f"Initializing AgentBuildCycle with task: {agent_task}")
-        logger.debug(f"Max iterations: {max_iterations}")
-        
+    def __init__(self, agent_task, max_iterations=3, log_dir="debuglog"):
         self.agent_task = agent_task
         self.max_iterations = max_iterations
-        self.worker = WorkerAgent(name="Build_Worker_001")
-        self.tester = Tester()
-        self.code_writer = CodeWriter()
-        
-        logger.info("Build cycle components initialized")
-    
-    def run_cycle(self) -> Optional[str]:
-        """Run the build cycle
-        
-        Returns:
-            Optional[str]: The generated code if successful, None otherwise
-        """
-        logger.info("Starting build cycle")
-        
-        try:
-            for iteration in range(self.max_iterations):
-                logger.info(f"Starting iteration {iteration + 1}/{self.max_iterations}")
-                
-                # Generate code
-                logger.debug("Generating code...")
-                code = self.worker.run_task(self.agent_task)
-                logger.debug(f"Generated code length: {len(code) if code else 0}")
-                
-                if not code:
-                    logger.warning("No code generated in this iteration")
-                    continue
-                
-                # Test the code
-                logger.debug("Testing generated code...")
-                test_result = self.tester.test_manager(code)
-                logger.debug(f"Test result: {test_result}")
-                
-                if test_result:
-                    logger.info("Code passed tests!")
-                    # Save the code
-                    logger.debug("Saving successful code...")
-                    self.code_writer.save_code(code)
-                    return code
-                else:
-                     logger.warning("Code failed tests, will try again")
-            
-            logger.error("Build cycle failed after all iterations")
-            return None
-            
-        except Exception as e:
-            logger.error(f"Error in build cycle: {str(e)}", exc_info=True)
-            raise
-        finally:
-            logger.info("Build cycle completed")
+        os.makedirs(log_dir, exist_ok=True)
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        self.log_file = os.path.join(log_dir, f"debug_cycle_{timestamp}.log")
+        self.debug_dir = os.path.join(log_dir, f"debug_run_{timestamp}")
+        os.makedirs(self.debug_dir, exist_ok=True)
+        self.final_status = None
+        #self.code_writer = code_writer  # Use the module directly since generate_code is static
+
+    def _write_log(self, content):
+        with open(self.log_file, "a", encoding='utf-8') as f:
+            f.write(content + "\n")
+
+    def run_cycle(self):
+        # Generate code and save it to a file
+        code = code_writer.CodeWriter.generate_code(self.agent_task)
+        file_path = code_writer.CodeWriter().save_code(code)
+        shutil.copy(file_path, os.path.join(self.debug_dir, os.path.basename(file_path)))
+        self._write_log(f"Prompt Task: {self.agent_task}\n")
+
+        for i in range(self.max_iterations):
+            self._write_log(f"--- Iteration {i+1} ---")
+            log(f"--- Iteration {i+1} ---")
+
+            # stdout, stderr = runner_docker.run_code_in_docker(file_path)
+
+            # self._write_log("STDOUT:\n" + stdout)
+            # self._write_log("STDERR:\n" + stderr)
+
+            # log(f"Execution Output:\n{stdout}\nErrors:\n{stderr}")
+
+            # with open(os.path.join(self.debug_dir, f"stdout_{i+1}.txt"), "w", encoding='utf-8') as out_f:
+            #     out_f.write(stdout)
+            # with open(os.path.join(self.debug_dir, f"stderr_{i+1}.txt"), "w", encoding='utf-8') as err_f:
+            #     err_f.write(stderr)
+
+            tests_passed = tester.Tester().test_manager(code)
+
+            if tests_passed:
+                msg = "*** All tests passed! ***"
+                log(msg)
+                self._write_log(msg)
+                self.final_status = "success"
+                break
+            else:
+                msg = " XXX Tests failed. Moving to next iteration..."
+                log(msg)
+                self._write_log(msg)
+
+        if self.final_status != "success":
+            msg = "XXXXXXXXXXXXXXX ----- Maximum iterations reached. Final attempt failed."
+            log(msg)
+            self._write_log(msg)
+            self.final_status = "failure"
+
+        # Add summary to end of log
+        summary = f"Run Summary:\nStatus: {self.final_status.upper()}\nLog Directory: {self.debug_dir}"
+        self._write_log("\n" + summary)
+        log(summary)

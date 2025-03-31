@@ -4,7 +4,8 @@ import os
 import logging
 from typing import Optional
 from .runner_docker import run_code_in_docker
-import json
+from . import debugger
+from typing import Tuple
 
 logger = logging.getLogger(__name__)
 
@@ -64,6 +65,9 @@ class Tester:
         lines = test_code.split('\n')
         test_code = '\n'.join(line for line in lines if not line.startswith('import ') and not line.startswith('from '))
         
+        # Replace _main_() with main() in the test code
+        test_code = test_code.replace('_main_()', 'main()')
+        
         # Add import statements at the top
         import_lines = [
             "import pytest",
@@ -85,7 +89,7 @@ class Tester:
             
         return test_file
 
-    def run_pytests(self, test_file: str) -> bool:
+    def run_pytests(self, test_file: str) -> Tuple[bool, str, str]:
         """Run pytest on the given test file in Docker container
         Args:
             test_file: Path to the test file
@@ -104,19 +108,19 @@ class Tester:
             # Check for test results in the output
             if "[100%]" in stdout:      #TODO: Add more checks for different test results
                 logger.info("Tests passed")
-                return True
+                return (True, stdout, stderr)
             else:
                 logger.error("Tests failed")
-                return False
+                return (False, stdout, stderr)
                 #logger.warning("No clear test results found in output")
                 #return False
                 
         except Exception as e:
             logger.error(f"Error running tests: {str(e)}", exc_info=True)
-            return False
+            return (False, stdout, stderr)
 
     def test_manager(self, code: str) -> bool:
-        """Run tests for the generated code in Docker container
+        """Run tests for the generated code in Docker container with debugging support
         
         Args:
             code: Code string to test
@@ -150,14 +154,28 @@ class Tester:
                 dst.write(src.read())
             logger.debug("Test file copied to sandbox")
             
-            # Run the generated tests in Docker container
-            logger.info("Running generated tests in Docker container...")
-            if not self.run_pytests(sandbox_test_path):
-                logger.error("Tests failed")
-                return False
-                
-            logger.info("All tests passed!")
-            return True
+            # Run tests with up to 3 debugging iterations
+            current_code_path = temp_code_path
+            for iteration in range(4):  # 0-based: 0, 1, 2
+                logger.info(f"Running tests (attempt {iteration + 1} of 3)...")
+                test_result, stdout, stderr = self.run_pytests(sandbox_test_path)
+                if not test_result:
+                    logger.error(f"Tests failed on attempt {iteration + 1} of 3")
+                    if iteration < 3:  # Don't debug on last iteration (when iteration is 3)
+                        logger.info("Attempting to debug and fix code...")
+                        current_code_path = debugger.revise_code_with_error_context(current_code_path, stderr)
+                        # Update the test file to import from the revised code
+                        with open(sandbox_test_path, 'r', encoding='utf-8') as f:
+                            test_content = f.read()
+                        test_content = test_content.replace('from temp_code import *', f'from {os.path.splitext(os.path.basename(current_code_path))[0]} import *')
+                        with open(sandbox_test_path, 'w', encoding='utf-8') as f:
+                            f.write(test_content)
+                else:
+                   logger.info("Tests passed!")
+                   return True
+            
+            logger.error("XXXX -- All 3 debugging attempts failed")
+            return False
             
         except Exception as e:
             logger.error(f"Error during testing: {str(e)}", exc_info=True)
