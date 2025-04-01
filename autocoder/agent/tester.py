@@ -2,10 +2,9 @@ import openai
 from utils.file_ops import save_code, clean_code_block
 import os
 import logging
-from typing import Optional
+from typing import Optional, Tuple
 from .runner_docker import run_code_in_docker
 from . import debugger
-from typing import Tuple
 
 # Suppress OpenAI client logging
 logging.getLogger("openai").setLevel(logging.WARNING)
