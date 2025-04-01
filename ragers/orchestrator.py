@@ -19,11 +19,17 @@ class Orchestrator:
     """Manages the company structure and conversation flow between agents"""
     
     def __init__(self):
-        # Get logger
+
+        self.initialize_logging()
+        self.initialize_goals()
+        self.initialize_company()   
+        self.initialize_directories()
+        
+    def initialize_logging (self):
         self.logger = logging.getLogger("orchestrator")
-        
         self.logger.info("Initializing Orchestrator")
-        
+      
+    def initialize_directories(self):
         # Create deliverables directory
         self.deliverables_dir = "deliverables"
         if not os.path.exists(self.deliverables_dir):
@@ -52,6 +58,7 @@ class Orchestrator:
             self.logger.error(f"Current working directory: {os.getcwd()}")
             self.logger.error(f"Conversation file path: {os.path.abspath(self.conversation_file)}")
         
+    def initialize_goals(self):
         # Load goals
         self.logger.debug("Loading high-level goals")
         try:
@@ -62,6 +69,7 @@ class Orchestrator:
             self.logger.error(f"Error loading goals: {str(e)}")
             self.goals = "Error: Goals could not be loaded"
         
+    def initialize_company(self):
         # Initialize the company structure
         self.logger.debug("Creating supervisor (Blane)")
         self.supervisor = AgentBlane()
