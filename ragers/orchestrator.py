@@ -1,6 +1,13 @@
 import logging
 import os
+import sys
 from datetime import datetime
+
+# Add the parent directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
 from agents.agent_blane import AgentBlane
 from agents.agent_dee import AgentDee
 from agents.agent_dum import AgentDum
