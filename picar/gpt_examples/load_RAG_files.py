@@ -9,8 +9,8 @@ load_dotenv()
 class LoadRAGfiles:
     def __init__(self):
         self.DB_ACCESS_TOKEN = os.getenv("DROPBOX_API_TOKEN")
-        self.file_path = "d.txt"  # Path in Dropbox
-        self.save_path = "d.txt" #Local path
+        self.file_path = ""  # Path in Dropbox
+        self.save_path = "" #Local path
         if not self.DB_ACCESS_TOKEN:
             gray_print("Error: No Dropbox access token found in environment 1")
 

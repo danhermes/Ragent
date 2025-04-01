@@ -1,7 +1,11 @@
 import logging
 import os
 import sys
+from dotenv import load_dotenv
+from pathlib import Path
 from datetime import datetime
+import dropbox
+from dropbox.files import WriteMode
 
 # Add the parent directory to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -19,11 +23,14 @@ class Orchestrator:
     """Manages the company structure and conversation flow between agents"""
     
     def __init__(self):
-
+        
+        env_path = Path(__file__).resolve().parent.parent / '.env'
+        load_dotenv(dotenv_path=env_path)
         self.initialize_logging()
         self.initialize_goals()
         self.initialize_company()   
         self.initialize_directories()
+        self.initialize_dropbox()
         
     def initialize_logging (self):
         self.logger = logging.getLogger("orchestrator")
@@ -91,6 +98,26 @@ class Orchestrator:
         self.conversation_history = []
         self.logger.info("Orchestrator initialization complete")
         
+    def initialize_dropbox(self):
+        """Initialize Dropbox connection"""
+             
+        self.DB_ACCESS_TOKEN = os.getenv("DROPBOX_API_TOKEN")
+        if not self.DB_ACCESS_TOKEN:
+            self.logger.error("No Dropbox access token found in environment")
+            self.dbx = None
+        else:
+            try:
+                self.dbx = dropbox.Dropbox(self.DB_ACCESS_TOKEN)
+                # Test the connection
+                self.dbx.users_get_current_account()
+                self.logger.info("Successfully connected to Dropbox")
+            except dropbox.exceptions.AuthError:
+                self.logger.error("Invalid Dropbox access token")
+                self.dbx = None
+            except Exception as e:
+                self.logger.error(f"Error connecting to Dropbox: {e}")
+                self.dbx = None
+
     def _log_conversation(self, phase: str, role: str, content: str):
         """Log a conversation entry to both the history and a file"""
         self.logger.debug(f"=== Starting _log_conversation ===")
@@ -137,7 +164,7 @@ class Orchestrator:
         
         self.logger.debug(f"=== Completed _log_conversation ===")
         
-    def strategic_goal_setting(self, high_level_goals: str = None) -> str:
+    def strategic_goal_setting(self, high_level_goals: str = None):
         """Set strategic goals for the company"""
         self.logger.debug("=== Starting strategic_goal_setting ===")
         
@@ -172,9 +199,8 @@ class Orchestrator:
             self._log_conversation("strategic_goal_setting", f"worker_{worker_name}", worker_response)
         
         self.logger.debug("=== Completed strategic_goal_setting ===")
-        return self.conversation_history
     
-    def company_kickoff(self) -> str:
+    def company_kickoff(self):
         """Facilitate company-wide kickoff meeting"""
         self.logger.info("Starting company-wide kickoff meeting")
         
@@ -195,9 +221,8 @@ class Orchestrator:
             self._log_conversation("company_kickoff", agent_name, agent_response)
         
         self.logger.info("Company-wide kickoff complete")
-        return self.conversation_history
     
-    def project_creation(self) -> str:
+    def project_creation(self):
         """Facilitate project creation between managers and workers"""
         self.logger.info("Starting project creation phase")
         
@@ -231,7 +256,6 @@ What are your thoughts on the tasks and deliverables? How can you contribute?"""
                     self._log_conversation("project_creation", worker_name, worker_response)
         
         self.logger.info("Project creation phase complete")
-        return self.conversation_history
     
     def _format_conversation_history(self, limit: int = 5) -> str:
         """Format recent conversation history for context"""
@@ -241,7 +265,7 @@ What are your thoughts on the tasks and deliverables? How can you contribute?"""
             formatted.append(f"{msg['role']}: {msg['content']}")
         return "\n".join(formatted)
     
-    def worker_collaboration(self) -> str:
+    def worker_collaboration(self):
         """Facilitate worker collaboration and task discussion"""
         self.logger.info("Starting worker collaboration phase")
         
@@ -260,9 +284,8 @@ What are you working on and how can others help?"""
             self._log_conversation("worker_collaboration", worker_name, worker_response)
         
         self.logger.info("Worker collaboration phase complete")
-        return self.conversation_history
     
-    def milestone_review(self, milestone: str) -> str:
+    def milestone_review(self, milestone: str):
         """Facilitate milestone review between managers and workers"""
         self.logger.info(f"Starting milestone review for: {milestone}")
         
@@ -297,9 +320,8 @@ What's your progress and any challenges? How can others help?"""
                     self._log_conversation("milestone_review", worker_name, worker_response)
         
         self.logger.info(f"Milestone review for {milestone} complete")
-        return self.conversation_history
     
-    def work_loop(self) -> str:
+    def work_loop(self):
         """Facilitate ongoing work and collaboration between workers"""
         self.logger.info("Starting work loop")
         
@@ -316,8 +338,35 @@ Let's continue working on our deliverables and goals. What's your current focus 
             self._log_conversation("work_loop", worker_name, worker_response)
         
         self.logger.info("Work loop complete")
-        return self.conversation_history
     
+    def upload_deliverable_to_dropbox(self, deliverable_file: str) -> bool:
+        """Upload a deliverable file to Dropbox in the /RAgents folder"""
+        if not self.dbx:
+            self.logger.error("Cannot upload to Dropbox: No valid connection")
+            return False
+
+        try:
+            # Ensure the file exists locally
+            if not os.path.exists(deliverable_file):
+                self.logger.error(f"Deliverable file not found: {deliverable_file}")
+                return False
+
+            # Create the Dropbox path
+            filename = os.path.basename(deliverable_file)
+            dropbox_path = f"/ragers/{filename}"
+
+            # Upload the file
+            self.logger.info(f"Uploading {filename} to Dropbox")
+            with open(deliverable_file, 'rb') as f:
+                self.dbx.files_upload(f.read(), dropbox_path, mode=WriteMode.overwrite)
+            
+            self.logger.info(f"Successfully uploaded {filename} to Dropbox")
+            return True
+
+        except Exception as e:
+            self.logger.error(f"Error uploading to Dropbox: {e}")
+            return False
+
     def present_deliverables(self) -> str:
         """Present deliverables to the Big Boss"""
         self.logger.info("Preparing deliverables for Big Boss review")
@@ -357,6 +406,12 @@ Let's continue working on our deliverables and goals. What's your current focus 
             if os.path.exists(deliverable_file):
                 file_size = os.path.getsize(deliverable_file)
                 self.logger.info(f"Deliverable file created successfully. Size: {file_size} bytes")
+                
+                # Upload to Dropbox
+                if self.upload_deliverable_to_dropbox(deliverable_file):
+                    self.logger.info("Deliverable successfully uploaded to Dropbox")
+                else:
+                    self.logger.error("Failed to upload deliverable to Dropbox")
             else:
                 self.logger.error("File was not created successfully")
                 
@@ -366,9 +421,9 @@ Let's continue working on our deliverables and goals. What's your current focus 
             self.logger.error(f"Deliverables directory path: {os.path.abspath(self.deliverables_dir)}")
         
         self.logger.info("Deliverable presentation complete")
-        return self.conversation_history
+        return deliverable_file
     
-    def handle_upward_communication(self, message: str, sender: str) -> str:
+    def handle_upward_communication(self, message: str, sender: str):
         """Handle questions or statements traveling upward"""
         self.logger.info(f"Handling upward communication from {sender}")
         self.logger.debug(f"Message content: {message}")
@@ -393,5 +448,4 @@ Let's continue working on our deliverables and goals. What's your current focus 
         self.logger.debug(f"{recipient_name}'s response: {recipient_response[:100]}...")
         self._log_conversation("upward_communication", recipient_name, recipient_response)
         
-        self.logger.info(f"Upward communication handling complete for {sender}")
-        return self.conversation_history 
+        self.logger.info(f"Upward communication handling complete for {sender}") 

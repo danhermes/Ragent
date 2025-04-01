@@ -43,8 +43,67 @@ setup_logging()
 import argparse
 from orchestrator import Orchestrator
 
-def main():
-    """Main entry point for the Orchestrator CLI"""
+def run_strategic_goals(orchestrator, goals=None):
+    """Run the strategic goal setting phase"""
+    logger = logging.getLogger("cli")
+    logger.info("Running strategic goal setting")
+    orchestrator.strategic_goal_setting(goals)
+
+def run_kickoff(orchestrator):
+    """Run the company kickoff phase"""
+    logger = logging.getLogger("cli")
+    logger.info("Running company kickoff")
+    orchestrator.company_kickoff()
+
+def run_project_creation(orchestrator):
+    """Run the project creation phase"""
+    logger = logging.getLogger("cli")
+    logger.info("Running project creation")
+    orchestrator.project_creation()
+
+def run_worker_collaboration(orchestrator):
+    """Run the worker collaboration phase"""
+    logger = logging.getLogger("cli")
+    logger.info("Running worker collaboration")
+    orchestrator.worker_collaboration()
+
+def run_milestone_review(orchestrator, milestone):
+    """Run the milestone review phase"""
+    logger = logging.getLogger("cli")
+    logger.info(f"Running milestone review for: {milestone}")
+    orchestrator.milestone_review(milestone)
+
+def run_work_loop(orchestrator):
+    """Run the work loop phase"""
+    logger = logging.getLogger("cli")
+    logger.info("Running work loop")
+    orchestrator.work_loop()
+
+def run_deliverables(orchestrator):
+    """Run the deliverables presentation phase"""
+    logger = logging.getLogger("cli")
+    logger.info("Generating deliverables")
+    deliverable_file = orchestrator.present_deliverables()
+    logger.info(f"Deliverables saved to: {deliverable_file}")
+    return deliverable_file
+
+def run_all_phases(orchestrator, args):
+    """Run all phases in sequence"""
+    logger = logging.getLogger("cli")
+    
+    # Run each phase in sequence
+    run_strategic_goals(orchestrator, args.goals)
+    run_kickoff(orchestrator)
+    run_project_creation(orchestrator)
+    run_worker_collaboration(orchestrator)
+    run_milestone_review(orchestrator, args.milestone)
+    run_work_loop(orchestrator)
+    
+    # Always generate deliverables at the end
+    return run_deliverables(orchestrator)
+
+def parse_arguments():
+    """Parse command line arguments"""
     parser = argparse.ArgumentParser(description='Run the AI Agent Orchestrator')
     
     # Add command-line arguments
@@ -64,9 +123,16 @@ def main():
     parser.add_argument('--sender', type=str, help='Sender name for upward communication')
     parser.add_argument('--goals', type=str, help='Custom high-level goals (overrides .goals file)')
     
-    args = parser.parse_args()
+    # Add --ragemoot as a flag with default of 1
+    parser.add_argument('--ragemoot', nargs='?', const=3, type=int, default=1,
+                       help='Run all phases multiple times. If specified without value, runs 3 times. If specified with value, runs that many times.')
     
+    return parser.parse_args()
+
+def main():
+    """Main entry point for the Orchestrator CLI"""
     logger = logging.getLogger("cli")
+    args = parse_arguments()
     
     try:
         # Initialize orchestrator
@@ -74,34 +140,32 @@ def main():
         orchestrator = Orchestrator()
         
         # Run specified phase or all phases
-        if args.phase == 'all' or args.phase == 'strategic-goals':
-            logger.info("Running strategic goal setting")
-            orchestrator.strategic_goal_setting(args.goals)
-        
-        if args.phase == 'all' or args.phase == 'kickoff':
-            logger.info("Running company kickoff")
-            orchestrator.company_kickoff()
-        
-        if args.phase == 'all' or args.phase == 'project-creation':
-            logger.info("Running project creation")
-            orchestrator.project_creation()
-        
-        if args.phase == 'all' or args.phase == 'worker-collaboration':
-            logger.info("Running worker collaboration")
-            orchestrator.worker_collaboration()
-        
-        if args.phase == 'all' or args.phase == 'milestone-review':
-            logger.info(f"Running milestone review for: {args.milestone}")
-            orchestrator.milestone_review(args.milestone)
-        
-        if args.phase == 'all' or args.phase == 'work-loop':
-            logger.info("Running work loop")
-            orchestrator.work_loop()
-        
-        # Always generate deliverables at the end
-        logger.info("Generating deliverables")
-        orchestrator.present_deliverables()
-        
+        if args.phase == 'all':
+            # Run all phases the specified number of times
+            for iteration in range(args.ragemoot):
+                logger.info(f"\nStarting Ragemoot iteration {iteration + 1}/{args.ragemoot}")
+                run_all_phases(orchestrator, args)
+                if iteration < args.ragemoot - 1:  # Don't log completion on last iteration
+                    logger.info(f"Completed Ragemoot iteration {iteration + 1}")
+        else:
+            # Map phase names to functions
+            phase_functions = {
+                'strategic-goals': lambda: run_strategic_goals(orchestrator, args.goals),
+                'kickoff': lambda: run_kickoff(orchestrator),
+                'project-creation': lambda: run_project_creation(orchestrator),
+                'worker-collaboration': lambda: run_worker_collaboration(orchestrator),
+                'milestone-review': lambda: run_milestone_review(orchestrator, args.milestone),
+                'work-loop': lambda: run_work_loop(orchestrator),
+                'present-deliverables': lambda: run_deliverables(orchestrator)
+            }
+            
+            # Run the specified phase
+            if args.phase in phase_functions:
+                phase_functions[args.phase]()
+            else:
+                logger.error(f"Unknown phase: {args.phase}")
+                return
+
         logger.info("Orchestrator execution complete")
         
     except Exception as e:
