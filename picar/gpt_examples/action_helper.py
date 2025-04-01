@@ -1,5 +1,7 @@
 from time import sleep
-from utils import gray_print  # Add this import at the top
+from utils import gray_print
+from vilib import Vilib
+
 
 def with_obstacle_check(func):
     """Decorator to add obstacle checking to movement functions
@@ -29,6 +31,7 @@ def with_obstacle_check(func):
 @with_obstacle_check
 def move_forward_this_way(car, distance_cm, speed=None, check_distance=None):
     """Move forward a specific distance at given speed"""
+    distance_cm = distance_cm * 3 #calibrate distance
     if speed is None:
         speed = car.speed
     gray_print(f"Starting forward movement: distance={distance_cm}cm, speed={speed}")
@@ -139,8 +142,8 @@ def come_here(car, check_distance=None):
             gray_print("Obstacle detected! Adjusting course.")
             
         if car.Vilib.detect_obj_parameter['face'] != 0:
-            coordinate_x = car.Vilib.detect_obj_parameter['face_x']
-            coordinate_y = car.Vilib.detect_obj_parameter['face_y']
+            coordinate_x = Vilib.detect_obj_parameter['face_x']
+            coordinate_y = Vilib.detect_obj_parameter['face_y']
             
             x_angle += (coordinate_x*10/640)-5
             x_angle = clamp_number(x_angle,-35,35)
@@ -155,11 +158,11 @@ def come_here(car, check_distance=None):
             elif dir_angle < x_angle:
                 dir_angle += 1
             car.set_dir_servo_angle(x_angle)
-            car.forward(speed)
+            move_forward_this_way(car,10,40)
             sleep(0.05)
         else:
-            car.forward(0)
-            car.Vilib.face_detect_switch(False)
+            move_forward_this_way(car,5,5)
+            Vilib.face_detect_switch(False)
             sleep(0.05)
 
 def clamp_number(num,a,b):
