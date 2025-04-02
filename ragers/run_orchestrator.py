@@ -124,7 +124,7 @@ def parse_arguments():
     parser.add_argument('--goals', type=str, help='Custom high-level goals (overrides .goals file)')
     
     # Add --ragemoot as a flag with default of 1
-    parser.add_argument('--ragemoot', nargs='?', const=3, type=int, default=1,
+    parser.add_argument('--ragemoot', nargs='?', const=1, type=int, default=2,
                        help='Run all phases multiple times. If specified without value, runs 3 times. If specified with value, runs that many times.')
     
     return parser.parse_args()
@@ -139,32 +139,45 @@ def main():
         logger.info("Initializing Orchestrator")
         orchestrator = Orchestrator()
         
+        # success, content = orchestrator.get_next_source_file()
+        # if not success:
+        #     logger.info("No source files available in Dropbox. Continuing with local .goals file.")
+        #     content = "" 
+        #     success = False   
+ 
+        for iteration in range(args.ragemoot):
+        
         # Run specified phase or all phases
-        if args.phase == 'all':
+            if args.phase == 'all':
             # Run all phases the specified number of times
-            for iteration in range(args.ragemoot):
                 logger.info(f"\nStarting Ragemoot iteration {iteration + 1}/{args.ragemoot}")
+                               
+                # Use the retrieved file content as goals for this iteration
+                args.goals = content
+                logger.info(f"Using retrieved file content as goals for this iteration: {args.goals}")
+                
                 run_all_phases(orchestrator, args)
-                if iteration < args.ragemoot - 1:  # Don't log completion on last iteration
-                    logger.info(f"Completed Ragemoot iteration {iteration + 1}")
-        else:
-            # Map phase names to functions
-            phase_functions = {
-                'strategic-goals': lambda: run_strategic_goals(orchestrator, args.goals),
-                'kickoff': lambda: run_kickoff(orchestrator),
-                'project-creation': lambda: run_project_creation(orchestrator),
-                'worker-collaboration': lambda: run_worker_collaboration(orchestrator),
-                'milestone-review': lambda: run_milestone_review(orchestrator, args.milestone),
-                'work-loop': lambda: run_work_loop(orchestrator),
-                'present-deliverables': lambda: run_deliverables(orchestrator)
-            }
-            
-            # Run the specified phase
-            if args.phase in phase_functions:
-                phase_functions[args.phase]()
+                
             else:
-                logger.error(f"Unknown phase: {args.phase}")
-                return
+            # Map phase names to functions
+                phase_functions = {
+                    'strategic-goals': lambda: run_strategic_goals(orchestrator, args.goals),
+                    'kickoff': lambda: run_kickoff(orchestrator),
+                    'project-creation': lambda: run_project_creation(orchestrator),
+                    'worker-collaboration': lambda: run_worker_collaboration(orchestrator),
+                    'milestone-review': lambda: run_milestone_review(orchestrator, args.milestone),
+                    'work-loop': lambda: run_work_loop(orchestrator),
+                    'present-deliverables': lambda: run_deliverables(orchestrator)
+                }
+                
+                # Run the specified phase
+                if args.phase in phase_functions:
+                    phase_functions[args.phase]()#(orchestrator, args)
+                else:
+                    logger.error(f"Unknown phase: {args.phase}")
+                    return
+            
+                logger.info(f"Completed Ragemoot iteration {iteration + 1}")
 
         logger.info("Orchestrator execution complete")
         
