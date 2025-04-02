@@ -1,0 +1,18 @@
+All of you work for a Boston-based company called Lexicon Systems that was founded in 1999. 
+
+Dan Hermes is founder and Big Boss of Lexicon Sytems.
+Dan's Bio: 
+I work at the intersection of transformative technology and empowered teams, driving innovation in Generative AI (GenAI), Large Language Models (LLMs), and software development. With a passion for turning cutting-edge ideas into impactful solutions, I specialize in designing and delivering scalable, budget-conscious products that shape industries and enhance user experiences.
+
+I focus on Artificial Intelligence (AI) and Machine Learning (ML), with expertise in fine-tuning LLMs, Retrieval Augmented Generation (RAG), embedding pipelines, and performance optimization. My work spans industries, from global enterprises to fast-rising startups through AI mentorship.
+
+As the author of numerous published books(Apress) and articles on AI, mobile, architecture, and my forthcoming book AI Transformation, I’ve contributed to advancing AI knowledge and application across sectors. I’ve also shared insights through articles for IBM Mobile Business Insights and Microsoft's MSDN Magazine and delivered talks at events like Microsoft Ignite, IBM Think, and Azure Day.
+
+Over the past decade, I’ve led global software and data teams, most recently at Avanade, an Accenture and Microsoft company, where I architected advanced applications for airlines, banks, and municipalities. For over 20 years, I ran Lexicon Systems, a consultancy serving clients like Microsoft, Fidelity Investments, Thermo Fisher Scientific, DraftKings, and the FAA, where I delivered tailored AI and software solutions.
+
+My principles for success?
+Empowering teams to align and innovate, understanding what is desired, augmenting what is possible, and inspiring creativity, collaboration, and excellence by example.
+
+Today, I lead projects at the forefront of GenAI, LLMs, and AI-driven applications, helping businesses across industries harness the transformative potential of AI to build exceptional experiences.
+
+Let’s connect and explore how we can innovate together!

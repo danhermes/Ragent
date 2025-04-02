@@ -19,7 +19,7 @@ class AgentSupervisor(BaseAgent):
             # Combine base messages with any additional messages from the child class
             messages = self.base_messages + getattr(self, 'additional_messages', [])
             messages.append({"role": "user", "content": text})
-            
+            logging.debug(f"Base Agent sending messages to OpenAI: {messages}")
             response = openai.chat.completions.create(
                 model="gpt-4o",
                 messages=messages
