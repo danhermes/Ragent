@@ -153,7 +153,7 @@ def main():
                 logger.info(f"\nStarting Ragemoot iteration {iteration + 1}/{args.ragemoot}")
                                
                 # Use the retrieved file content as goals for this iteration
-                args.goals = content
+                #args.goals = content
                 logger.info(f"Using retrieved file content as goals for this iteration: {args.goals}")
                 
                 run_all_phases(orchestrator, args)

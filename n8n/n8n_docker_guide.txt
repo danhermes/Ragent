@@ -59,8 +59,6 @@ volumes:
     external: true                       # Uses the same Docker volume you already had
 
 
-
-
 Old (pre-tunnel) Create Container from Image
 docker run -d --name n8n \
   -p 5678:5678 \

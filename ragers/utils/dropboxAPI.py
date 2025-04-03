@@ -9,8 +9,9 @@ import logging
 class DropboxAPI:
     def __init__(self):
         env_path = Path(__file__).resolve().parent.parent.parent / '.env'
-        load_dotenv(dotenv_path=env_path)
+        self.env_path = env_path
         self.logger = logging.getLogger("dropbox")
+        self.clear_and_reload_env()
         
         # Get app credentials and tokens from .env
         self.client_id = os.getenv("DROPBOX_API_APP_ID")
@@ -21,11 +22,11 @@ class DropboxAPI:
         
         # Log the loaded values for debugging
         self.logger.debug(f"*********** Loaded from .env at {env_path}")
-        self.logger.debug(f"*********** Client ID: {self.client_id[5:]}")
-        self.logger.debug(f"*********** Client Secret: {self.client_secret[5:]}")
-        self.logger.debug(f"*********** Current Token: {self.access_token[5:]}")
-        self.logger.debug(f"*********** Refresh Token: {self.refresh_token[5:]}")
-        self.logger.debug(f"*********** Authorization Code: {self.auth_code[5:]}")
+        self.logger.debug(f"*********** Client ID: {self.client_id[:5] if self.client_id else 'None'}")
+        self.logger.debug(f"*********** Client Secret: {self.client_secret[:5] if self.client_secret else 'None'}")
+        self.logger.debug(f"*********** Current Token: {self.access_token[:5] if self.access_token else 'None'}")
+        self.logger.debug(f"*********** Refresh Token: {self.refresh_token[:5] if self.refresh_token else 'None'}")
+        self.logger.debug(f"*********** Authorization Code: {self.auth_code[:5] if self.auth_code else 'None'}")
 
         # Validate required credentials
         if not self.client_id or not self.client_secret:
@@ -48,7 +49,8 @@ class DropboxAPI:
             self.access_token,
             self.refresh_token,
             self.client_id,
-            self.client_secret 
+            self.client_secret,
+            self.auth_code
         )
         
         if self.access_token:
@@ -66,6 +68,38 @@ class DropboxAPI:
         else:
             self.logger.error("Failed to obtain valid Dropbox access token")
                 
+    def clear_and_reload_env(self):
+        """Clear cached environment variables and reload from .env file"""
+        # Clear any existing environment variables
+        env_vars = [
+            "DROPBOX_API_APP_ID",
+            "DROPBOX_API_APP_SECRET",
+            "DROPBOX_API_TOKEN_ACCESS",
+            "DROPBOX_API_TOKEN_REFRESH",
+            "DROPBOX_API_AUTHORIZATION_CODE"
+        ]
+        for var in env_vars:
+            if var in os.environ:
+                del os.environ[var]
+        
+        # Force reload from .env file
+        load_dotenv(dotenv_path=self.env_path, override=True)
+        
+        # Get fresh values
+        self.client_id = os.getenv("DROPBOX_API_APP_ID")
+        self.client_secret = os.getenv("DROPBOX_API_APP_SECRET")
+        self.access_token = os.getenv("DROPBOX_API_TOKEN_ACCESS")
+        self.refresh_token = os.getenv("DROPBOX_API_TOKEN_REFRESH")
+        self.auth_code = os.getenv("DROPBOX_API_AUTHORIZATION_CODE")
+        
+        # Log the loaded values for debugging
+        self.logger.debug(f"*********** Cleared cache and reloaded from .env at {self.env_path}")
+        self.logger.debug(f"*********** Client ID: {self.client_id[:5] if self.client_id else 'None'}")
+        self.logger.debug(f"*********** Client Secret: {self.client_secret[:5] if self.client_secret else 'None'}")
+        self.logger.debug(f"*********** Current Token: {self.access_token[:5] if self.access_token else 'None'}")
+        self.logger.debug(f"*********** Refresh Token: {self.refresh_token[:5] if self.refresh_token else 'None'}")
+        self.logger.debug(f"*********** Authorization Code: {self.auth_code[:5] if self.auth_code else 'None'}")
+
     def is_token_valid(self, access_token):
         """Check if the access token is valid by calling Dropbox's account endpoint."""
         if not access_token:
@@ -78,16 +112,16 @@ class DropboxAPI:
             self.logger.error(f"Token validation failed. Status: {response.status_code}, Response: {response.text}")
         return response.status_code == 200
 
-    def renew_access_token(self, refresh_token, client_id, client_secret) -> str:
+    def renew_access_token(self, refresh_token, client_id, client_secret, auth_code=None) -> str:
         """Refresh the Dropbox access token using the refresh token."""
         if not refresh_token:
             self.logger.error("No refresh token provided for access token refresh. Authorizing another refresh token.")
-            refresh_token, access_token = self.authorize_refresh_token(client_id, client_secret, self.auth_code)
-            if not refresh_token or not access_token:
+            result = self.authorize_refresh_token(client_id, client_secret, auth_code)
+            if not result:
                 self.logger.error("Failed to authorize refresh token")  
                 return None
-            else:
-                return access_token
+            refresh_token, access_token = result
+            return access_token
         
         url = "https://api.dropbox.com/oauth2/token"
         data = {
@@ -105,16 +139,20 @@ class DropboxAPI:
         
         else:
             self.logger.error("Failed to renew access token. Authorizing another refresh token.")
-            refresh_token, access_token = self.authorize_refresh_token(client_id, client_secret, self.auth_code)
-            if not refresh_token or not access_token:
+            result = self.authorize_refresh_token(client_id, client_secret, auth_code)
+            if not result:
                 self.logger.error(f"Failed to refresh access token. Status: {response.status_code}, Response: {response.text}")
                 return None
-            else:
-                return access_token
+            refresh_token, access_token = result
+            return access_token
 
 
     def authorize_refresh_token(self, client_id, client_secret, auth_code):
-
+        """Authorize a refresh token using the authorization code."""
+        if not auth_code:
+            self.logger.error("No authorization code provided")
+            return None
+            
         redirect_uri = "https://lexicon.systems/"   # Must match the one registered with your Dropbox app
         token_url = "https://api.dropbox.com/oauth2/token"
         data = {
@@ -190,11 +228,11 @@ class DropboxAPI:
         except Exception as e:
             self.logger.error(f"Error updating {token_name} in .env: {e}")
 
-    def get_valid_access_token(self, access_token, refresh_token, client_id, client_secret):
+    def get_valid_access_token(self, access_token, refresh_token, client_id, client_secret, auth_code=None):
         """Get a valid access token, refreshing if necessary."""
-        # if not refresh_token:
-        #     self.logger.error("No refresh token provided for token validation")
-        #     return None
+        # Clear and reload environment variables to ensure we have the latest values
+        self.clear_and_reload_env()
+        
         self.logger.info(f"Checking access token: {access_token}")
         if self.is_token_valid(access_token):
             self.logger.info("Access token is valid")
@@ -203,7 +241,7 @@ class DropboxAPI:
             
         # If current token is invalid, try to refresh
         self.logger.info("Attempting to refresh access token")
-        new_token = self.renew_access_token(refresh_token, client_id, client_secret)
+        new_token = self.renew_access_token(refresh_token, client_id, client_secret, auth_code)
         if new_token and self.is_token_valid(new_token):
             self.logger.info("Successfully refreshed access token")
             return new_token
