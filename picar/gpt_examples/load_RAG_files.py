@@ -69,6 +69,8 @@ class LoadRAGfiles:
             self.file_path = "/Nevil_general.txt"
         elif file_type == "fitness":
             self.file_path = "/weekly_fitness_plan.txt"
+        elif file_type == "work":
+            self.file_path = "/weekly_work_plan.txt"
         else:
             gray_print(f"Invalid file type: {file_type}")
             return ""
