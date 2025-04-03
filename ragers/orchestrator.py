@@ -28,7 +28,7 @@ class Orchestrator:
     def __init__(self):
         
         env_path = Path(__file__).resolve().parent.parent / '.env'
-        load_dotenv(dotenv_path=env_path)
+        load_dotenv(dotenv_path=env_path, override=True)
         self.initialize_logging()
         self.initialize_goals()
         self.initialize_company()   
@@ -130,10 +130,10 @@ class Orchestrator:
         auth_code = os.getenv("DROPBOX_API_AUTHORIZATION_CODE")
         
         
-        self.logger.info(f"OOOOOOOOO Access token: {access_token[5:]}")
-        self.logger.info(f"OOOOOOOOO Refresh token: {refresh_token[5:]}")
-        self.logger.info(f"OOOOOOOOO Client ID: {client_id[5:]}")
-        self.logger.info(f"OOOOOOOOO Client secret: {client_secret[5:]}")
+        self.logger.info(f"OOOOOOOOO Access token: {access_token[:5]}")
+        self.logger.info(f"OOOOOOOOO Refresh token: {refresh_token[:5]}")
+        self.logger.info(f"OOOOOOOOO Client ID: {client_id[:5]}")
+        self.logger.info(f"OOOOOOOOO Client secret: {client_secret[:5]}")
         
         if not all([client_id, client_secret]):
             self.logger.error("Missing required Dropbox environment variables")
@@ -142,7 +142,7 @@ class Orchestrator:
             
         self.dropbox_api = DropboxAPI()
         valid_token = self.dropbox_api.get_valid_access_token(
-            access_token, refresh_token, client_id, client_secret
+            access_token, refresh_token, client_id, client_secret, auth_code
         )
         
         if not valid_token:
