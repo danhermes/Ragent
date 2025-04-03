@@ -60,5 +60,7 @@ autocoder/sandbox/
 autocoder/tests/
 autocoder/Dockerfile
 
+TinyLlama/
+llama.cpp
 
   

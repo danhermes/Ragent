@@ -1,4 +1,5 @@
-On TAHITI:
+Start the web interface for Ragents
+
 streamlit run main.py --browser.serverAddress=localhost
 
 but this should REALLY be set up in /.streamlit/config.toml
