@@ -1,0 +1,155 @@
+{
+  "name": "Monthly Blog Schedule",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "months",
+              "triggerAtHour": 8
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -980,
+        -260
+      ],
+      "id": "2752175b-836b-47ec-9bec-19a140a800d5",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "You are an AI/LLM/GenAI expert who understands the trends and AI interests of the day/week/month.  From the uploaded list of AI-related blog ideas, choose four for the month that are similarly themed and create a schedule for the month with two blog titles for each week in the month. Every month should have at least five GenAI-related titles. Keep the output editorial and not conversational, listing the theme of the month then the weekly titles. Titles should be snappy and clever but not silly. No Markup. No numbering."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -660,
+        -260
+      ],
+      "id": "b6d9f65a-8aee-445c-8312-8edb2b851d1c",
+      "name": "OpenAI1",
+      "executeOnce": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "dan@lexicon.systems",
+        "toEmail": "dan@lexicon.systems",
+        "subject": "Monthly Blog Schedule",
+        "emailFormat": "text",
+        "text": "=Monthly Dan Hermes AI Blog Schedule \n\n{{ $json.message.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        -300,
+        -260
+      ],
+      "id": "73108357-9d2a-40c3-b7d0-d7c4b3851aef",
+      "name": "Send Email",
+      "webhookId": "9881c760-5a30-443d-9799-bb8eaea59ee3",
+      "credentials": {
+        "smtp": {
+          "id": "JTbu1l5Wfqw1zrie",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "folder",
+        "operation": "list",
+        "path": "/Writing/AI Blog/Topics",
+        "returnAll": true,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        -820,
+        -260
+      ],
+      "id": "bc74d253-6427-4d8c-836d-60d56ef10471",
+      "name": "Dropbox",
+      "executeOnce": false,
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Dropbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI1": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dropbox": {
+      "main": [
+        [
+          {
+            "node": "OpenAI1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "3f6bac83-58c6-4a0a-bb63-ec7c305bc471",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "546179b5641a177dfdb8b791287ceb5cc4108634bd65e0730257717d8d42d201"
+  },
+  "id": "vm4GH9H97HAIzmnb",
+  "tags": []
+}

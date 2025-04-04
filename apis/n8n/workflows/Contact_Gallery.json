@@ -1,0 +1,94 @@
+{
+  "name": "Contact Gallery",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "daysInterval": 2,
+              "triggerAtHour": 10
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -740,
+        -80
+      ],
+      "id": "1afafdd5-8b72-4308-a598-6b5e05722a56",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "messages": {
+          "values": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -520,
+        -80
+      ],
+      "id": "88350f1d-a440-4866-afe0-20317a924d75",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "content": "Where are galleries in SOLITUDE(RIP) Edge?",
+        "height": 80,
+        "width": 200
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "position": [
+        -560,
+        -220
+      ],
+      "typeVersion": 1,
+      "id": "ddbc4b7d-ba37-4b12-8abd-4f2c5515289f",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e8f191a7-3ecb-4509-8ba2-aa0fe2bc40d2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "546179b5641a177dfdb8b791287ceb5cc4108634bd65e0730257717d8d42d201"
+  },
+  "id": "FMtJxzhBJJVNnAPS",
+  "tags": []
+}

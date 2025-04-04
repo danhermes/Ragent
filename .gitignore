@@ -52,13 +52,13 @@ deliverables/
 logs/orchestrator.log
 n8n/workflows/
 n8n/logs/
-autocoder/logs/
-autocoder/generated_code/
-autocoder/debuglog/
-autocoder/weather_data.json
-autocoder/sandbox/
-autocoder/tests/
-autocoder/Dockerfile
+apis/autocoder/logs/
+apis/autocoder/generated_code/
+apis/autocoder/debuglog/
+apis/autocoder/weather_data.json
+apis/autocoder/sandbox/
+apis/autocoder/tests/
+apis/autocoder/Dockerfile
 
 TinyLlama/
 llama.cpp

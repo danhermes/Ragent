@@ -8,9 +8,14 @@ import logging
 
 class DropboxAPI:
     def __init__(self):
-        env_path = Path(__file__).resolve().parent.parent.parent / '.env'
+        self.logger = logging.getLogger("dropbox_api")
+        self.logger.setLevel(logging.INFO)
+        
+        # Set up environment path
+        env_path = Path(__file__).resolve().parent.parent.parent.parent / '.env'
         self.env_path = env_path
-        self.logger = logging.getLogger("dropbox")
+        
+        # Clear and reload environment
         self.clear_and_reload_env()
         
         # Get app credentials and tokens from .env
@@ -215,7 +220,7 @@ class DropboxAPI:
     def _update_env_token(self, token_name: str, new_token: str):
         """Update a token in the .env file."""
         try:
-            env_path = Path(__file__).resolve().parent.parent.parent / '.env'
+            env_path = Path(__file__).resolve().parent.parent.parent.parent / '.env'
             with open(env_path, 'r') as f:
                 lines = f.readlines()
             
