@@ -41,6 +41,22 @@ class Orchestrator:
         self.mode.initialize()
         
     def initialize_logging (self):
+        # Create logs directory if it doesn't exist
+        os.makedirs('logs', exist_ok=True)
+        
+        # Create a timestamped log file
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        log_file = f"logs/orchestrator_{timestamp}.log"
+        
+        # Configure logging
+        logging.basicConfig(
+            level=logging.DEBUG,
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler(log_file),
+                logging.StreamHandler()
+            ]
+        )
         self.logger = logging.getLogger("orchestrator")
         self.logger.info("Initializing Orchestrator")
       

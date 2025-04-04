@@ -32,6 +32,7 @@ class ProofAPIClient:
     def _request(self, endpoint: str, method: str = "POST", data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         """Make a request to the LanguageTool API. Args: endpoint (str): API endpoint, method (str): HTTP method, data (Dict[str, Any]): Request data. Returns: Dict[str, Any]: API response."""
         url = f"{self.base_url}{endpoint}"
+        self.logger.debug(f"Proofing now.")
         self.logger.debug(f"Making {method} request to {url}")
         if data:
             self.logger.debug(f"Request data: {json.dumps(data, indent=2)}")
@@ -42,6 +43,8 @@ class ProofAPIClient:
             
             response_data = response.json()
             self.logger.debug(f"Response: {json.dumps(response_data, indent=2)}")
+            self.logger.debug(f"Proofing complete.")
+            
             return response_data
             
         except requests.exceptions.ConnectionError as e:
