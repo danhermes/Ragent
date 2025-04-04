@@ -1,7 +1,7 @@
 from typing import Any
 from pathlib import Path
 from datetime import datetime
-from .base_mode import BaseMode
+from .base import BaseMode
 
 class PlanMode(BaseMode):
     """Mode for strategic planning and project management"""
@@ -10,10 +10,17 @@ class PlanMode(BaseMode):
         super().__init__("plan")
         
     def run_meeting(self, orchestrator: Any) -> None:
-        """Run planning meeting with all agents"""
+        """Run planning meeting focusing on project requirements"""
+        # Log mode banner
+        banner = "\n" + "=" * 80 + "\n"
+        banner += "PLAN MODE\n"
+        banner += "=" * 80 + "\n"
+        self.logger.info(banner)
+        print(banner)
+        
         self.logger.info("Starting planning meeting")
         
-        # Get supervisor's strategic goals
+        # Get supervisor's project requirements
         supervisor_prompt = f"""Based on these high-level goals: {orchestrator.goals}
 {orchestrator._format_conversation_history()}
 

@@ -132,9 +132,9 @@ def parse_arguments():
     parser.add_argument('--sender', type=str, help='Sender name for upward communication')
     parser.add_argument('--goals', type=str, help='Custom high-level goals (overrides .goals file)')
     
-    # Add --ragemoot as a flag with default of 1
-    parser.add_argument('--ragemoot', nargs='?', const=1, type=int, default=2,
-                       help='Run all phases multiple times. If specified without value, runs 3 times. If specified with value, runs that many times.')
+    # Add command-line arguments
+    parser.add_argument('--ragemoot', nargs='?', const=3, type=int, default=1,
+                       help='Run all phases multiple times to refine results (default: 1)')
     
     return parser.parse_args()
 
@@ -143,8 +143,13 @@ def main():
     logger = logging.getLogger("cli")
     args = parse_arguments()
     
+    # Log the mode being used
+    print(f"\nMode from command line: {args.mode}")
+    logger.info(f"Using mode from command line: {args.mode}")
+    
     try:
         # Initialize orchestrator with specified mode
+        print(f"Initializing Orchestrator with mode: {args.mode}")
         logger.info("Initializing Orchestrator")
         mode_map = {
             'plan': PlanMode,

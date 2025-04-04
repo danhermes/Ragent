@@ -1,18 +1,34 @@
+import os
+import sys
 from typing import Any, Dict
 from pathlib import Path
 from datetime import datetime
-from .base_mode import BaseMode
-from ..apis.autocoder.adapters.proof_adapter import ProofAdapter
+import re
+
+# Add the parent directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(os.path.dirname(current_dir))  # Go up two levels to root
+sys.path.insert(0, parent_dir)
+
+from .base import BaseMode
+from apis.autocoder.adapters.proof_adapter import ProofAdapter
 
 class ProofMode(BaseMode):
     """Mode for text proofing using proof API"""
     
     def __init__(self):
         super().__init__("proof")
-        self.proof_adapter = ProofAdapter()
+        self.proof_adapter = ProofAdapter(logger=self.logger)
         
     def run_meeting(self, orchestrator: Any) -> None:
         """Run proofing planning meeting focusing on text requirements"""
+        # Log mode banner
+        banner = "\n" + "=" * 80 + "\n"
+        banner += "PROOF MODE\n"
+        banner += "=" * 80 + "\n"
+        self.logger.info(banner)
+        print(banner)
+        
         self.logger.info("Starting proofing planning meeting")
         
         # Get supervisor's proofing requirements
@@ -113,6 +129,10 @@ GOALS: {orchestrator.goals}"""
         try:
             # Get text and requirements from conversation history
             text = self._extract_text(orchestrator)
+            if not text:
+                self.logger.error("No text to proof - input files may be missing")
+                return None
+                
             requirements = self._extract_requirements(orchestrator)
             
             # Proof text using proof adapter
@@ -130,26 +150,20 @@ GOALS: {orchestrator.goals}"""
             return None
             
     def _extract_text(self, orchestrator: Any) -> str:
-        """Extract text to be proofed from conversation history"""
+        """Extract text to be proofed from the first file in goals"""
         try:
-            # Get the latest conversation content
-            history = orchestrator._format_conversation_history()
-            
-            # Look for a file name in the conversation history
-            # This assumes the file name is mentioned in the last message
-            last_message = history.split("\n")[-1]
-            
-            # Look for a file name pattern
-            import re
+            # Look for file name in goals
             file_pattern = r'file:\s*([^\s]+)'
-            match = re.search(file_pattern, last_message)
+            match = re.search(file_pattern, orchestrator.goals)
             
             if not match:
-                self.logger.warning("No file name found in conversation history")
+                self.logger.warning("No file name found in goals")
                 return ""
                 
             file_name = match.group(1)
-            file_path = Path("proof/sources") / file_name
+            # Look for file in sources directory
+            file_path = Path("sources") / file_name
+            self.logger.info(f"Reading text from file: {file_path}")
             
             if not file_path.exists():
                 self.logger.error(f"File not found: {file_path}")
@@ -164,7 +178,7 @@ GOALS: {orchestrator.goals}"""
                 return ""
                 
         except Exception as e:
-            self.logger.error(f"Error extracting text from conversation history: {str(e)}")
+            self.logger.error(f"Error extracting text from goals: {str(e)}")
             return ""
         
     def _extract_requirements(self, orchestrator: Any) -> Dict:

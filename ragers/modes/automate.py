@@ -1,18 +1,33 @@
+import os
+import sys
 from typing import Any, Dict
 from pathlib import Path
 from datetime import datetime
-from .base_mode import BaseMode
-from ..apis.autocoder.adapters.n8n_adapter import AutomationWorkflowAdapter
+
+# Add the parent directory to the Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(os.path.dirname(current_dir))  # Go up two levels to root
+sys.path.insert(0, parent_dir)
+
+from .base import BaseMode
+from apis.autocoder.adapters.n8n_adapter import N8nAdapter
 
 class AutomateMode(BaseMode):
     """Mode for workflow automation using autocoder's AgentBuildCycle"""
     
     def __init__(self):
         super().__init__("automate")
-        self.workflow_adapter = AutomationWorkflowAdapter()
+        self.workflow_adapter = N8nAdapter()
         
     def run_meeting(self, orchestrator: Any) -> None:
         """Run automation planning meeting focusing on technical requirements"""
+        # Log mode banner
+        banner = "\n" + "=" * 80 + "\n"
+        banner += "AUTOMATE MODE\n"
+        banner += "=" * 80 + "\n"
+        self.logger.info(banner)
+        print(banner)
+        
         self.logger.info("Starting automation planning meeting")
         
         # Get supervisor's automation requirements

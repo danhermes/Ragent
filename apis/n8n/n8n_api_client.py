@@ -2,7 +2,7 @@ import requests
 import logging
 import json
 from typing import Dict, Any, Optional, List, Union
-from config import N8nConfig
+from .config import N8nConfig
 
 logger = logging.getLogger(__name__)
 
