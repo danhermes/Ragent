@@ -6,9 +6,10 @@ from pathlib import Path
 from datetime import datetime
 import dropbox
 from dropbox.files import WriteMode
-from typing import Tuple
+from typing import Tuple, Optional
 from utils.dropboxAPI import DropboxAPI
 from dropbox.files import FileMetadata
+from modes import DEFAULT_MODE, BaseMode
 
 # Add the parent directory to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -25,8 +26,7 @@ from agents.agent_woz import AgentWoz
 class Orchestrator:
     """Manages the company structure and conversation flow between agents"""
     
-    def __init__(self):
-        
+    def __init__(self, mode: Optional[BaseMode] = None):
         env_path = Path(__file__).resolve().parent.parent / '.env'
         load_dotenv(dotenv_path=env_path, override=True)
         self.initialize_logging()
@@ -35,6 +35,10 @@ class Orchestrator:
         self.initialize_directories()
         self.initialize_dropbox()
         self.initialize_RAG_data()
+        
+        # Initialize mode
+        self.mode = mode if mode else DEFAULT_MODE()
+        self.mode.initialize()
         
     def initialize_logging (self):
         self.logger = logging.getLogger("orchestrator")
@@ -95,9 +99,9 @@ class Orchestrator:
             with open('rag/dan_hermes.txt', 'r') as f:
                 self.RAG_data = f.read()
             self.logger.info("Successfully loaded RAG data")
-        except Exception    as e:
+        except Exception as e:
             self.logger.error(f"Error loading RAG data: {str(e)}")
-            self.RAG_data = "Error: RAG data could not be loaded"        
+            self.RAG_data = "Error: RAG data could not be loaded"
         
     def initialize_company(self):
         # Initialize the company structure
@@ -128,12 +132,6 @@ class Orchestrator:
         client_id = os.getenv("DROPBOX_API_APP_ID")
         client_secret = os.getenv("DROPBOX_API_APP_SECRET")
         auth_code = os.getenv("DROPBOX_API_AUTHORIZATION_CODE")
-        
-        
-        self.logger.info(f"OOOOOOOOO Access token: {access_token[:5]}")
-        self.logger.info(f"OOOOOOOOO Refresh token: {refresh_token[:5]}")
-        self.logger.info(f"OOOOOOOOO Client ID: {client_id[:5]}")
-        self.logger.info(f"OOOOOOOOO Client secret: {client_secret[:5]}")
         
         if not all([client_id, client_secret]):
             self.logger.error("Missing required Dropbox environment variables")
@@ -208,6 +206,30 @@ class Orchestrator:
         
         self.logger.debug(f"=== Completed _log_conversation ===")
         
+    def _format_conversation_history(self, limit: int = 5) -> str:
+        """Format recent conversation history for context"""
+        recent_history = self.conversation_history[-limit:] if self.conversation_history else []
+        formatted = []
+        for msg in recent_history:
+            formatted.append(f"{msg['role']}: {msg['content']}")
+        self.logger.debug(f"Formatted conversation history: {formatted}")
+        return "\n".join(formatted)
+    
+    def run_mode_meeting(self) -> None:
+        """Run the current mode's meeting"""
+        self.logger.info(f"Running {self.mode.name} mode meeting")
+        self.mode.run_meeting(self)
+        
+    def review_mode_deliverables(self) -> None:
+        """Review the current mode's deliverables"""
+        self.logger.info(f"Reviewing {self.mode.name} mode deliverables")
+        self.mode.review_deliverables(self)
+        
+    def generate_mode_deliverable(self) -> Path:
+        """Generate the current mode's deliverable"""
+        self.logger.info(f"Generating {self.mode.name} mode deliverable")
+        return self.mode.generate_deliverable(self)
+        
     def strategic_goal_setting(self, high_level_goals: str = None):
         """Set strategic goals for the company"""
         self.logger.debug("=== Starting strategic_goal_setting ===")
@@ -250,7 +272,7 @@ class Orchestrator:
         
         # Supervisor leads the kickoff
         self.logger.debug("Initiating supervisor's kickoff presentation")
-        kickoff_prompt = f"Let's have a company-wide kickoff to align everyone on our strategic objectives and team structure. {self._format_conversation_history()}  GOALS: {self.goals} RAG DATA: {self.RAG_data}"
+        kickoff_prompt = f"Let's have a company-wide kickoff to align everyone on our strategic objectives and team structure. {self._format_conversation_history()} GOALS: {self.goals} RAG DATA: {self.RAG_data}"
         kickoff_response = self.supervisor.get_chat_response(kickoff_prompt)
         self.logger.debug(f"Supervisor's kickoff message: {kickoff_response[:100]}...")
         self._log_conversation("company_kickoff", "supervisor", kickoff_response)
@@ -259,7 +281,7 @@ class Orchestrator:
         self.logger.debug("Gathering team feedback")
         for agent_name, agent in {**self.managers, **self.workers}.items():
             self.logger.debug(f"Getting feedback from {agent_name}")
-            agent_prompt = f"Supervisor has initiated the kickoff: {kickoff_response}. What are your thoughts and questions? {self._format_conversation_history()}  GOALS: {self.goals} RAG DATA: {self.RAG_data}"
+            agent_prompt = f"Supervisor has initiated the kickoff: {kickoff_response}. What are your thoughts and questions? {self._format_conversation_history()} GOALS: {self.goals} RAG DATA: {self.RAG_data}"
             agent_response = agent.get_chat_response(agent_prompt)
             self.logger.debug(f"{agent_name}'s kickoff response: {agent_response[:100]}...")
             self._log_conversation("company_kickoff", agent_name, agent_response)
@@ -300,15 +322,6 @@ What are your thoughts on the tasks and deliverables? How can you contribute? GO
                     self._log_conversation("project_creation", worker_name, worker_response)
         
         self.logger.info("Project creation phase complete")
-    
-    def _format_conversation_history(self, limit: int = 5) -> str:
-        """Format recent conversation history for context"""
-        recent_history = self.conversation_history[-limit:] if self.conversation_history else []
-        formatted = []
-        for msg in recent_history:
-            formatted.append(f"{msg['role']}: {msg['content']}")
-        self.logger.debug(f"Formatted conversation history: {formatted}")
-        return "\n".join(formatted)
     
     def worker_collaboration(self):
         """Facilitate worker collaboration and task discussion"""
@@ -384,41 +397,13 @@ Let's continue working on our deliverables and goals. What's your current focus 
         
         self.logger.info("Work loop complete")
     
-    def upload_deliverable_to_dropbox(self, deliverable_file: str) -> bool:
-        """Upload a deliverable file to Dropbox in the /RAgents folder"""
-        if not self.dbx:
-            self.logger.error("Cannot upload to Dropbox: No valid connection")
-            return False
-
-        try:
-            # Ensure the file exists locally
-            if not os.path.exists(deliverable_file):
-                self.logger.error(f"Deliverable file not found: {deliverable_file}")
-                return False
-
-            # Create the Dropbox path
-            filename = os.path.basename(deliverable_file)
-            dropbox_path = f"/ragers/{filename}"
-
-            # Upload the file
-            self.logger.info(f"Uploading {filename} to Dropbox")
-            with open(deliverable_file, 'rb') as f:
-                self.dbx.files_upload(f.read(), dropbox_path, mode=WriteMode.overwrite)
-            
-            self.logger.info(f"Successfully uploaded {filename} to Dropbox")
-            return True
-
-        except Exception as e:
-            self.logger.error(f"Error uploading to Dropbox: {e}")
-            return False
-
     def present_deliverables(self) -> str:
         """Present deliverables to the Big Boss"""
         self.logger.info("Preparing deliverables for Big Boss review")
         
         # Supervisor summarizes deliverables
         self.logger.debug("Generating supervisor's deliverable summary")
-        supervisor_prompt = f"Let's prepare a summary of our deliverables for Big Boss review. GOALS: {self.goals}  CONVERSATION HISTORY: {self.conversation_history} RAG DATA: {self.RAG_data}"
+        supervisor_prompt = f"Let's prepare a summary of our deliverables for Big Boss review. GOALS: {self.goals} CONVERSATION HISTORY: {self.conversation_history} RAG DATA: {self.RAG_data}"
         supervisor_response = self.supervisor.get_chat_response(supervisor_prompt)
         self.logger.debug(f"Supervisor's deliverable summary: {supervisor_response[:100]}...")
         self._log_conversation("present_deliverables", "supervisor", supervisor_response)
@@ -554,4 +539,32 @@ Let's continue working on our deliverables and goals. What's your current focus 
             return False, ""
         except Exception as e:
             self.logger.error(f"Error downloading source file: {e}")
-            return False, "" 
+            return False, ""
+
+    def upload_deliverable_to_dropbox(self, deliverable_file: str) -> bool:
+        """Upload a deliverable file to Dropbox in the /RAgents folder"""
+        if not self.dbx:
+            self.logger.error("Cannot upload to Dropbox: No valid connection")
+            return False
+
+        try:
+            # Ensure the file exists locally
+            if not os.path.exists(deliverable_file):
+                self.logger.error(f"Deliverable file not found: {deliverable_file}")
+                return False
+
+            # Create the Dropbox path
+            filename = os.path.basename(deliverable_file)
+            dropbox_path = f"/ragers/{filename}"
+
+            # Upload the file
+            self.logger.info(f"Uploading {filename} to Dropbox")
+            with open(deliverable_file, 'rb') as f:
+                self.dbx.files_upload(f.read(), dropbox_path, mode=WriteMode.overwrite)
+            
+            self.logger.info(f"Successfully uploaded {filename} to Dropbox")
+            return True
+
+        except Exception as e:
+            self.logger.error(f"Error uploading to Dropbox: {e}")
+            return False 

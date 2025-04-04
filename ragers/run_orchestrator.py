@@ -42,6 +42,7 @@ setup_logging()
 # Now import other modules
 import argparse
 from orchestrator import Orchestrator
+from modes import PlanMode, AutomateMode, ProofMode
 
 def run_strategic_goals(orchestrator, goals=None):
     """Run the strategic goal setting phase"""
@@ -87,24 +88,32 @@ def run_deliverables(orchestrator):
     logger.info(f"Deliverables saved to: {deliverable_file}")
     return deliverable_file
 
-def run_all_phases(orchestrator, args):
-    """Run all phases in sequence"""
+def run_mode_cycle(orchestrator):
+    """Run a complete mode cycle"""
     logger = logging.getLogger("cli")
+    logger.info(f"Running {orchestrator.mode.name} mode cycle")
     
-    # Run each phase in sequence
-    run_strategic_goals(orchestrator, args.goals)
-    run_kickoff(orchestrator)
-    run_project_creation(orchestrator)
-    run_worker_collaboration(orchestrator)
-    run_milestone_review(orchestrator, args.milestone)
-    run_work_loop(orchestrator)
+    # Run mode meeting
+    orchestrator.run_mode_meeting()
     
-    # Always generate deliverables at the end
-    return run_deliverables(orchestrator)
+    # Review deliverables
+    orchestrator.review_mode_deliverables()
+    
+    # Generate deliverable
+    deliverable_file = orchestrator.generate_mode_deliverable()
+    logger.info(f"Mode deliverable saved to: {deliverable_file}")
+    return deliverable_file
 
 def parse_arguments():
     """Parse command line arguments"""
     parser = argparse.ArgumentParser(description='Run the AI Agent Orchestrator')
+    
+    # Add mode argument
+    parser.add_argument('--mode', choices=[
+        'plan',
+        'automate',
+        'proof'
+    ], default='plan', help='Which mode to run')
     
     # Add command-line arguments
     parser.add_argument('--phase', choices=[
@@ -135,31 +144,26 @@ def main():
     args = parse_arguments()
     
     try:
-        # Initialize orchestrator
+        # Initialize orchestrator with specified mode
         logger.info("Initializing Orchestrator")
-        orchestrator = Orchestrator()
+        mode_map = {
+            'plan': PlanMode,
+            'automate': AutomateMode,
+            'proof': ProofMode
+        }
+        mode_class = mode_map[args.mode]
+        orchestrator = Orchestrator(mode=mode_class())
         
-        # success, content = orchestrator.get_next_source_file()
-        # if not success:
-        #     logger.info("No source files available in Dropbox. Continuing with local .goals file.")
-        #     content = "" 
-        #     success = False   
- 
         for iteration in range(args.ragemoot):
-        
-        # Run specified phase or all phases
             if args.phase == 'all':
-            # Run all phases the specified number of times
                 logger.info(f"\nStarting Ragemoot iteration {iteration + 1}/{args.ragemoot}")
-                               
-                # Use the retrieved file content as goals for this iteration
-                #args.goals = content
-                logger.info(f"Using retrieved file content as goals for this iteration: {args.goals}")
+                logger.info(f"Using mode: {orchestrator.mode.name}")
                 
-                run_all_phases(orchestrator, args)
+                # Run mode cycle
+                run_mode_cycle(orchestrator)
                 
             else:
-            # Map phase names to functions
+                # For backward compatibility, run the specified phase
                 phase_functions = {
                     'strategic-goals': lambda: run_strategic_goals(orchestrator, args.goals),
                     'kickoff': lambda: run_kickoff(orchestrator),
@@ -170,14 +174,13 @@ def main():
                     'present-deliverables': lambda: run_deliverables(orchestrator)
                 }
                 
-                # Run the specified phase
                 if args.phase in phase_functions:
-                    phase_functions[args.phase]()#(orchestrator, args)
+                    phase_functions[args.phase]()
                 else:
                     logger.error(f"Unknown phase: {args.phase}")
                     return
             
-                logger.info(f"Completed Ragemoot iteration {iteration + 1}")
+            logger.info(f"Completed Ragemoot iteration {iteration + 1}")
 
         logger.info("Orchestrator execution complete")
         
