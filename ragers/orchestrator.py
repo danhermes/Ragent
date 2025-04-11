@@ -137,6 +137,11 @@ class Orchestrator:
             "Woz": AgentWoz()
         }
         
+        # Initialize automation adapter
+        self.logger.debug("Creating automation adapter")
+        from apis.autocoder.adapters.automation_adapter import AutomationAdapter
+        self.automation_adapter = AutomationAdapter(logger=self.logger)
+        
         # Initialize conversation history
         self.conversation_history = []
         self.logger.info("Orchestrator company initialization complete")
