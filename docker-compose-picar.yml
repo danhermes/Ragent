@@ -1,0 +1,12 @@
+version: '3'
+
+services:
+  picar:
+    build: .
+    container_name: picar
+    privileged: true  # Required for GPIO access
+    volumes:
+      - /dev:/dev  # Mount device files for GPIO access
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped 
