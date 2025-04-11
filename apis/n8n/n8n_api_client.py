@@ -7,27 +7,41 @@ from .config import N8nConfig
 logger = logging.getLogger(__name__)
 
 class N8nApiClient:
-    """Client for making requests to the n8n API"""
+    """Client for interacting with n8n API"""
     
     def __init__(self, config: N8nConfig):
-        """Initialize n8n API client
-        
-        Args:
-            config: N8nConfig instance containing API configuration
-        """
-        self.base_url = config.base_url
-        self.headers = config.headers
-        self.logger = logging.getLogger(__name__)
-        
-        # API endpoints
-        self.endpoints = {
-            'workflows': '/api/v1/workflows',
-            'nodes': '/api/v1/nodes',
-            'credentials': '/api/v1/credentials',
-            'webhooks': '/api/v1/webhooks',
-            'executions': '/api/v1/executions'
+        self.config = config
+        self.base_url = f"{config.api_url}/api/v1"
+        self.headers = {
+            "X-N8N-API-KEY": config.api_key,
+            "Content-Type": "application/json"
         }
-    
+        self.logger = logging.getLogger("n8n_api_client")
+        
+    def get_nodes(self) -> Dict:
+        """Get available n8n nodes"""
+        try:
+            response = requests.get(f"{self.base_url}/nodes", headers=self.headers)
+            response.raise_for_status()
+            return response.json()
+        except Exception as e:
+            self.logger.error(f"Error getting n8n nodes: {str(e)}")
+            return {}
+            
+    def deploy_workflow(self, workflow: Dict) -> bool:
+        """Deploy workflow to n8n"""
+        try:
+            response = requests.post(
+                f"{self.base_url}/workflows",
+                headers=self.headers,
+                json=workflow
+            )
+            response.raise_for_status()
+            return True
+        except Exception as e:
+            self.logger.error(f"Error deploying workflow to n8n: {str(e)}")
+            return False
+
     def _make_request(self, method: str, endpoint: str, data: Optional[Dict] = None) -> Dict:
         """Make a request to the n8n API
         
@@ -38,8 +52,11 @@ class N8nApiClient:
             
         Returns:
             Dict containing the API response
+            
+        Raises:
+            ConnectionError: If n8n is not running or not accessible
         """
-        url = f"{self.base_url}{self.endpoints.get(endpoint, endpoint)}"
+        url = f"{self.base_url}/{endpoint}"
         
         try:
             # Log request details
@@ -48,13 +65,13 @@ class N8nApiClient:
                 self.logger.info(f"Request data: {json.dumps(data, indent=2)}")
             
             if method.upper() == 'GET':
-                response = requests.get(url, headers=self.headers)
+                response = requests.get(url, headers=self.headers, timeout=5)
             elif method.upper() == 'POST':
-                response = requests.post(url, headers=self.headers, json=data)
+                response = requests.post(url, headers=self.headers, json=data, timeout=5)
             elif method.upper() == 'PUT':
-                response = requests.put(url, headers=self.headers, json=data)
+                response = requests.put(url, headers=self.headers, json=data, timeout=5)
             elif method.upper() == 'DELETE':
-                response = requests.delete(url, headers=self.headers)
+                response = requests.delete(url, headers=self.headers, timeout=5)
             else:
                 raise ValueError(f"Unsupported HTTP method: {method}")
             
@@ -65,6 +82,13 @@ class N8nApiClient:
             
             response.raise_for_status()
             return response.json()
+            
+        except requests.exceptions.ConnectionError as e:
+            self.logger.error(f"Could not connect to n8n at {self.base_url}. Is n8n running?")
+            raise ConnectionError(f"Could not connect to n8n at {self.base_url}. Please ensure n8n is running and accessible.") from e
+        except requests.exceptions.Timeout as e:
+            self.logger.error(f"Request to n8n timed out. Is n8n running and responsive?")
+            raise ConnectionError(f"Request to n8n timed out. Please ensure n8n is running and responsive.") from e
         except requests.exceptions.RequestException as e:
             self.logger.error(f"Error making {method} request to n8n API endpoint {endpoint}: {str(e)}")
             if hasattr(e.response, 'text'):

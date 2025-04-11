@@ -2,8 +2,10 @@ import json
 from typing import Dict, Any, Optional, List, Union
 import logging
 import uuid
-from n8n_api_client import N8nApiClient
-from config import N8nConfig
+from pathlib import Path
+from datetime import datetime
+from .n8n_api_client import N8nApiClient
+from .config import N8nConfig
 
 # Set up logging with more detailed format
 logging.basicConfig(
@@ -15,17 +17,25 @@ logger = logging.getLogger(__name__)
 class N8nWorkflowHelper:
     """Helper class for creating and managing n8n workflows"""
     
-    def __init__(self, config: Optional[N8nConfig] = None):
+    def __init__(self, config: N8nConfig):
         """Initialize n8n API connection
         
         Args:
-            config: Optional N8nConfig instance. If not provided, a new one will be created.
+            config: N8nConfig instance
         """
         logger.debug("Initializing N8nWorkflowHelper")
-        self.config = config or N8nConfig()
+        self.config = config
         self.api_client = N8nApiClient(self.config)
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger("n8n_workflow_helper")
         logger.debug(f"Initialized with config: {self.config.__dict__}")
+    
+    def get_nodes(self) -> Dict:
+        """Get available n8n nodes"""
+        try:
+            return self.api_client.get_nodes()
+        except Exception as e:
+            self.logger.error(f"Error getting n8n nodes: {str(e)}")
+            return {}
     
     def _create_node_base(self, name: str, type: str, position: List[int], parameters: Dict[str, Any], 
                          credentials: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -74,13 +84,13 @@ class N8nWorkflowHelper:
         """Create a Schedule Trigger node"""
         logger.debug(f"Creating schedule trigger: {name} at {trigger_at_hour}:00 {interval}")
         parameters = {
-            "rule": {
-                "interval": [
-                    {
-                        "field": interval,
-                        "triggerAtHour": trigger_at_hour
-                    }
-                ]
+            "triggerTimes": {
+                "item": [{
+                    "mode": "everyX",
+                    "value": 1,
+                    "unit": interval,
+                    "hours": trigger_at_hour
+                }]
             }
         }
         logger.debug(f"Schedule parameters: {json.dumps(parameters, indent=2)}")
@@ -97,20 +107,14 @@ class N8nWorkflowHelper:
         logger.debug(f"Creating OpenAI node: {name} with model {model}")
         logger.debug(f"Prompt: {prompt}")
         parameters = {
-            "authentication": "apiKey",
+            "resource": "chat",
             "model": model,
             "prompt": prompt,
-            "options": {
-                "temperature": 0.7,
-                "maxTokens": 2000
-            }
+            "options": {}
         }
         
         credentials = {
-            "openAiApi": {
-                "id": credentials_id,
-                "name": "OpenAI account"
-            }
+            "openAiApi": credentials_id
         }
         
         logger.debug(f"OpenAI parameters: {json.dumps(parameters, indent=2)}")
@@ -130,17 +134,13 @@ class N8nWorkflowHelper:
         logger.debug(f"Creating Dropbox List Folder node: {name}")
         logger.debug(f"Folder path: {folder_path}")
         parameters = {
+            "resource": "file",
             "operation": "list",
-            "path": folder_path,
-            "limit": 100,
-            "options": {}
+            "folder": folder_path
         }
         
         credentials = {
-            "dropboxApi": {
-                "id": credentials_id,
-                "name": "Dropbox account"
-            }
+            "dropboxApi": credentials_id
         }
         
         logger.debug(f"Dropbox parameters: {json.dumps(parameters, indent=2)}")
@@ -160,17 +160,14 @@ class N8nWorkflowHelper:
         logger.debug(f"Creating Dropbox Upload node: {name}")
         logger.debug(f"Upload path: {folder_path}/{file_name}")
         parameters = {
+            "resource": "file",
             "operation": "upload",
-            "path": folder_path + "/" + file_name,
-            "binary": True,
-            "options": {}
+            "folder": folder_path,
+            "fileName": file_name
         }
         
         credentials = {
-            "dropboxApi": {
-                "id": credentials_id,
-                "name": "Dropbox account"
-            }
+            "dropboxApi": credentials_id
         }
         
         logger.debug(f"Dropbox upload parameters: {json.dumps(parameters, indent=2)}")
@@ -191,18 +188,13 @@ class N8nWorkflowHelper:
         logger.debug(f"To: {to_email}")
         logger.debug(f"Subject: {subject}")
         parameters = {
-            "fromEmail": "dan@lexicon.systems",
-            "to": to_email,
+            "toEmail": to_email,
             "subject": subject,
-            "text": body,
-            "options": {}
+            "text": body
         }
         
         credentials = {
-            "smtp": {
-                "id": credentials_id,
-                "name": "SMTP account"
-            }
+            "smtp": credentials_id
         }
         
         logger.debug(f"Email parameters: {json.dumps(parameters, indent=2)}")
