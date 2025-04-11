@@ -1,13 +1,21 @@
 import os
+import sys
 import shutil
 import logging
 from datetime import datetime
+from pathlib import Path
+
+# Add parent directory to Python path
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+
 from . import code_writer
 from . import runner_docker
 from . import tester
 from . import debugger
 from utils.logger import log
-from ..adapters.n8n_adapter import N8nAdapter
+from apis.autocoder.adapters.n8n_adapter import N8nAdapter
 
 class AgentBuildCycle:
     def __init__(self, agent_task, max_iterations=3, log_dir="debuglog"):
