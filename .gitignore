@@ -61,6 +61,11 @@ apis/autocoder/tests/
 apis/autocoder/Dockerfile
 
 TinyLlama/
-llama.cpp
+llama.cpp/
+
+ragers/logs/orchestrator_*.log
+ragers/workflow_*.json
+ragers/logs/
+ragers/*.json
 
   
