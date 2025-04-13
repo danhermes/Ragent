@@ -2,6 +2,10 @@ from time import sleep
 from utils import gray_print
 from vilib import Vilib
 
+# Actions: forward, backward, left, right, stop, circle left, circle right, come here, shake head, 
+#    nod, wave hands, resist, act cute, rub hands, think, twist body, celebrate, depressed, keep think
+#
+# Sounds: honk, start engine
 
 def with_obstacle_check(func):
     """Decorator to add obstacle checking to movement functions
@@ -272,28 +276,6 @@ def nod(car):
 
 
 def depressed(car):
-    # car.reset()
-    # car.set_cam_tilt_angle(0)
-    # car.set_cam_tilt_angle(20)
-    # sleep(.22)
-    # car.set_cam_tilt_angle(-30)
-    # sleep(.1)
-    # car.set_cam_tilt_angle(15)
-    # sleep(.1)
-    # car.set_cam_tilt_angle(-20)
-    # sleep(.1)
-    # car.set_cam_tilt_angle(10)
-    # sleep(.1)
-    # car.set_cam_tilt_angle(-10)
-    # sleep(.1)
-    # car.set_cam_tilt_angle(5)
-    # sleep(.1)
-    # car.set_cam_tilt_angle(-5)
-    # sleep(.1)
-    # car.set_cam_tilt_angle(2)
-    # sleep(.1)
-    # car.set_cam_tilt_angle(0)
-
     car.reset()
     car.set_cam_tilt_angle(0)
     car.set_cam_tilt_angle(20)
@@ -393,8 +375,8 @@ actions_dict = {
     "left": turn_left,
     "right": turn_right,
     "stop": stop,
-    "turn left": turn_left_in_place,
-    "turn right": turn_right_in_place,
+    "circle left": turn_left_in_place,
+    "circle right": turn_right_in_place,
     "come here": come_here,
     "shake head": shake_head,
     "nod": nod,
