@@ -1,3 +1,6 @@
+import warnings
+warnings.filterwarnings("ignore", category=RuntimeWarning, module="ALSA")
+
 from openai_helper import OpenAiHelper
 from action_helper import actions_dict, sounds_dict, move_forward_this_way as forward, move_backward_this_way as backward, turn_left_in_place, turn_right_in_place, turn_left, turn_right, stop, shake_head, nod, wave_hands, resist, act_cute, rub_hands, think, keep_think, twist_body, celebrate, depressed
 from utils import *
@@ -10,6 +13,7 @@ from dotenv import load_dotenv
 from time import sleep
 import numpy as np
 import re
+from automatic import Automatic
 
 # Load environment variables from .env file
 load_dotenv()
@@ -41,6 +45,7 @@ class PiCar:
             self.init_threads()
             self.init_topics()
             self.init_movement()
+            self.init_auto() 
         except Exception as e:
             print(f"Initialization error: {e}")
             raise
@@ -177,6 +182,11 @@ class PiCar:
     def init_movement(self):
         self.ACTIONS = actions_dict
 
+    def init_auto(self):
+        """Initialize automatic mode settings"""
+        self.auto = Automatic(self)  # Initialize auto mode
+        self.auto_enabled = False
+
     def play_audio_file(self, music, tts_file):
         try:
             if os.path.exists(tts_file):
@@ -273,6 +283,16 @@ class PiCar:
         return last_led_time
 
     def parse_action(self, response):
+        # Handle sleep command
+        if response.startswith("sleep"):
+            try:
+                _, duration = response.split()
+                return "sleep", [float(duration)]
+            except (ValueError, IndexError):
+                print(f"Failed to parse sleep command: {response}")
+                return None, None
+
+        # Handle movement commands
         parts = response.lower().split()
         if len(parts) >= 2:
             # Handle forward movement
@@ -345,10 +365,10 @@ class PiCar:
                 for _action in _actions:
                     try:
                         gray_print(f'actionT: {_action}')
-                        #if _action in self.ACTIONS:
-                        gray_print(f"Performing action: {_action}")
                         action, params = self.parse_action(_action)
-                        if action in self.ACTIONS:
+                        if action == "sleep":
+                            time.sleep(params[0])  # Sleep duration is first parameter
+                        elif action in self.ACTIONS:
                             if params:
                                 self.ACTIONS[action](self.my_car, *params)
                             else:
@@ -385,9 +405,25 @@ class PiCar:
                                   sample_rate=44100) as source: #16000
                     cancel_redirect_error(_stderr_back)
                     self.recognizer.adjust_for_ambient_noise(source)
-                    audio = self.recognizer.listen(source)
+                    try:  
+                        audio = None
+                        audio = self.recognizer.listen(source, timeout=10, phrase_time_limit=10)
+                    except sr.WaitTimeoutError:
+                        print("Timeout detected.")
+                        _user_prompt = ""
 
                 gray_print(f"Listen time: {time.time() - listen_start:.3f}s")
+
+                # After listen attempt
+                if audio is None:  # If no audio was captured
+                    print("No audio captured")
+                    _user_prompt = ""
+                    # Auto mode for no audio
+                    if not self.speech_loaded and self.action_status == 'standby':
+                        print("\n[system] No input detected, running automatic behaviors...")
+                        self.auto_enabled = True
+                        self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
+                        continue
 
                 # For Debugging only - Play back the recorded audio
                 #self.play_audio_data(audio)
@@ -398,6 +434,8 @@ class PiCar:
                 
                 audio_data = None
                 rms_energy = 0
+                normalized_data = None
+
                 try:
                     audio_data = np.frombuffer(audio.get_raw_data(), dtype=np.int16)
                     # Normalize to -1.0 to 1.0 range
@@ -408,19 +446,43 @@ class PiCar:
                     print(f"Error checking audio RMS energy: {e}")
 
                 # Define your threshold for what you consider 'real' speech
-                if rms_energy < 0.009:  # Threshold for normalized values
-                    print("Silence detected: skipping transcription.")
-                    _user_prompt = ""
-                else:
+                if rms_energy >= 0.009:  # Real speech detected
                     _user_prompt = self.openai_helper.stt(audio, language=self.LANGUAGE)
                     print("Transcript:", _user_prompt)
+                    
+                    if self.auto_enabled:
+                        if _user_prompt and "nevil" in _user_prompt.lower():
+                            # Wake word detected - process normally
+                            print("[system] Wake word detected")
+                            self.auto_enabled = False
+                            self.actions_to_be_done = []  # Clear pending actions
+                            self.my_car.reset()  # Reset car state
+                        else:
+                            # No wake word - go back to auto mode
+                            print("\n[system] No wake word, running automatic behaviors...")
+                            #self.auto_enabled = True
+                            self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
+                            continue
+                else:
+                    print("Silence detected: skipping transcription.")
+                    _user_prompt = ""
+                    # Auto mode for silence
+                    if not self.speech_loaded and self.action_status == 'standby':
+                        print("\n[system] No input detected, running automatic behaviors...")
+                        self.auto_enabled = True
+                        self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
+                        continue
 
                 
                 gray_print(f"STT time: {time.time() - stt_start:.3f}s")
 
                 if _user_prompt == False or _user_prompt == "":
-                    print() # new line
-                    continue
+                    # Add automatic behavior when no input detected
+                    if not self.speech_loaded and self.action_status == 'standby':
+                        print("\n[system] No input detected, running automatic behaviors...")
+                        self.auto_enabled = True
+                        self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
+                        continue
                 if "shut down" in _user_prompt.lower():
                     gray_print("Shutting down ...")
                     raise KeyboardInterrupt()
@@ -433,9 +495,6 @@ class PiCar:
 
                 _user_prompt = input(f'\033[1;30m{"intput: "}\033[0m').encode(sys.stdin.encoding).decode('utf-8')
 
-                if _user_prompt == False or _user_prompt == "":
-                    print() # new line
-                    continue
                 if _user_prompt.lower() == "shut down":
                     gray_print("Shutting down ...")
                     raise KeyboardInterrupt()
@@ -566,6 +625,13 @@ class PiCar:
                 time.sleep(.01)
             gray_print(f"Wait time for completion: {time.time() - wait_start:.3f}s")
             gray_print(f"Total iteration time: {time.time() - listen_start:.3f}s\n")
+
+            # When going into auto mode
+            if not _user_prompt or "nevil" not in _user_prompt.lower():
+                print("\n[system] No wake word, running automatic behaviors...")
+                self.auto_enabled = True
+                self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
+                continue
 
     def cleanup(self):
         """Add this method for cleanup"""
