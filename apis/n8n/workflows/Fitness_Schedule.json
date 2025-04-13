@@ -1,0 +1,138 @@
+{
+  "name": "Fitness Schedule",
+  "nodes": [
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-3.5-turbo",
+          "mode": "list",
+          "cachedResultName": "GPT-3.5-TURBO"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Randomly generate a 6-day fitness schedule for the week from these activities and classes with ONLY 1 activity/day max. List Monday-Saturday with morning, afternoon, or evening activity with time. Omit schedule title. Indent exercises beneath day name and put one per line. These are the options for each day:\nMon-Friday\n______________________________________\nMorning\nYMCA - Mon/Thurs. 10am - Core Fusion w/ Michelle/Jen - 1 hour\nYMCA - Thurs. 11am - BodyCombat w/ Shonna\n______________________________________\n1pm-3pm (15-30 min)\nQuest VR: Beat Saber, LesMills Combat, Racket\n15 minute walks\n_____________________________\n5pm-8pm (30-60 min)\n30 minute walks\nYMCA - Wed 7:15 Tai Chi - 1 hour\nYMCA - CrossFit - 1 hour\nSkateboarding - 45 min.\nQuest VR: Beat Saber, LesMills Combat, Racket - 30 min.\n______________________________\nSat/Sun (15-60 min)\nRandom fun activity (hike, walk, Quest VR, etc.)\n_____________________________\nEncourage a fitness tracker and LoseIt.\n\nAt bottom title \"Register YMCA Classes\" and list those classes. "
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -240,
+        -80
+      ],
+      "id": "7ad60f1c-aeee-4fbc-9a47-274c9b852e50",
+      "name": "OpenAI",
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fromEmail": "dan@lexicon.systems",
+        "toEmail": "dan@lexicon.systems",
+        "subject": "Weekly Fitness Schedule",
+        "emailFormat": "text",
+        "text": "=Your weekly motion schedule for {{$today.toFormat('MM-dd-YYYY')}}} \n\n{{ $json.message.content }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 2.1,
+      "position": [
+        100,
+        -80
+      ],
+      "id": "2fc11bd4-6e3e-436b-9731-2adfaa3c69ec",
+      "name": "Send Email",
+      "webhookId": "16f9bb88-2e59-43e3-96a9-ee84ce2265cd",
+      "credentials": {
+        "smtp": {
+          "id": "JTbu1l5Wfqw1zrie",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "weeks",
+              "triggerAtHour": 20
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -420,
+        -80
+      ],
+      "id": "18989753-e134-44a6-bc89-c44b83335d12",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "content": "Add Calendar Events\n",
+        "height": 80,
+        "width": 220
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        240,
+        60
+      ],
+      "id": "09ed41fd-93b3-440c-8fcb-df823aa22c7e",
+      "name": "Sticky Note"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Send Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Email": {
+      "main": [
+        []
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "abd173e2-5a10-4c8e-8d47-506edc06034e",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "546179b5641a177dfdb8b791287ceb5cc4108634bd65e0730257717d8d42d201"
+  },
+  "id": "v2YDdH7jpq4K5EpY",
+  "tags": []
+}

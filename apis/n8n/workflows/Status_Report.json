@@ -1,0 +1,555 @@
+{
+  "name": "Status Report",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1480,
+        -540
+      ],
+      "id": "a7967682-ec60-48ac-9409-e32138f5bd14",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "operation": "download",
+        "path": "/AGENTS/Galleries 2025 Agents.xlsx"
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        -1260,
+        -540
+      ],
+      "id": "e049eba1-f18d-46fe-ae7f-729f903a7288",
+      "name": "Dropbox",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1,
+      "position": [
+        -1040,
+        -540
+      ],
+      "id": "42b938c4-25bd-4d31-90de-6b0c9a9998bf",
+      "name": "Extract from File"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ca8f2694-2b2a-47fe-a6e4-39f4b949efc2",
+              "leftValue": "=  {{ DateTime.fromMillis(($json[\"Create Date\"] - 25568) * 86400000).format('yyyy-MM-dd') }}",
+              "rightValue": "={{ DateTime.fromISO($today).format('yyyy-MM-dd') }}",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        -820,
+        -540
+      ],
+      "id": "67a936ff-5aa0-422b-abd1-3e60957d67c4",
+      "name": "Date = Today"
+    },
+    {
+      "parameters": {
+        "fieldsToSummarize": {
+          "values": [
+            {
+              "field": "Company Name"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.summarize",
+      "typeVersion": 1.1,
+      "position": [
+        -600,
+        -540
+      ],
+      "id": "68c239a7-adba-4534-8ae9-0a74619a16d3",
+      "name": "Count"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "eda4b5f1-7c88-4d26-af7f-edcfe9c76e1b",
+              "leftValue": "={{ $('Date = Today').all()[0].json['Create Email'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "d9619557-c4bd-4bff-a206-6198316a01cc",
+              "leftValue": "={{ $('Date = Today').all()[1].json['Create Email'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            },
+            {
+              "id": "9affa6f4-ab0c-4385-bd2d-6d63c0ee8cea",
+              "leftValue": "={{ $('Date = Today').all()[2].json['Create Email'] }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -160,
+        -540
+      ],
+      "id": "934fe1f6-8f28-4ba1-90ea-02feb2d61d26",
+      "name": "Create Email exists",
+      "executeOnce": false
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.convertToFile",
+      "typeVersion": 1.1,
+      "position": [
+        180,
+        -820
+      ],
+      "id": "23f169ec-ccbe-410c-9e6b-65975eb7cf36",
+      "name": "Convert to File"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "=/AGENTS/Task Status_{{ $now.toDateTime().format('yyyy-MM-dd_HH:mm') }}.xlsx",
+        "binaryData": true
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        340,
+        -820
+      ],
+      "id": "70cb4904-6a88-4b99-8c10-24da67b632ba",
+      "name": "Dropbox1",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9d090a49-9810-406c-ae59-e45d0771523e",
+              "name": "Date Run",
+              "value": "={{ $today.toDateTime().format('yyyy-MM-dd HH:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "1904e35a-9e6b-429f-ab34-0b75449b9194",
+              "name": "Task",
+              "value": "Gallery Outreach",
+              "type": "string"
+            },
+            {
+              "id": "5102c1d1-4a29-4804-a57b-aea77ac6c544",
+              "name": "Agent",
+              "value": "N8N Gallery Agent(s)",
+              "type": "string"
+            },
+            {
+              "id": "2ce3f5b1-ed24-4e0e-8b9a-ef865911167c",
+              "name": "Completed",
+              "value": "No",
+              "type": "string"
+            },
+            {
+              "id": "d3b7e5e7-df7a-47ea-8c07-9335d49f0753",
+              "name": "Approved",
+              "value": "No",
+              "type": "string"
+            },
+            {
+              "id": "cb46729d-ffc9-44e1-874e-1583d572dabc",
+              "name": "Results",
+              "value": "=Gallery Contacts not created",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        -300
+      ],
+      "id": "77b79242-eb59-4eff-b25e-7cfcc2f841fd",
+      "name": "Edit Fields2"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9d090a49-9810-406c-ae59-e45d0771523e",
+              "name": "Date Run",
+              "value": "={{ $today.toDateTime().format('yyyy-MM-dd HH:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "1904e35a-9e6b-429f-ab34-0b75449b9194",
+              "name": "Task",
+              "value": "Gallery Outreach",
+              "type": "string"
+            },
+            {
+              "id": "5102c1d1-4a29-4804-a57b-aea77ac6c544",
+              "name": "Agent",
+              "value": "N8N Gallery Agent(s)",
+              "type": "string"
+            },
+            {
+              "id": "2ce3f5b1-ed24-4e0e-8b9a-ef865911167c",
+              "name": "Completed",
+              "value": "Yes",
+              "type": "string"
+            },
+            {
+              "id": "d3b7e5e7-df7a-47ea-8c07-9335d49f0753",
+              "name": "Approved",
+              "value": "Yes",
+              "type": "string"
+            },
+            {
+              "id": "cb46729d-ffc9-44e1-874e-1583d572dabc",
+              "name": "Results",
+              "value": "=",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        -700
+      ],
+      "id": "2d8f0ad6-8812-46a2-b24a-c03dac7b9721",
+      "name": "Success"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9d090a49-9810-406c-ae59-e45d0771523e",
+              "name": "Date Run",
+              "value": "={{ $now.toDateTime().format('yyyy-MM-dd HH:mm') }}",
+              "type": "string"
+            },
+            {
+              "id": "1904e35a-9e6b-429f-ab34-0b75449b9194",
+              "name": "Task",
+              "value": "Gallery Outreach",
+              "type": "string"
+            },
+            {
+              "id": "5102c1d1-4a29-4804-a57b-aea77ac6c544",
+              "name": "Agent",
+              "value": "N8N Gallery Agent(s)",
+              "type": "string"
+            },
+            {
+              "id": "2ce3f5b1-ed24-4e0e-8b9a-ef865911167c",
+              "name": "Completed",
+              "value": "No",
+              "type": "string"
+            },
+            {
+              "id": "d3b7e5e7-df7a-47ea-8c07-9335d49f0753",
+              "name": "Approved",
+              "value": "No",
+              "type": "string"
+            },
+            {
+              "id": "cb46729d-ffc9-44e1-874e-1583d572dabc",
+              "name": "Results",
+              "value": "=Contacts created, Email not created",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        0,
+        -500
+      ],
+      "id": "57d6a0b3-89c2-4f6e-9307-24b831438d3d",
+      "name": "Failure"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "903d3dfc-2d44-4228-9dae-9bfb2f6d9e8c",
+              "leftValue": "={{ $json.count_Company_Name }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            },
+            {
+              "id": "cfae12de-64c1-481d-97f3-2dc764eca573",
+              "leftValue": "",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -380,
+        -540
+      ],
+      "id": "e6c1dec2-6216-4225-8cbf-e23defee828e",
+      "name": "Created Gallery Contacts"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Dropbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dropbox": {
+      "main": [
+        [
+          {
+            "node": "Extract from File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract from File": {
+      "main": [
+        [
+          {
+            "node": "Date = Today",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Date = Today": {
+      "main": [
+        [
+          {
+            "node": "Count",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Count": {
+      "main": [
+        [
+          {
+            "node": "Created Gallery Contacts",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create Email exists": {
+      "main": [
+        [
+          {
+            "node": "Success",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Failure",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Convert to File": {
+      "main": [
+        [
+          {
+            "node": "Dropbox1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields2": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Success": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Failure": {
+      "main": [
+        [
+          {
+            "node": "Convert to File",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Created Gallery Contacts": {
+      "main": [
+        [
+          {
+            "node": "Create Email exists",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Edit Fields2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "5ffefe7c-7e0a-4518-bdf5-571a19a45b53",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "546179b5641a177dfdb8b791287ceb5cc4108634bd65e0730257717d8d42d201"
+  },
+  "id": "zD7qK7JJQ0IL2YqU",
+  "tags": []
+}

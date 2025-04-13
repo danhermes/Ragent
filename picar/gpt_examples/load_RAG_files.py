@@ -9,8 +9,8 @@ load_dotenv()
 class LoadRAGfiles:
     def __init__(self):
         self.DB_ACCESS_TOKEN = os.getenv("DROPBOX_API_TOKEN")
-        self.file_path = "d.txt"  # Path in Dropbox
-        self.save_path = "d.txt" #Local path
+        self.file_path = ""  # Path in Dropbox
+        self.save_path = "" #Local path
         if not self.DB_ACCESS_TOKEN:
             gray_print("Error: No Dropbox access token found in environment 1")
 
@@ -69,6 +69,8 @@ class LoadRAGfiles:
             self.file_path = "/Nevil_general.txt"
         elif file_type == "fitness":
             self.file_path = "/weekly_fitness_plan.txt"
+        elif file_type == "work":
+            self.file_path = "/weekly_work_plan.txt"
         else:
             gray_print(f"Invalid file type: {file_type}")
             return ""

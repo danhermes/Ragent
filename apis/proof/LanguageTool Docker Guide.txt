@@ -1,0 +1,83 @@
+Ahhh, yes—**Docker**, the modern-day summoning circle for dev tools. You want LanguageTool running inside a container, humming obediently and checking grammar like a Victorian schoolteacher on caffeine? Let’s go.
+
+---
+
+## 🐳 **How to Run LanguageTool in Docker (TL;DR)**
+
+```bash
+
+THIS ONE WORKS
+docker pull erikvl87/languagetool
+docker run -d -p 8010:8010 --name languagetool erikvl87/languagetool
+
+
+THESE DONT WORK
+docker run -d -p 8010:8010 --name languagetool quay.io/languagetool-org/languagetool:6.3
+
+docker run -d -p 8010:8010 --name languagetool \
+  quay.io/languagetool-org/languagetool
+```
+
+- This runs LanguageTool on port **8010**, accessible via `http://localhost:8010`.
+- It starts the built-in HTTP server with the `/v2/check` endpoint ready to receive your glorious, typo-ridden text.
+
+---
+
+## 🧪 Test it
+
+Try this with `curl`:
+
+```bash
+curl -X POST http://localhost:8010/v2/check \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "language=en-US&text=She dont know what she doing"
+```
+
+You’ll get back a tidy little JSON payload with suggestions like:
+> “did you mean *doesn’t*?”
+
+---
+
+## ⚙️ Optional: More Control with Java Options
+
+If you're running this on a system with limited RAM, or a beefy dev box:
+
+```bash
+docker run -d -p 8010:8010 --name languagetool \
+  -e JAVA_TOOL_OPTIONS="-Xmx2g" \
+  quay.io/languagetool-org/languagetool
+```
+
+This sets the max heap size to 2GB (adjust as needed).
+
+---
+
+## 🧠 Use in Your App
+
+Your app can now make HTTP POSTs to:
+
+```
+http://localhost:8010/v2/check
+```
+
+Parameters:
+- `text=Your+text+here`
+- `language=en-US`
+
+Headers:
+- `Content-Type: application/x-www-form-urlencoded`
+
+---
+
+## 💡 Bonus: Use with Nginx, SSL, or Docker Compose
+
+If you're feeling fancy or want to deploy this to production, I can help set up:
+- A reverse proxy with HTTPS
+- Docker Compose stack
+- Persistent configuration or caching layers
+
+---
+
+You're now the proud master of a **free, private proofreading API**, with no limits and no leaks. Your words are safe, your syntax is sharp, and your commas march in line like little soldiers.
+
+Just say the word if you want me to help wire this into your GPT workflow.

@@ -1,0 +1,338 @@
+{
+  "name": "Daily Data Analysis Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        100,
+        100
+      ],
+      "id": "1df8b69b-a088-4b1c-a3d7-0359f1d79138",
+      "name": "Daily Schedule"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "folder",
+        "operation": "list",
+        "path": "/Reports",
+        "returnAll": true,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        100
+      ],
+      "id": "fdfe1bfe-0cb7-4b8c-8470-617e3bceb29c",
+      "name": "List Excel Files",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['name']}}",
+              "value2": ".xlsx",
+              "operation": "contains"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        100
+      ],
+      "id": "27990bb5-48ec-4bed-9747-da24d62a361c",
+      "name": "Get Latest Excel"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "sheetName": "Sheet1",
+        "range": "A1:D100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        700,
+        100
+      ],
+      "id": "05cc3385-73b6-4675-addd-fe723df4e2cd",
+      "name": "Extract Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['status']}}",
+              "value2": "pending",
+              "operation": "equal"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        100
+      ],
+      "id": "397701a8-98e2-4fa1-ab9c-ef286bcce724",
+      "name": "Filter Data"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "GPT-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Analyze the following data and provide insights:\n{{$json}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.2,
+      "position": [
+        1100,
+        100
+      ],
+      "id": "c9416fb4-8b33-40ec-976e-bd55d08c810c",
+      "name": "Analyze Data",
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fields": {
+          "subject": "Daily Data Analysis Report",
+          "body": "={{$json['choices'][0]['message']['content']}}"
+        }
+      },
+      "type": "n8n-nodes-base.editFields",
+      "typeVersion": 1.2,
+      "position": [
+        1300,
+        100
+      ],
+      "id": "398fc963-6754-4797-b2be-65e67ce8af84",
+      "name": "Format Email"
+    },
+    {
+      "parameters": {
+        "fromEmail": "dan@lexicon.systems",
+        "toEmail": "team@example.com",
+        "subject": "={{$json['subject']}}",
+        "emailFormat": "text",
+        "text": "={{$json['body']}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        0
+      ],
+      "id": "296dddfd-d4fa-4d7a-aca9-6ca6a3e94fea",
+      "name": "Send Report",
+      "credentials": {
+        "smtp": {
+          "id": "JTbu1l5Wfqw1zrie",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileType": "xlsx",
+        "sheetName": "Analysis Results"
+      },
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        200
+      ],
+      "id": "a8dbfc2b-0ad8-49bc-8bd8-18c37419fdef",
+      "name": "Convert Results"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "/Analysis Results",
+        "fileName": "daily_analysis_{{Date.now()}}.xlsx"
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        200
+      ],
+      "id": "847dd07c-f7e6-4d34-a1da-c2bbe3cfbd93",
+      "name": "Upload Results",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "1df8b69b-a088-4b1c-a3d7-0359f1d79138": {
+      "main": [
+        [
+          {
+            "node": "fdfe1bfe-0cb7-4b8c-8470-617e3bceb29c",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "fdfe1bfe-0cb7-4b8c-8470-617e3bceb29c": {
+      "main": [
+        [
+          {
+            "node": "27990bb5-48ec-4bed-9747-da24d62a361c",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "27990bb5-48ec-4bed-9747-da24d62a361c": {
+      "main": [
+        [
+          {
+            "node": "05cc3385-73b6-4675-addd-fe723df4e2cd",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "05cc3385-73b6-4675-addd-fe723df4e2cd": {
+      "main": [
+        [
+          {
+            "node": "397701a8-98e2-4fa1-ab9c-ef286bcce724",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "397701a8-98e2-4fa1-ab9c-ef286bcce724": {
+      "main": [
+        [
+          {
+            "node": "c9416fb4-8b33-40ec-976e-bd55d08c810c",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "c9416fb4-8b33-40ec-976e-bd55d08c810c": {
+      "main": [
+        [
+          {
+            "node": "398fc963-6754-4797-b2be-65e67ce8af84",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "398fc963-6754-4797-b2be-65e67ce8af84": {
+      "main": [
+        [
+          {
+            "node": "296dddfd-d4fa-4d7a-aca9-6ca6a3e94fea",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "node": "a8dbfc2b-0ad8-49bc-8bd8-18c37419fdef",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "a8dbfc2b-0ad8-49bc-8bd8-18c37419fdef": {
+      "main": [
+        [
+          {
+            "node": "847dd07c-f7e6-4d34-a1da-c2bbe3cfbd93",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "UTC"
+  },
+  "active": false,
+  "versionId": "5c0120d9-2ca3-4c40-ace7-eb375f552b05",
+  "id": "CLCrlwsmKnjJEkOc",
+  "staticData": null,
+  "meta": null,
+  "pinData": null,
+  "createdAt": "2025-03-28T08:12:59.653Z",
+  "updatedAt": "2025-03-28T08:12:59.653Z",
+  "triggerCount": 0
+}

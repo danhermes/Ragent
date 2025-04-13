@@ -448,13 +448,22 @@ class PiCar:
             # ---------------------------------------------------------------- 
             self.RAGtext=""
             search_terms = ["gym", "fit", "pump","The Y", "YMCA", "Tai Chi", "walk", "exercise", "motion", "movement", "skateboarding", "dance", "cardio", "strength", "endurance", "flexibility", "balance", "core", "stretching", "yoga", "pilates", "dance", "cardio", "strength", "endurance", "flexibility", "balance", "core", "stretching"]
-            gym_RAG = bool(re.search('|'.join(map(re.escape, search_terms)), _user_prompt))
-            if gym_RAG:
+            fitness_RAG = bool(re.search('|'.join(map(re.escape, search_terms)), _user_prompt))
+            if fitness_RAG:
                 try:
                     gray_print("Getting fitness schedule")    
-                    self.RAGtext = LoadRAGfiles().get_files_from_Dropbox(file_type="fitness")
+                    self.RAGtext = self.RAGtext + LoadRAGfiles().get_files_from_Dropbox(file_type="fitness")
                 except Exception as e:  
                     gray_print(f"Error getting fitness schedule: {e}")
+                    
+            search_terms = ["work", "job", "project", "task", "deadline", "meeting", "customer", "company", "client", "customer", "writing", "search", "contract", "proposal", "email", "consulting", "consult", "consultant", "Lexicon", "books", "book", "artwork", "art", "publishers", "galleries", "planning", "event", "talk", "calendar", "raging", "coding", "outreach"]
+            work_RAG = bool(re.search('|'.join(map(re.escape, search_terms)), _user_prompt))
+            if work_RAG:
+                try:
+                    gray_print("Getting work schedule")    
+                    self.RAGtext = self.RAGtext + LoadRAGfiles().get_files_from_Dropbox(file_type="work")
+                except Exception as e:  
+                    gray_print(f"Error getting work schedule: {e}")
 
 
             # chat-gpt
