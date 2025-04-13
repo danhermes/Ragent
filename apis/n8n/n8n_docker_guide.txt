@@ -1,0 +1,85 @@
+N8N Startup
+
+Create Container from Image and Start
+docker run -d --name n8n -p 5678:5678 -v n8n_data:/home/node/.n8n -v "/c/Users/Dan Hermes/Documents/n8n-project/certs:/certs" -e N8N_PROTOCOL=https -e N8N_SSL_KEY=/certs/n8n.key -e N8N_SSL_CERT=/certs/n8n.crt -e WEBHOOK_URL=https://localhost:5678 n8nio/n8n start --tunnel
+
+
+Tunnel setup
+https://github.com/accaderi/Hosting-n8n-on-a-Home-Server-Using-Docker
+Your tunnel's not dead. It's just stoned.
+
+Reboot the container to refresh the tunnel
+
+Or switch to localtunnel or ngrok
+
+Or ditch the tunnels and go full domain boss mode
+
+With linefeeds:
+docker run -d --name n8n \
+  -p 5678:5678 \
+  -v n8n_data:/home/node/.n8n \
+  -v C:\Users\Dan Hermes\Documents\n8n-project\certs:/certs \
+  -e N8N_PROTOCOL=https \
+  -e N8N_SSL_KEY=/certs/n8n.key \
+  -e N8N_SSL_CERT=/certs/n8n.crt \
+  -e WEBHOOK_URL=https://localhost:5678 \
+  n8nio/n8n start --tunnel
+
+Create Container with Docker Compose
+cd "C:\Users\Dan Hermes\Documents\n8n-project"
+docker-compose up -d
+with .yml config file in the project dir (C:\Users\Dan Hermes\Documents\n8n-project)
+
+Stop container
+docker stop n8n
+
+Restart
+docker start n8n
+
+Lists Containers
+docker ps -a
+
+Remove Container
+docker rm n8n
+
+Show Docker Logs
+docker logs -f n8n
+
+
+Backup Docker volumes 
+docker run --rm -v n8n_data:/volume -v %cd%:/backup alpine tar czf /backup/n8n-backup.tar.gz -C /volume .
+
+Docker Compose .yml file
+
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n:latest   # <- That's from n8n for tunneling.  Here's the public Docker Hub one -> n8nio/n8n  (https://hub.docker.com/r/n8nio/n8n)
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      - N8N_PROTOCOL=https
+      - N8N_SSL_KEY=/certs/n8n.key
+      - N8N_SSL_CERT=/certs/n8n.crt
+      - WEBHOOK_URL=https://localhost:5678
+    volumes:
+      - n8n_data:/home/node/.n8n         # Docker-managed persistent data
+      - ./certs:/certs                   # Your local certs folder
+    command: start --tunnel              # <-- This tells it to tunnel on startup
+
+volumes:
+  n8n_data:
+    external: true                       # Uses the same Docker volume you already had
+
+
+Old (pre-tunnel) Create Container from Image
+docker run -d --name n8n \
+  -p 5678:5678 \
+  -v n8n_data:/home/node/.n8n \
+  -v C:\Users\Dan Hermes\Documents\n8n-project\certs:/certs \
+  -e N8N_PROTOCOL=https \
+  -e N8N_SSL_KEY=/certs/n8n.key \
+  -e N8N_SSL_CERT=/certs/n8n.crt \
+  -e WEBHOOK_URL=https://localhost:5678 \
+  n8nio/n8n 

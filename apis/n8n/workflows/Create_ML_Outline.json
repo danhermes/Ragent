@@ -1,0 +1,140 @@
+{
+  "name": "Create ML Outline",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -620,
+        -200
+      ],
+      "id": "ce93918d-b3ce-46a6-afab-91288fb84f47",
+      "name": "When clicking ‘Test workflow’"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "folder",
+        "operation": "list",
+        "path": "/Research/ML Outline Sources",
+        "returnAll": true,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        -440,
+        -200
+      ],
+      "id": "696370af-4f7b-4e69-8f5c-67791f780e8a",
+      "name": "Dropbox",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4o",
+          "mode": "list",
+          "cachedResultName": "GPT-4O"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Convert these files (PDF, md, docx, etc,) into text and create an aggregate master outline for ML topics using the downloaded files containing table of contents from ML books. Write to a Word file."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.8,
+      "position": [
+        -240,
+        -200
+      ],
+      "id": "9d099542-3974-4d27-b3a3-1516d491fa05",
+      "name": "OpenAI",
+      "executeOnce": true,
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "={{\"/Research/ML_Outline_\" + $now.format(\"MM-DD\")}}"
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1,
+      "position": [
+        120,
+        -200
+      ],
+      "id": "9aa57aa2-5a39-496d-a300-d99a2dcabcc3",
+      "name": "Dropbox1",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Test workflow’": {
+      "main": [
+        [
+          {
+            "node": "Dropbox",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dropbox": {
+      "main": [
+        [
+          {
+            "node": "OpenAI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "OpenAI": {
+      "main": [
+        [
+          {
+            "node": "Dropbox1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "217b23a1-8082-4e2b-8193-570b565dbe00",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "546179b5641a177dfdb8b791287ceb5cc4108634bd65e0730257717d8d42d201"
+  },
+  "id": "9PGTcvM1U6GtyXvv",
+  "tags": []
+}

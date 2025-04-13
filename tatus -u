@@ -1,0 +1,167 @@
+[33mcommit 2eb51179a84a092af22e198a8fb484cec1657b83[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Dan Hermes <dan@lexiconsystemsinc.com>
+Date:   Fri Apr 4 16:56:03 2025 -0400
+
+    proof grammar
+
+[1mdiff --git a/apis/n8n/n8n_api_client.py b/apis/n8n/n8n_api_client.py[m
+[1mindex ba8feed..a867d9e 100644[m
+[1m--- a/apis/n8n/n8n_api_client.py[m
+[1m+++ b/apis/n8n/n8n_api_client.py[m
+[36m@@ -2,7 +2,7 @@[m [mimport requests[m
+ import logging[m
+ import json[m
+ from typing import Dict, Any, Optional, List, Union[m
+[31m-from config import N8nConfig[m
+[32m+[m[32mfrom .config import N8nConfig[m
+ [m
+ logger = logging.getLogger(__name__)[m
+ [m
+
+[33mcommit b9c355310a7e542e92fc48685148106e2cb1803d[m
+Author: Dan Hermes <dan@lexiconsystemsinc.com>
+Date:   Fri Apr 4 04:25:23 2025 -0400
+
+    rager/proof/n8n integration
+
+[1mdiff --git a/apis/autocoder/adapters/automation_adapter.py b/apis/autocoder/adapters/automation_adapter.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..45eaadb[m
+[1m--- /dev/null[m
+[1m+++ b/apis/autocoder/adapters/automation_adapter.py[m
+[36m@@ -0,0 +1,32 @@[m
+[32m+[m[32mfrom typing import Dict, Optional[m
+[32m+[m[32mfrom pathlib import Path[m
+[32m+[m[32mfrom ..agent_build_cycle import AgentBuildCycle[m
+[32m+[m
+[32m+[m[32mclass AutomationAdapter:[m
+[32m+[m[32m    """Adapter that bridges ragers automation requirements with autocoder's AgentBuildCycle"""[m
+[32m+[m[41m    [m
+[32m+[m[32m    def __init__(self):[m
+[32m+[m[32m        self.agent_cycle = AgentBuildCycle()[m
+[32m+[m[41m        [m
+[32m+[m[32m    def generate_workflow(self, requirements: Dict, specifications: Dict) -> Optional[Path]:[m
+[32m+[m[32m        """Generate workflow using AgentBuildCycle based on ragers requirements"""[m
+[32m+[m[32m        try:[m
+[32m+[m[32m            # Create task for AgentBuildCycle[m
+[32m+[m[32m            task = {[m
+[32m+[m[32m                "type": "n8n_workflow",[m
+[32m+[m[32m                "requirements": requirements,[m
+[32m+[m[32m                "specifications": specifications[m
+[32m+[m[32m            }[m
+[32m+[m[41m            [m
+[32m+[m[32m            # Run AgentBuildCycle to generate workflow[m
+[32m+[m[32m            result = self.agent_cycle.run(task)[m
+[32m+[m[41m            [m
+[32m+[m[32m            if not result or "workflow_file" not in result:[m
+[32m+[m[32m                self.logger.error("AgentBuildCycle failed to generate workflow")[m
+[32m+[m[32m                return None[m
+[32m+[m[41m                [m
+[32m+[m[32m            return Path(result["workflow_file"])[m
+[32m+[m[41m            [m
+[32m+[m[32m        except Exception as e:[m
+[32m+[m[32m            self.logger.error(f"Error generating workflow: {str(e)}")[m
+[32m+[m[32m            return None[m[41m [m
+\ No newline at end of file[m
+[1mdiff --git a/apis/autocoder/adapters/n8n_adapter.py b/apis/autocoder/adapters/n8n_adapter.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..7bf47b0[m
+[1m--- /dev/null[m
+[1m+++ b/apis/autocoder/adapters/n8n_adapter.py[m
+[36m@@ -0,0 +1,70 @@[m
+[32m+[m[32mfrom typing import Dict, List, Optional[m
+[32m+[m[32mimport json[m
+[32m+[m[32mfrom pathlib import Path[m
+[32m+[m[32mfrom datetime import datetime[m
+[32m+[m[32mfrom ...n8n.n8n_api_client import N8nApiClient[m
+[32m+[m[32mfrom ...n8n.config import N8nConfig[m
+[32m+[m
+[32m+[m[32mclass N8nAdapter:[m
+[32m+[m[32m    """Adapter for n8n-specific functionality used by autocoder"""[m
+[32m+[m[41m    [m
+[32m+[m[32m    def __init__(self):[m
+[32m+[m[32m        self.config = N8nConfig()[m
+[32m+[m[32m        self.client = N8nApiClient(self.config)[m
+[32m+[m[41m        [m
+[32m+[m[32m    def get_nodes(self) -> Dict:[m
+[32m+[m[32m        """Get available n8n nodes"""[m
+[32m+[m[32m        try:[m
+[32m+[m[32m            return self.client.get_nodes()[m
+[32m+[m[32m        except Exception as e:[m
+[32m+[m[32m            self.logger.error(f"Error getting n8n nodes: {str(e)}")[m
+[32m+[m[32m            return {}[m
+[32m+[m[41m            [m
+[32m+[m[32m    def deploy_workflow(self, workflow_json: Dict) -> bool:[m
+[32m+[m[32m        """Deploy workflow to n8n"""[m
+[32m+[m[32m        try:[m
+[32m+[m[32m            return self.client.deploy_workflow(workflow_json)[m
+[32m+[m[32m        except Exception as e:[m
+[32m+[m[32m            self.logger.error(f"Error deploying workflow to n8n: {str(e)}")[m
+[32m+[m[32m            return False[m
+[32m+[m[41m            [m
+[32m+[m[32m    def get_workflow_examples(self) -> str:[m
+[32m+[m[32m        """Get example workflows from n8n/workflows directory"""[m
+[32m+[m[32m        try:[m
+[32m+[m[32m            workflow_dir = Path("apis/n8n/workflows")[m
+[32m+[m[32m            if not workflow_dir.exists():[m
+[32m+[m[32m                self.logger.warning(f"Workflow directory not found: {workflow_dir}")[m
+[32m+[m[32m                return ""[m
+[32m+[m[41m                [m
+[32m+[m[32m            examples = [][m
+[32m+[m[32m            for workflow_file in workflow_dir.glob("*.json"):[m
+[32m+[m[32m                try:[m
+[32m+[m[32m                    with open(workflow_file, 'r', encoding='utf-8') as f:[m
+[32m+[m[32m                        workflow = json.load(f)[m
+[32m+[m[32m                        examples.append(f"""[m
+[32m+[m[32mWorkflow: {workflow_file.stem}[m
+[32m+[m[32m{json.dumps(workflow, indent=2)}[m
+[32m+[m[32m""")[m
+[32m+[m[32m                except Exception as e:[m
+[32m+[m[32m                    self.logger.error(f"Error loading workflow {workflow_file}: {str(e)}")[m
+[32m+[m[41m                    [m
+[32m+[m[32m            return "\n".join(examples)[m
+[32m+[m[41m            [m
+[32m+[m[32m        except Exception as e:[m
+[32m+[m[32m            self.logger.error(f"Error loading workflow examples: {str(e)}")[m
+[32m+[m[32m            return ""[m
+[32m+[m[41m            [m
+[32m+[m[32m    def save_workflow(self, workflow_json: Dict) -> Path:[m
+[32m+[m[32m        """Save workflow to file"""[m
+[32m+[m[32m        try:[m
+[32m+[m[32m            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")[m
+[32m+[m[32m            workflow_file = Path(f"workflow_{timestamp}.json")[m
+[32m+[m[41m            [m
+[32m+[m[32m            with open(workflow_file, 'w', encoding='utf-8') as f:[m
+[32m+[m[32m                json.dump(workflow_json, f, indent=2)[m
+[32m+[m[41m                [m
+[32m+[m[32m            return workflow_file[m
+[32m+[m[41m            [m
+[32m+[m[32m        except Exception as e:[m
+[32m+[m[32m            self.logger.error(f"Error saving workflow: {str(e)}")[m
+[32m+[m[32m            return None[m[41m [m
+\ No newline at end of file[m
+[1mdiff --git a/apis/autocoder/agent/build_cycle.py b/apis/autocoder/agent/build_cycle.py[m
+[1mnew file mode 100644[m
+[1mindex 0000000..ef568a6[m
+[1m--- /dev/null[m
+[1m+++ b/apis/autocoder/agent/build_cycle.py[m
+[36m@@ -0,0 +1,103 @@[m
+[32m+[m[32mimport os[m
+[32m+[m[32mimport shutil[m
+[32m+[m[32mimport logging[m
+[32m+[m[32mfrom datetime import datetime[m
+[32m+[m[32mfrom . import code_writer[m
+[32m+[m[32mfrom . import runner_docker[m
+[32m+[m[32mfrom . import tester[m
+[32m+[m[32mfrom . import debugger[m
+[32m+[m[32mfrom utils.logger import log[m
+[32m+[m[32mfrom ..adapters.n8n_adapter import N8nAdapter[m
+[32m+[m
+[32m+[m[32mclass AgentBuildCycle:[m
+[32m+[m[32m    def __init__(self, agent_task, max_iterations=3, log_dir="debuglog"):[m
+[32m+[m[32m        self.agent_task = agent_task[m
+[32m+[m[32m        self.max_iterations = max_iterations[m
+[32m+[m[32m        os.makedirs(log_dir, exist_ok=True)[m
+[32m+[m[32m        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")[m
+[32m+[m[32m        self.log_file = os.path.join(log_dir, f"debug_cycle_{timestamp}.log")[m
+[32m+[m[32m        self.debug_dir = os.path.join(log_dir, f"debug

@@ -1,0 +1,1858 @@
+2025-03-28 03:50:25,351 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 03:50:25,352 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 03:50:25,352 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 03:50:25,352 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 03:50:25,353 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 03:50:25,353 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 03:50:25,354 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 03:50:25,354 - __main__ - INFO - Creating Data Filter node
+2025-03-28 03:50:25,355 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 03:50:25,355 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 03:50:25,356 - __main__ - INFO - Creating Send Email node
+2025-03-28 03:50:25,356 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 03:50:25,356 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 03:50:25,357 - __main__ - INFO - Creating node connections
+2025-03-28 03:50:25,357 - __main__ - INFO - Saving workflow JSON to logs/workflow_20250328_035025.json
+2025-03-28 03:50:25,363 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 03:50:25,385 - n8n_api_client - ERROR - Error making POST request to n8n API endpoint workflows: 400 Client Error: Bad Request for url: http://localhost:5678/api/v1/workflows
+2025-03-28 03:53:12,500 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 03:53:12,501 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 03:53:12,501 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 03:53:12,502 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 03:53:12,502 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 03:53:12,502 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 03:53:12,503 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 03:53:12,503 - __main__ - INFO - Creating Data Filter node
+2025-03-28 03:53:12,504 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 03:53:12,504 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 03:53:12,504 - __main__ - INFO - Creating Send Email node
+2025-03-28 03:53:12,505 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 03:53:12,505 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 03:53:12,505 - __main__ - INFO - Creating node connections
+2025-03-28 03:53:12,506 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 03:53:12,528 - n8n_api_client - ERROR - Error making POST request to n8n API endpoint workflows: 400 Client Error: Bad Request for url: http://localhost:5678/api/v1/workflows
+2025-03-28 03:53:54,448 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 03:53:54,449 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 03:53:54,449 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 03:53:54,450 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 03:53:54,451 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 03:53:54,451 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 03:53:54,452 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 03:53:54,452 - __main__ - INFO - Creating Data Filter node
+2025-03-28 03:53:54,453 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 03:53:54,453 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 03:53:54,453 - __main__ - INFO - Creating Send Email node
+2025-03-28 03:53:54,454 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 03:53:54,455 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 03:53:54,455 - __main__ - INFO - Creating node connections
+2025-03-28 03:53:54,456 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 03:53:54,478 - n8n_api_client - ERROR - Error making POST request to n8n API endpoint workflows: 400 Client Error: Bad Request for url: http://localhost:5678/api/v1/workflows
+2025-03-28 03:58:01,435 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 03:58:01,436 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 03:58:01,436 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 03:58:01,437 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 03:58:01,437 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 03:58:01,437 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 03:58:01,438 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 03:58:01,438 - __main__ - INFO - Creating Data Filter node
+2025-03-28 03:58:01,439 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 03:58:01,439 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 03:58:01,439 - __main__ - INFO - Creating Send Email node
+2025-03-28 03:58:01,440 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 03:58:01,440 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 03:58:01,440 - __main__ - INFO - Creating node connections
+2025-03-28 03:58:01,441 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 03:58:01,463 - n8n_api_client - ERROR - Error making POST request to n8n API endpoint workflows: 400 Client Error: Bad Request for url: http://localhost:5678/api/v1/workflows
+2025-03-28 03:58:49,302 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 03:58:49,303 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 03:58:49,303 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 03:58:49,303 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 03:58:49,304 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 03:58:49,304 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 03:58:49,305 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 03:58:49,305 - __main__ - INFO - Creating Data Filter node
+2025-03-28 03:58:49,305 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 03:58:49,306 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 03:58:49,306 - __main__ - INFO - Creating Send Email node
+2025-03-28 03:58:49,306 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 03:58:49,307 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 03:58:49,307 - __main__ - INFO - Creating node connections
+2025-03-28 03:58:49,308 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 03:58:49,329 - n8n_api_client - ERROR - Error making POST request to n8n API endpoint workflows: 400 Client Error: Bad Request for url: http://localhost:5678/api/v1/workflows
+2025-03-28 04:00:58,331 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 04:00:58,332 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 04:00:58,332 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 04:00:58,333 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 04:00:58,333 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 04:00:58,333 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 04:00:58,334 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 04:00:58,334 - __main__ - INFO - Creating Data Filter node
+2025-03-28 04:00:58,335 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 04:00:58,335 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 04:00:58,335 - __main__ - INFO - Creating Send Email node
+2025-03-28 04:00:58,336 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 04:00:58,336 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 04:00:58,336 - __main__ - INFO - Creating node connections
+2025-03-28 04:00:58,337 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 04:00:58,358 - n8n_api_client - ERROR - Error making POST request to n8n API endpoint workflows: 400 Client Error: Bad Request for url: http://localhost:5678/api/v1/workflows
+2025-03-28 04:06:05,949 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 04:06:05,950 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 04:06:05,950 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 04:06:05,951 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 04:06:05,951 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 04:06:05,952 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 04:06:05,952 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 04:06:05,952 - __main__ - INFO - Creating Data Filter node
+2025-03-28 04:06:05,953 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 04:06:05,953 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 04:06:05,953 - __main__ - INFO - Creating Send Email node
+2025-03-28 04:06:05,954 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 04:06:05,954 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 04:06:05,954 - __main__ - INFO - Creating node connections
+2025-03-28 04:06:05,955 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 04:06:05,955 - n8n_api_client - INFO - Making POST request to http://localhost:5678/api/v1/workflows
+2025-03-28 04:06:05,956 - n8n_api_client - INFO - Request data: {
+  "name": "Daily Data Analysis Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        100,
+        100
+      ],
+      "id": "dec8b873-bfff-402a-a450-46c176257a0c",
+      "name": "Daily Schedule"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "folder",
+        "operation": "list",
+        "path": "/Reports",
+        "returnAll": true,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        100
+      ],
+      "id": "666e0d90-637a-467a-a6d9-a9b6a92b0717",
+      "name": "List Excel Files",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['name']}}",
+              "value2": ".xlsx",
+              "operation": "contains"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        100
+      ],
+      "id": "78a6c83a-6758-41b6-a99a-3dcbf475e69b",
+      "name": "Get Latest Excel"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "sheetName": "Sheet1",
+        "range": "A1:D100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        700,
+        100
+      ],
+      "id": "d8772838-b905-4cd9-9459-825e453a6024",
+      "name": "Extract Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['status']}}",
+              "value2": "pending",
+              "operation": "equal"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        100
+      ],
+      "id": "bbc6af3a-2d2d-476e-9a4f-7eb10f5f214a",
+      "name": "Filter Data"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "GPT-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Analyze the following data and provide insights:\n{{$json}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.2,
+      "position": [
+        1100,
+        100
+      ],
+      "id": "bcba01a4-6ef1-4989-a786-fde5f57b7402",
+      "name": "Analyze Data",
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fields": {
+          "subject": "Daily Data Analysis Report",
+          "body": "={{$json['choices'][0]['message']['content']}}"
+        }
+      },
+      "type": "n8n-nodes-base.editFields",
+      "typeVersion": 1.2,
+      "position": [
+        1300,
+        100
+      ],
+      "id": "ac3f4549-3738-422a-ae5b-d7ed56a9afa7",
+      "name": "Format Email"
+    },
+    {
+      "parameters": {
+        "fromEmail": "dan@lexicon.systems",
+        "toEmail": "team@example.com",
+        "subject": "={{$json['subject']}}",
+        "emailFormat": "text",
+        "text": "={{$json['body']}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        0
+      ],
+      "id": "a582adb0-2a1e-45ac-9d52-7f3c2da1d4f1",
+      "name": "Send Report",
+      "credentials": {
+        "smtp": {
+          "id": "JTbu1l5Wfqw1zrie",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileType": "xlsx",
+        "sheetName": "Analysis Results"
+      },
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        200
+      ],
+      "id": "07fc3311-21db-4613-ab08-63b7b6d35479",
+      "name": "Convert Results"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "/Analysis Results",
+        "fileName": "daily_analysis_{{Date.now()}}.xlsx"
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        200
+      ],
+      "id": "d695cd12-eb7f-4737-aa84-a2d5ee177e03",
+      "name": "Upload Results",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "dec8b873-bfff-402a-a450-46c176257a0c": {
+      "main": [
+        [
+          {
+            "node": "666e0d90-637a-467a-a6d9-a9b6a92b0717",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "666e0d90-637a-467a-a6d9-a9b6a92b0717": {
+      "main": [
+        [
+          {
+            "node": "78a6c83a-6758-41b6-a99a-3dcbf475e69b",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "78a6c83a-6758-41b6-a99a-3dcbf475e69b": {
+      "main": [
+        [
+          {
+            "node": "d8772838-b905-4cd9-9459-825e453a6024",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "d8772838-b905-4cd9-9459-825e453a6024": {
+      "main": [
+        [
+          {
+            "node": "bbc6af3a-2d2d-476e-9a4f-7eb10f5f214a",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "bbc6af3a-2d2d-476e-9a4f-7eb10f5f214a": {
+      "main": [
+        [
+          {
+            "node": "bcba01a4-6ef1-4989-a786-fde5f57b7402",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "bcba01a4-6ef1-4989-a786-fde5f57b7402": {
+      "main": [
+        [
+          {
+            "node": "ac3f4549-3738-422a-ae5b-d7ed56a9afa7",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "ac3f4549-3738-422a-ae5b-d7ed56a9afa7": {
+      "main": [
+        [
+          {
+            "node": "a582adb0-2a1e-45ac-9d52-7f3c2da1d4f1",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "node": "07fc3311-21db-4613-ab08-63b7b6d35479",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "07fc3311-21db-4613-ab08-63b7b6d35479": {
+      "main": [
+        [
+          {
+            "node": "d695cd12-eb7f-4737-aa84-a2d5ee177e03",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "UTC"
+  },
+  "tags": [
+    "automation"
+  ],
+  "active": false,
+  "version": 1,
+  "triggerCount": 0,
+  "staticData": null,
+  "updateWorkflowData": true
+}
+2025-03-28 04:06:06,021 - n8n_api_client - INFO - Response status: 400
+2025-03-28 04:06:06,021 - n8n_api_client - INFO - Response headers: {'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '62', 'ETag': 'W/"3e-6fQmUEi0MXsMiYjyQEeXHFR9rws"', 'Vary': 'Accept-Encoding', 'Date': 'Fri, 28 Mar 2025 08:06:06 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'}
+2025-03-28 04:06:06,022 - n8n_api_client - INFO - Response body: {"message":"request/body must NOT have additional properties"}
+2025-03-28 04:06:06,023 - n8n_api_client - ERROR - Error making POST request to n8n API endpoint workflows: 400 Client Error: Bad Request for url: http://localhost:5678/api/v1/workflows
+2025-03-28 04:06:06,023 - n8n_api_client - ERROR - Error response: {"message":"request/body must NOT have additional properties"}
+2025-03-28 04:07:34,120 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 04:07:34,121 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 04:07:34,121 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 04:07:34,121 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 04:07:34,122 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 04:07:34,122 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 04:07:34,123 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 04:07:34,123 - __main__ - INFO - Creating Data Filter node
+2025-03-28 04:07:34,123 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 04:07:34,124 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 04:07:34,124 - __main__ - INFO - Creating Send Email node
+2025-03-28 04:07:34,125 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 04:07:34,125 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 04:07:34,125 - __main__ - INFO - Creating node connections
+2025-03-28 04:07:34,126 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 04:07:34,126 - n8n_api_client - INFO - Making POST request to http://localhost:5678/api/v1/workflows
+2025-03-28 04:07:34,127 - n8n_api_client - INFO - Request data: {
+  "name": "Daily Data Analysis Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        100,
+        100
+      ],
+      "id": "2bced155-6590-4465-92a5-d834d34da535",
+      "name": "Daily Schedule"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "folder",
+        "operation": "list",
+        "path": "/Reports",
+        "returnAll": true,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        100
+      ],
+      "id": "0c539b7c-6e6c-4546-90c9-fdbbe4273c38",
+      "name": "List Excel Files",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['name']}}",
+              "value2": ".xlsx",
+              "operation": "contains"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        100
+      ],
+      "id": "c1f11d78-2f50-4397-acde-5a1a39600bc7",
+      "name": "Get Latest Excel"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "sheetName": "Sheet1",
+        "range": "A1:D100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        700,
+        100
+      ],
+      "id": "05004a70-cd29-4d02-a8b0-f5a0b4378828",
+      "name": "Extract Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['status']}}",
+              "value2": "pending",
+              "operation": "equal"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        100
+      ],
+      "id": "701be0d6-0e27-4558-840e-5d39188fa959",
+      "name": "Filter Data"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "GPT-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Analyze the following data and provide insights:\n{{$json}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.2,
+      "position": [
+        1100,
+        100
+      ],
+      "id": "92491948-50ed-406a-8871-8bf3c0369e68",
+      "name": "Analyze Data",
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fields": {
+          "subject": "Daily Data Analysis Report",
+          "body": "={{$json['choices'][0]['message']['content']}}"
+        }
+      },
+      "type": "n8n-nodes-base.editFields",
+      "typeVersion": 1.2,
+      "position": [
+        1300,
+        100
+      ],
+      "id": "7be67118-17c4-4b23-82e1-6d1e4fac8fc1",
+      "name": "Format Email"
+    },
+    {
+      "parameters": {
+        "fromEmail": "dan@lexicon.systems",
+        "toEmail": "team@example.com",
+        "subject": "={{$json['subject']}}",
+        "emailFormat": "text",
+        "text": "={{$json['body']}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        0
+      ],
+      "id": "dc69dda4-f05a-4bae-987e-bc371b28871d",
+      "name": "Send Report",
+      "credentials": {
+        "smtp": {
+          "id": "JTbu1l5Wfqw1zrie",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileType": "xlsx",
+        "sheetName": "Analysis Results"
+      },
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        200
+      ],
+      "id": "fc66df3f-1571-4160-8bc0-2377c1e46be0",
+      "name": "Convert Results"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "/Analysis Results",
+        "fileName": "daily_analysis_{{Date.now()}}.xlsx"
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        200
+      ],
+      "id": "02eb65de-1a30-4859-b7c8-f2a364f91019",
+      "name": "Upload Results",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "2bced155-6590-4465-92a5-d834d34da535": {
+      "main": [
+        [
+          {
+            "node": "0c539b7c-6e6c-4546-90c9-fdbbe4273c38",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "0c539b7c-6e6c-4546-90c9-fdbbe4273c38": {
+      "main": [
+        [
+          {
+            "node": "c1f11d78-2f50-4397-acde-5a1a39600bc7",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "c1f11d78-2f50-4397-acde-5a1a39600bc7": {
+      "main": [
+        [
+          {
+            "node": "05004a70-cd29-4d02-a8b0-f5a0b4378828",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "05004a70-cd29-4d02-a8b0-f5a0b4378828": {
+      "main": [
+        [
+          {
+            "node": "701be0d6-0e27-4558-840e-5d39188fa959",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "701be0d6-0e27-4558-840e-5d39188fa959": {
+      "main": [
+        [
+          {
+            "node": "92491948-50ed-406a-8871-8bf3c0369e68",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "92491948-50ed-406a-8871-8bf3c0369e68": {
+      "main": [
+        [
+          {
+            "node": "7be67118-17c4-4b23-82e1-6d1e4fac8fc1",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "7be67118-17c4-4b23-82e1-6d1e4fac8fc1": {
+      "main": [
+        [
+          {
+            "node": "dc69dda4-f05a-4bae-987e-bc371b28871d",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "node": "fc66df3f-1571-4160-8bc0-2377c1e46be0",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "fc66df3f-1571-4160-8bc0-2377c1e46be0": {
+      "main": [
+        [
+          {
+            "node": "02eb65de-1a30-4859-b7c8-f2a364f91019",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "UTC"
+  },
+  "tags": [
+    "automation"
+  ],
+  "active": false,
+  "version": 1,
+  "triggerCount": 0,
+  "staticData": null
+}
+2025-03-28 04:07:34,191 - n8n_api_client - INFO - Response status: 400
+2025-03-28 04:07:34,191 - n8n_api_client - INFO - Response headers: {'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '62', 'ETag': 'W/"3e-6fQmUEi0MXsMiYjyQEeXHFR9rws"', 'Vary': 'Accept-Encoding', 'Date': 'Fri, 28 Mar 2025 08:07:34 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'}
+2025-03-28 04:07:34,192 - n8n_api_client - INFO - Response body: {"message":"request/body must NOT have additional properties"}
+2025-03-28 04:07:34,192 - n8n_api_client - ERROR - Error making POST request to n8n API endpoint workflows: 400 Client Error: Bad Request for url: http://localhost:5678/api/v1/workflows
+2025-03-28 04:07:34,193 - n8n_api_client - ERROR - Error response: {"message":"request/body must NOT have additional properties"}
+2025-03-28 04:09:23,984 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 04:09:23,984 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 04:09:23,985 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 04:09:23,985 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 04:09:23,986 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 04:09:23,986 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 04:09:23,986 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 04:09:23,987 - __main__ - INFO - Creating Data Filter node
+2025-03-28 04:09:23,987 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 04:09:23,988 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 04:09:23,988 - __main__ - INFO - Creating Send Email node
+2025-03-28 04:09:23,988 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 04:09:23,989 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 04:09:23,989 - __main__ - INFO - Creating node connections
+2025-03-28 04:09:23,989 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 04:09:23,990 - n8n_api_client - INFO - Making POST request to http://localhost:5678/api/v1/workflows
+2025-03-28 04:09:23,991 - n8n_api_client - INFO - Request data: {
+  "name": "Daily Data Analysis Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        100,
+        100
+      ],
+      "id": "190ae436-f6ab-4c97-9ce6-143269456ca8",
+      "name": "Daily Schedule"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "folder",
+        "operation": "list",
+        "path": "/Reports",
+        "returnAll": true,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        100
+      ],
+      "id": "d1bae64e-e661-43d3-856b-70c08fdd5203",
+      "name": "List Excel Files",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['name']}}",
+              "value2": ".xlsx",
+              "operation": "contains"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        100
+      ],
+      "id": "74d46efa-dabd-42cb-b965-de78a89d652a",
+      "name": "Get Latest Excel"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "sheetName": "Sheet1",
+        "range": "A1:D100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        700,
+        100
+      ],
+      "id": "06c1efdb-d707-4a9a-9f8c-b70ca2e7a7f4",
+      "name": "Extract Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['status']}}",
+              "value2": "pending",
+              "operation": "equal"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        100
+      ],
+      "id": "6a8d47c4-acc1-4ae9-aa71-b2ee043ca9c8",
+      "name": "Filter Data"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "GPT-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Analyze the following data and provide insights:\n{{$json}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.2,
+      "position": [
+        1100,
+        100
+      ],
+      "id": "cae0e530-87ac-48fe-881e-c1dacb6587e5",
+      "name": "Analyze Data",
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fields": {
+          "subject": "Daily Data Analysis Report",
+          "body": "={{$json['choices'][0]['message']['content']}}"
+        }
+      },
+      "type": "n8n-nodes-base.editFields",
+      "typeVersion": 1.2,
+      "position": [
+        1300,
+        100
+      ],
+      "id": "98879a81-941a-4d47-8d1a-86d34b5855df",
+      "name": "Format Email"
+    },
+    {
+      "parameters": {
+        "fromEmail": "dan@lexicon.systems",
+        "toEmail": "team@example.com",
+        "subject": "={{$json['subject']}}",
+        "emailFormat": "text",
+        "text": "={{$json['body']}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        0
+      ],
+      "id": "91b81ff6-5c22-499d-a000-6b8ab4751fcf",
+      "name": "Send Report",
+      "credentials": {
+        "smtp": {
+          "id": "JTbu1l5Wfqw1zrie",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileType": "xlsx",
+        "sheetName": "Analysis Results"
+      },
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        200
+      ],
+      "id": "fae69027-9dcf-4bed-801a-f79010f8a12b",
+      "name": "Convert Results"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "/Analysis Results",
+        "fileName": "daily_analysis_{{Date.now()}}.xlsx"
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        200
+      ],
+      "id": "d06d964b-a197-47d3-b3a1-bf55a29c9684",
+      "name": "Upload Results",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "190ae436-f6ab-4c97-9ce6-143269456ca8": {
+      "main": [
+        [
+          {
+            "node": "d1bae64e-e661-43d3-856b-70c08fdd5203",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "d1bae64e-e661-43d3-856b-70c08fdd5203": {
+      "main": [
+        [
+          {
+            "node": "74d46efa-dabd-42cb-b965-de78a89d652a",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "74d46efa-dabd-42cb-b965-de78a89d652a": {
+      "main": [
+        [
+          {
+            "node": "06c1efdb-d707-4a9a-9f8c-b70ca2e7a7f4",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "06c1efdb-d707-4a9a-9f8c-b70ca2e7a7f4": {
+      "main": [
+        [
+          {
+            "node": "6a8d47c4-acc1-4ae9-aa71-b2ee043ca9c8",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "6a8d47c4-acc1-4ae9-aa71-b2ee043ca9c8": {
+      "main": [
+        [
+          {
+            "node": "cae0e530-87ac-48fe-881e-c1dacb6587e5",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "cae0e530-87ac-48fe-881e-c1dacb6587e5": {
+      "main": [
+        [
+          {
+            "node": "98879a81-941a-4d47-8d1a-86d34b5855df",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "98879a81-941a-4d47-8d1a-86d34b5855df": {
+      "main": [
+        [
+          {
+            "node": "91b81ff6-5c22-499d-a000-6b8ab4751fcf",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "node": "fae69027-9dcf-4bed-801a-f79010f8a12b",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "fae69027-9dcf-4bed-801a-f79010f8a12b": {
+      "main": [
+        [
+          {
+            "node": "d06d964b-a197-47d3-b3a1-bf55a29c9684",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  }
+}
+2025-03-28 04:09:24,052 - n8n_api_client - INFO - Response status: 400
+2025-03-28 04:09:24,053 - n8n_api_client - INFO - Response headers: {'Content-Type': 'application/json; charset=utf-8', 'Content-Length': '65', 'ETag': 'W/"41-gNlHe5z8kXSnZQDl3JHf5t15kG4"', 'Vary': 'Accept-Encoding', 'Date': 'Fri, 28 Mar 2025 08:09:24 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5'}
+2025-03-28 04:09:24,053 - n8n_api_client - INFO - Response body: {"message":"request/body must have required property 'settings'"}
+2025-03-28 04:09:24,054 - n8n_api_client - ERROR - Error making POST request to n8n API endpoint workflows: 400 Client Error: Bad Request for url: http://localhost:5678/api/v1/workflows
+2025-03-28 04:09:24,054 - n8n_api_client - ERROR - Error response: {"message":"request/body must have required property 'settings'"}
+2025-03-28 04:12:59,532 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 04:12:59,533 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 04:12:59,533 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 04:12:59,534 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 04:12:59,534 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 04:12:59,534 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 04:12:59,535 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 04:12:59,535 - __main__ - INFO - Creating Data Filter node
+2025-03-28 04:12:59,536 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 04:12:59,536 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 04:12:59,536 - __main__ - INFO - Creating Send Email node
+2025-03-28 04:12:59,537 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 04:12:59,537 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 04:12:59,537 - __main__ - INFO - Creating node connections
+2025-03-28 04:12:59,538 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 04:12:59,538 - n8n_api_client - INFO - Making POST request to http://localhost:5678/api/v1/workflows
+2025-03-28 04:12:59,539 - n8n_api_client - INFO - Request data: {
+  "name": "Daily Data Analysis Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        100,
+        100
+      ],
+      "id": "1df8b69b-a088-4b1c-a3d7-0359f1d79138",
+      "name": "Daily Schedule"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "folder",
+        "operation": "list",
+        "path": "/Reports",
+        "returnAll": true,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        100
+      ],
+      "id": "fdfe1bfe-0cb7-4b8c-8470-617e3bceb29c",
+      "name": "List Excel Files",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['name']}}",
+              "value2": ".xlsx",
+              "operation": "contains"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        100
+      ],
+      "id": "27990bb5-48ec-4bed-9747-da24d62a361c",
+      "name": "Get Latest Excel"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "sheetName": "Sheet1",
+        "range": "A1:D100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        700,
+        100
+      ],
+      "id": "05cc3385-73b6-4675-addd-fe723df4e2cd",
+      "name": "Extract Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['status']}}",
+              "value2": "pending",
+              "operation": "equal"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        100
+      ],
+      "id": "397701a8-98e2-4fa1-ab9c-ef286bcce724",
+      "name": "Filter Data"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "GPT-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Analyze the following data and provide insights:\n{{$json}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.2,
+      "position": [
+        1100,
+        100
+      ],
+      "id": "c9416fb4-8b33-40ec-976e-bd55d08c810c",
+      "name": "Analyze Data",
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fields": {
+          "subject": "Daily Data Analysis Report",
+          "body": "={{$json['choices'][0]['message']['content']}}"
+        }
+      },
+      "type": "n8n-nodes-base.editFields",
+      "typeVersion": 1.2,
+      "position": [
+        1300,
+        100
+      ],
+      "id": "398fc963-6754-4797-b2be-65e67ce8af84",
+      "name": "Format Email"
+    },
+    {
+      "parameters": {
+        "fromEmail": "dan@lexicon.systems",
+        "toEmail": "team@example.com",
+        "subject": "={{$json['subject']}}",
+        "emailFormat": "text",
+        "text": "={{$json['body']}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        0
+      ],
+      "id": "296dddfd-d4fa-4d7a-aca9-6ca6a3e94fea",
+      "name": "Send Report",
+      "credentials": {
+        "smtp": {
+          "id": "JTbu1l5Wfqw1zrie",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileType": "xlsx",
+        "sheetName": "Analysis Results"
+      },
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        200
+      ],
+      "id": "a8dbfc2b-0ad8-49bc-8bd8-18c37419fdef",
+      "name": "Convert Results"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "/Analysis Results",
+        "fileName": "daily_analysis_{{Date.now()}}.xlsx"
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        200
+      ],
+      "id": "847dd07c-f7e6-4d34-a1da-c2bbe3cfbd93",
+      "name": "Upload Results",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "1df8b69b-a088-4b1c-a3d7-0359f1d79138": {
+      "main": [
+        [
+          {
+            "node": "fdfe1bfe-0cb7-4b8c-8470-617e3bceb29c",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "fdfe1bfe-0cb7-4b8c-8470-617e3bceb29c": {
+      "main": [
+        [
+          {
+            "node": "27990bb5-48ec-4bed-9747-da24d62a361c",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "27990bb5-48ec-4bed-9747-da24d62a361c": {
+      "main": [
+        [
+          {
+            "node": "05cc3385-73b6-4675-addd-fe723df4e2cd",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "05cc3385-73b6-4675-addd-fe723df4e2cd": {
+      "main": [
+        [
+          {
+            "node": "397701a8-98e2-4fa1-ab9c-ef286bcce724",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "397701a8-98e2-4fa1-ab9c-ef286bcce724": {
+      "main": [
+        [
+          {
+            "node": "c9416fb4-8b33-40ec-976e-bd55d08c810c",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "c9416fb4-8b33-40ec-976e-bd55d08c810c": {
+      "main": [
+        [
+          {
+            "node": "398fc963-6754-4797-b2be-65e67ce8af84",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "398fc963-6754-4797-b2be-65e67ce8af84": {
+      "main": [
+        [
+          {
+            "node": "296dddfd-d4fa-4d7a-aca9-6ca6a3e94fea",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "node": "a8dbfc2b-0ad8-49bc-8bd8-18c37419fdef",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "a8dbfc2b-0ad8-49bc-8bd8-18c37419fdef": {
+      "main": [
+        [
+          {
+            "node": "847dd07c-f7e6-4d34-a1da-c2bbe3cfbd93",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "UTC"
+  }
+}
+2025-03-28 04:12:59,685 - n8n_api_client - INFO - Response status: 200
+2025-03-28 04:12:59,685 - n8n_api_client - INFO - Response headers: {'Content-Type': 'application/json; charset=utf-8', 'ETag': 'W/"1270-jxBBEgJme+s9b503LqLx5bZCofM"', 'Vary': 'Accept-Encoding', 'Content-Encoding': 'gzip', 'Date': 'Fri, 28 Mar 2025 08:12:59 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5', 'Transfer-Encoding': 'chunked'}
+2025-03-28 04:12:59,686 - n8n_api_client - INFO - Response body: {"name":"Daily Data Analysis Workflow","nodes":[{"parameters":{"rule":{"interval":[{"field":"days","triggerAtHour":9}]}},"type":"n8n-nodes-base.scheduleTrigger","typeVersion":1.2,"position":[100,100],"id":"1df8b69b-a088-4b1c-a3d7-0359f1d79138","name":"Daily Schedule"},{"parameters":{"authentication":"oAuth2","resource":"folder","operation":"list","path":"/Reports","returnAll":true,"filters":{}},"type":"n8n-nodes-base.dropbox","typeVersion":1.2,"position":[300,100],"id":"fdfe1bfe-0cb7-4b8c-8470-617e3bceb29c","name":"List Excel Files","credentials":{"dropboxOAuth2Api":{"id":"KcAhGHqBrsmriXlY","name":"Dropbox account"}}},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"loose","version":2},"conditions":[{"value1":"={{$json['name']}}","value2":".xlsx","operation":"contains"}],"combinator":"and"},"looseTypeValidation":true,"options":{}},"type":"n8n-nodes-base.filter","typeVersion":1.2,"position":[500,100],"id":"27990bb5-48ec-4bed-9747-da24d62a361c","name":"Get Latest Excel"},{"parameters":{"operation":"xlsx","sheetName":"Sheet1","range":"A1:D100","options":{}},"type":"n8n-nodes-base.extractFromFile","typeVersion":1.2,"position":[700,100],"id":"05cc3385-73b6-4675-addd-fe723df4e2cd","name":"Extract Data"},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"loose","version":2},"conditions":[{"value1":"={{$json['status']}}","value2":"pending","operation":"equal"}],"combinator":"and"},"looseTypeValidation":true,"options":{}},"type":"n8n-nodes-base.filter","typeVersion":1.2,"position":[900,100],"id":"397701a8-98e2-4fa1-ab9c-ef286bcce724","name":"Filter Data"},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4","mode":"list","cachedResultName":"GPT-4"},"messages":{"values":[{"content":"Analyze the following data and provide insights:\n{{$json}}"}]},"options":{}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":1.2,"position":[1100,100],"id":"c9416fb4-8b33-40ec-976e-bd55d08c810c","name":"Analyze Data","credentials":{"openAiApi":{"id":"E1s5v9qmBbZViUJ5","name":"OpenAi account"}}},{"parameters":{"fields":{"subject":"Daily Data Analysis Report","body":"={{$json['choices'][0]['message']['content']}}"}},"type":"n8n-nodes-base.editFields","typeVersion":1.2,"position":[1300,100],"id":"398fc963-6754-4797-b2be-65e67ce8af84","name":"Format Email"},{"parameters":{"fromEmail":"dan@lexicon.systems","toEmail":"team@example.com","subject":"={{$json['subject']}}","emailFormat":"text","text":"={{$json['body']}}","options":{}},"type":"n8n-nodes-base.emailSend","typeVersion":1.2,"position":[1500,0],"id":"296dddfd-d4fa-4d7a-aca9-6ca6a3e94fea","name":"Send Report","credentials":{"smtp":{"id":"JTbu1l5Wfqw1zrie","name":"SMTP account"}}},{"parameters":{"operation":"write","fileType":"xlsx","sheetName":"Analysis Results"},"type":"n8n-nodes-base.spreadsheetFile","typeVersion":1.2,"position":[1500,200],"id":"a8dbfc2b-0ad8-49bc-8bd8-18c37419fdef","name":"Convert Results"},{"parameters":{"authentication":"oAuth2","path":"/Analysis Results","fileName":"daily_analysis_{{Date.now()}}.xlsx"},"type":"n8n-nodes-base.dropbox","typeVersion":1.2,"position":[1700,200],"id":"847dd07c-f7e6-4d34-a1da-c2bbe3cfbd93","name":"Upload Results","credentials":{"dropboxOAuth2Api":{"id":"KcAhGHqBrsmriXlY","name":"Dropbox account"}}}],"connections":{"1df8b69b-a088-4b1c-a3d7-0359f1d79138":{"main":[[{"node":"fdfe1bfe-0cb7-4b8c-8470-617e3bceb29c","type":"main"}]]},"fdfe1bfe-0cb7-4b8c-8470-617e3bceb29c":{"main":[[{"node":"27990bb5-48ec-4bed-9747-da24d62a361c","type":"main"}]]},"27990bb5-48ec-4bed-9747-da24d62a361c":{"main":[[{"node":"05cc3385-73b6-4675-addd-fe723df4e2cd","type":"main"}]]},"05cc3385-73b6-4675-addd-fe723df4e2cd":{"main":[[{"node":"397701a8-98e2-4fa1-ab9c-ef286bcce724","type":"main"}]]},"397701a8-98e2-4fa1-ab9c-ef286bcce724":{"main":[[{"node":"c9416fb4-8b33-40ec-976e-bd55d08c810c","type":"main"}]]},"c9416fb4-8b33-40ec-976e-bd55d08c810c":{"main":[[{"node":"398fc963-6754-4797-b2be-65e67ce8af84","type":"main"}]]},"398fc963-6754-4797-b2be-65e67ce8af84":{"main":[[{"node":"296dddfd-d4fa-4d7a-aca9-6ca6a3e94fea","type":"main"}],[{"node":"a8dbfc2b-0ad8-49bc-8bd8-18c37419fdef","type":"main"}]]},"a8dbfc2b-0ad8-49bc-8bd8-18c37419fdef":{"main":[[{"node":"847dd07c-f7e6-4d34-a1da-c2bbe3cfbd93","type":"main"}]]}},"settings":{"saveExecutionProgress":true,"saveManualExecutions":true,"saveDataErrorExecution":"all","saveDataSuccessExecution":"all","executionTimeout":3600,"timezone":"UTC"},"active":false,"versionId":"5c0120d9-2ca3-4c40-ace7-eb375f552b05","id":"CLCrlwsmKnjJEkOc","staticData":null,"meta":null,"pinData":null,"createdAt":"2025-03-28T08:12:59.653Z","updatedAt":"2025-03-28T08:12:59.653Z","triggerCount":0}
+2025-03-28 04:12:59,692 - __main__ - INFO - Saving workflow JSON to logs/workflow_20250328_041259.json
+2025-03-28 04:12:59,698 - __main__ - INFO - Successfully created bonus workflow with ID: CLCrlwsmKnjJEkOc
+2025-03-28 04:12:59,698 - __main__ - INFO - Workflow creation completed
+2025-03-28 04:19:17,436 - __main__ - INFO - Starting bonus workflow creation
+2025-03-28 04:19:17,437 - __main__ - INFO - Created N8nConfig instance
+2025-03-28 04:19:17,437 - __main__ - INFO - Initialized N8nWorkflowHelper
+2025-03-28 04:19:17,437 - __main__ - INFO - Creating Schedule Trigger node
+2025-03-28 04:19:17,438 - __main__ - INFO - Creating Dropbox List Folder node
+2025-03-28 04:19:17,438 - __main__ - INFO - Creating Filter node for latest Excel
+2025-03-28 04:19:17,438 - __main__ - INFO - Creating Extract XLSX node
+2025-03-28 04:19:17,439 - __main__ - INFO - Creating Data Filter node
+2025-03-28 04:19:17,439 - __main__ - INFO - Creating OpenAI Analysis node
+2025-03-28 04:19:17,440 - __main__ - INFO - Creating Edit Fields node
+2025-03-28 04:19:17,440 - __main__ - INFO - Creating Send Email node
+2025-03-28 04:19:17,440 - __main__ - INFO - Creating Convert to XLSX node
+2025-03-28 04:19:17,441 - __main__ - INFO - Creating Dropbox Upload node
+2025-03-28 04:19:17,441 - __main__ - INFO - Creating node connections
+2025-03-28 04:19:17,441 - __main__ - INFO - Submitting workflow to n8n
+2025-03-28 04:19:17,442 - n8n_api_client - INFO - Making POST request to http://localhost:5678/api/v1/workflows
+2025-03-28 04:19:17,443 - n8n_api_client - INFO - Request data: {
+  "name": "Daily Data Analysis Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        100,
+        100
+      ],
+      "id": "037b6d29-d602-4e88-9314-c38c57b16425",
+      "name": "Daily Schedule"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "folder",
+        "operation": "list",
+        "path": "/Reports",
+        "returnAll": true,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        100
+      ],
+      "id": "b04b390f-2000-4e03-8c68-6c1be99ca8b8",
+      "name": "List Excel Files",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['name']}}",
+              "value2": ".xlsx",
+              "operation": "contains"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        500,
+        100
+      ],
+      "id": "648589bc-eb9b-4805-ae80-ba72203f981a",
+      "name": "Get Latest Excel"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "sheetName": "Sheet1",
+        "range": "A1:D100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        700,
+        100
+      ],
+      "id": "f527b3a3-e827-4b7f-a974-1ef2a1ac2b72",
+      "name": "Extract Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['status']}}",
+              "value2": "pending",
+              "operation": "equal"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        900,
+        100
+      ],
+      "id": "bb7f1c57-99fc-4f67-89b8-c7aa62190c32",
+      "name": "Filter Data"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "GPT-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Analyze the following data and provide insights:\n{{$json}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.2,
+      "position": [
+        1100,
+        100
+      ],
+      "id": "d9b862df-afb9-46d9-af81-fb9bc1c1672e",
+      "name": "Analyze Data",
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fields": {
+          "subject": "Daily Data Analysis Report",
+          "body": "={{$json['choices'][0]['message']['content']}}"
+        }
+      },
+      "type": "n8n-nodes-base.editFields",
+      "typeVersion": 1.2,
+      "position": [
+        1300,
+        100
+      ],
+      "id": "dabe5b76-e77f-470a-8907-c9e1ab6befb5",
+      "name": "Format Email"
+    },
+    {
+      "parameters": {
+        "fromEmail": "dan@lexicon.systems",
+        "toEmail": "team@example.com",
+        "subject": "={{$json['subject']}}",
+        "emailFormat": "text",
+        "text": "={{$json['body']}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        0
+      ],
+      "id": "36b4cc8d-2682-4aae-9cc2-cbdd75a207bd",
+      "name": "Send Report",
+      "credentials": {
+        "smtp": {
+          "id": "JTbu1l5Wfqw1zrie",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileType": "xlsx",
+        "sheetName": "Analysis Results"
+      },
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1.2,
+      "position": [
+        1500,
+        200
+      ],
+      "id": "16f9470f-3780-4dd5-8611-8a51eff68794",
+      "name": "Convert Results"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "/Analysis Results",
+        "fileName": "daily_analysis_{{Date.now()}}.xlsx"
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        200
+      ],
+      "id": "38e7db6a-78ac-4fce-8d8b-d3b0674c890c",
+      "name": "Upload Results",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "037b6d29-d602-4e88-9314-c38c57b16425": {
+      "main": [
+        [
+          {
+            "node": "b04b390f-2000-4e03-8c68-6c1be99ca8b8",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "b04b390f-2000-4e03-8c68-6c1be99ca8b8": {
+      "main": [
+        [
+          {
+            "node": "648589bc-eb9b-4805-ae80-ba72203f981a",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "648589bc-eb9b-4805-ae80-ba72203f981a": {
+      "main": [
+        [
+          {
+            "node": "f527b3a3-e827-4b7f-a974-1ef2a1ac2b72",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "f527b3a3-e827-4b7f-a974-1ef2a1ac2b72": {
+      "main": [
+        [
+          {
+            "node": "bb7f1c57-99fc-4f67-89b8-c7aa62190c32",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "bb7f1c57-99fc-4f67-89b8-c7aa62190c32": {
+      "main": [
+        [
+          {
+            "node": "d9b862df-afb9-46d9-af81-fb9bc1c1672e",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "d9b862df-afb9-46d9-af81-fb9bc1c1672e": {
+      "main": [
+        [
+          {
+            "node": "dabe5b76-e77f-470a-8907-c9e1ab6befb5",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "dabe5b76-e77f-470a-8907-c9e1ab6befb5": {
+      "main": [
+        [
+          {
+            "node": "36b4cc8d-2682-4aae-9cc2-cbdd75a207bd",
+            "type": "main"
+          }
+        ],
+        [
+          {
+            "node": "16f9470f-3780-4dd5-8611-8a51eff68794",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "16f9470f-3780-4dd5-8611-8a51eff68794": {
+      "main": [
+        [
+          {
+            "node": "38e7db6a-78ac-4fce-8d8b-d3b0674c890c",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "UTC"
+  }
+}
+2025-03-28 04:19:17,542 - n8n_api_client - INFO - Response status: 200
+2025-03-28 04:19:17,543 - n8n_api_client - INFO - Response headers: {'Content-Type': 'application/json; charset=utf-8', 'ETag': 'W/"1270-xhoPFtggh0krsj7dRiCDTuqV7eQ"', 'Vary': 'Accept-Encoding', 'Content-Encoding': 'gzip', 'Date': 'Fri, 28 Mar 2025 08:19:17 GMT', 'Connection': 'keep-alive', 'Keep-Alive': 'timeout=5', 'Transfer-Encoding': 'chunked'}
+2025-03-28 04:19:17,543 - n8n_api_client - INFO - Response body: {"name":"Daily Data Analysis Workflow","nodes":[{"parameters":{"rule":{"interval":[{"field":"days","triggerAtHour":9}]}},"type":"n8n-nodes-base.scheduleTrigger","typeVersion":1.2,"position":[100,100],"id":"037b6d29-d602-4e88-9314-c38c57b16425","name":"Daily Schedule"},{"parameters":{"authentication":"oAuth2","resource":"folder","operation":"list","path":"/Reports","returnAll":true,"filters":{}},"type":"n8n-nodes-base.dropbox","typeVersion":1.2,"position":[300,100],"id":"b04b390f-2000-4e03-8c68-6c1be99ca8b8","name":"List Excel Files","credentials":{"dropboxOAuth2Api":{"id":"KcAhGHqBrsmriXlY","name":"Dropbox account"}}},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"loose","version":2},"conditions":[{"value1":"={{$json['name']}}","value2":".xlsx","operation":"contains"}],"combinator":"and"},"looseTypeValidation":true,"options":{}},"type":"n8n-nodes-base.filter","typeVersion":1.2,"position":[500,100],"id":"648589bc-eb9b-4805-ae80-ba72203f981a","name":"Get Latest Excel"},{"parameters":{"operation":"xlsx","sheetName":"Sheet1","range":"A1:D100","options":{}},"type":"n8n-nodes-base.extractFromFile","typeVersion":1.2,"position":[700,100],"id":"f527b3a3-e827-4b7f-a974-1ef2a1ac2b72","name":"Extract Data"},{"parameters":{"conditions":{"options":{"caseSensitive":true,"leftValue":"","typeValidation":"loose","version":2},"conditions":[{"value1":"={{$json['status']}}","value2":"pending","operation":"equal"}],"combinator":"and"},"looseTypeValidation":true,"options":{}},"type":"n8n-nodes-base.filter","typeVersion":1.2,"position":[900,100],"id":"bb7f1c57-99fc-4f67-89b8-c7aa62190c32","name":"Filter Data"},{"parameters":{"modelId":{"__rl":true,"value":"gpt-4","mode":"list","cachedResultName":"GPT-4"},"messages":{"values":[{"content":"Analyze the following data and provide insights:\n{{$json}}"}]},"options":{}},"type":"@n8n/n8n-nodes-langchain.openAi","typeVersion":1.2,"position":[1100,100],"id":"d9b862df-afb9-46d9-af81-fb9bc1c1672e","name":"Analyze Data","credentials":{"openAiApi":{"id":"E1s5v9qmBbZViUJ5","name":"OpenAi account"}}},{"parameters":{"fields":{"subject":"Daily Data Analysis Report","body":"={{$json['choices'][0]['message']['content']}}"}},"type":"n8n-nodes-base.editFields","typeVersion":1.2,"position":[1300,100],"id":"dabe5b76-e77f-470a-8907-c9e1ab6befb5","name":"Format Email"},{"parameters":{"fromEmail":"dan@lexicon.systems","toEmail":"team@example.com","subject":"={{$json['subject']}}","emailFormat":"text","text":"={{$json['body']}}","options":{}},"type":"n8n-nodes-base.emailSend","typeVersion":1.2,"position":[1500,0],"id":"36b4cc8d-2682-4aae-9cc2-cbdd75a207bd","name":"Send Report","credentials":{"smtp":{"id":"JTbu1l5Wfqw1zrie","name":"SMTP account"}}},{"parameters":{"operation":"write","fileType":"xlsx","sheetName":"Analysis Results"},"type":"n8n-nodes-base.spreadsheetFile","typeVersion":1.2,"position":[1500,200],"id":"16f9470f-3780-4dd5-8611-8a51eff68794","name":"Convert Results"},{"parameters":{"authentication":"oAuth2","path":"/Analysis Results","fileName":"daily_analysis_{{Date.now()}}.xlsx"},"type":"n8n-nodes-base.dropbox","typeVersion":1.2,"position":[1700,200],"id":"38e7db6a-78ac-4fce-8d8b-d3b0674c890c","name":"Upload Results","credentials":{"dropboxOAuth2Api":{"id":"KcAhGHqBrsmriXlY","name":"Dropbox account"}}}],"connections":{"037b6d29-d602-4e88-9314-c38c57b16425":{"main":[[{"node":"b04b390f-2000-4e03-8c68-6c1be99ca8b8","type":"main"}]]},"b04b390f-2000-4e03-8c68-6c1be99ca8b8":{"main":[[{"node":"648589bc-eb9b-4805-ae80-ba72203f981a","type":"main"}]]},"648589bc-eb9b-4805-ae80-ba72203f981a":{"main":[[{"node":"f527b3a3-e827-4b7f-a974-1ef2a1ac2b72","type":"main"}]]},"f527b3a3-e827-4b7f-a974-1ef2a1ac2b72":{"main":[[{"node":"bb7f1c57-99fc-4f67-89b8-c7aa62190c32","type":"main"}]]},"bb7f1c57-99fc-4f67-89b8-c7aa62190c32":{"main":[[{"node":"d9b862df-afb9-46d9-af81-fb9bc1c1672e","type":"main"}]]},"d9b862df-afb9-46d9-af81-fb9bc1c1672e":{"main":[[{"node":"dabe5b76-e77f-470a-8907-c9e1ab6befb5","type":"main"}]]},"dabe5b76-e77f-470a-8907-c9e1ab6befb5":{"main":[[{"node":"36b4cc8d-2682-4aae-9cc2-cbdd75a207bd","type":"main"}],[{"node":"16f9470f-3780-4dd5-8611-8a51eff68794","type":"main"}]]},"16f9470f-3780-4dd5-8611-8a51eff68794":{"main":[[{"node":"38e7db6a-78ac-4fce-8d8b-d3b0674c890c","type":"main"}]]}},"settings":{"saveExecutionProgress":true,"saveManualExecutions":true,"saveDataErrorExecution":"all","saveDataSuccessExecution":"all","executionTimeout":3600,"timezone":"UTC"},"active":false,"versionId":"bd3555e1-bd31-4f6b-a86f-c440a0fb59d6","id":"hs9pBrruu0IufrFy","staticData":null,"meta":null,"pinData":null,"createdAt":"2025-03-28T08:19:17.513Z","updatedAt":"2025-03-28T08:19:17.513Z","triggerCount":0}
+2025-03-28 04:19:17,550 - __main__ - INFO - Saving workflow JSON to logs/workflow_20250328_041917.json
+2025-03-28 04:19:17,556 - __main__ - INFO - Successfully created bonus workflow with ID: hs9pBrruu0IufrFy
+2025-03-28 04:19:17,556 - __main__ - INFO - Workflow creation completed
