@@ -68,7 +68,8 @@ class Automatic:
     def __init__(self, gpt_car_self):
         self.current_mood_name = "curious"  # Default mood
         self.current_mood = self.MOOD_PROFILES[self.current_mood_name]
-        self.car_self = gpt_car_self  # Store the gpt_car's self
+        self.gpt_car = gpt_car_self  # Store the gpt_car reference
+        self.last_interaction_time = 0  # Track when we last had an interaction
         
         # Map behavior names to their functions
         self.BEHAVIOR_FUNCTIONS = {
@@ -85,14 +86,45 @@ class Automatic:
             "dance": self.dance
         }
 
-    def do_action(self, action_str, mood=None):
-        print(f"[action] {action_str}" + (f" ({mood})" if mood else ""))
-        action, params = self.car_self.parse_action(action_str)  # Use gpt_car's parse_action
-        if action in self.car_self.ACTIONS:  # Use gpt_car's ACTIONS
-            if params:
-                self.car_self.ACTIONS[action](self.car_self.my_car, *params)
-            else:
-                self.car_self.ACTIONS[action](self.car_self.my_car)
+    def do_actions(self, actions, mood=None):
+        """Queue action for execution by action thread"""
+        #print(f"[action] {action}" + (f" ({mood})" if mood else ""))
+        
+        # Parse to check if it's a sound
+        #action, params = self.gpt_car.parse_action(actions)
+        
+        # # Queue sound effects directly to speech handler
+        # if action in ["honk", "start_engine"]:
+        #     with self.gpt_car.speech_lock:
+        #         self.gpt_car.sound_effects_queue.append(action)
+        #         self.gpt_car.speech_loaded = True  # Set flag so speech thread processes it
+        #         self.gpt_car.tts_file = None  # No TTS file for sound effects
+        
+        # Queue action for action thread
+        with self.gpt_car.action_lock:
+            self.gpt_car.actions_to_be_done = [actions]
+            self.gpt_car.action_status = 'actions'
+        
+        # Wait for both speech and action to complete
+        while True:
+            if not self.gpt_car.auto_enabled:
+                break
+            
+            speech_done = True
+            action_done = False
+            
+            with self.gpt_car.speech_lock:
+                if self.gpt_car.speech_loaded:
+                    speech_done = False
+                
+            with self.gpt_car.action_lock:
+                if self.gpt_car.action_status != 'actions':
+                    action_done = True
+                
+            if speech_done and action_done:
+                break
+            
+            time.sleep(.01)
 
     def explore(self, mood):
         actions = []
@@ -100,8 +132,8 @@ class Automatic:
         energy = mood["energy"]
         whimsy = mood["whimsy"]
 
-        speed = int(15 + energy * 0.3)
-        distance = int(10 + curiosity * 0.2)
+        speed = int(35 + energy * 0.5)
+        distance = int(50 + curiosity * 0.5)
         actions.append(f"forward {distance} {speed}")
 
         if curiosity > 60:
@@ -113,8 +145,7 @@ class Automatic:
         if whimsy > 75:
             actions.append("nod")
 
-        for action in actions:
-            self.do_action(action, mood="exploring")
+        self.do_actions(actions, mood)
 
     def rest(self, mood):
         actions = []
@@ -123,18 +154,17 @@ class Automatic:
         actions.append("act cute")
         actions.append(f"sleep {duration}")
         
-        for action in actions:
-            self.do_action(action, mood="peaceful")
+        self.do_actions(actions, mood)
 
     def sleep(self, mood):
         actions = []
         energy = mood["energy"]
-        duration = (100 - energy) / 8
+        duration = (100 - energy) / 5
+        actions.append("depressed")
         actions.append("depressed")
         actions.append(f"sleep {duration}")
         
-        for action in actions:
-            self.do_action(action, mood="sleepy")
+        self.do_actions(actions, mood)
 
     def fidget(self, mood):
         actions = []
@@ -151,8 +181,7 @@ class Automatic:
 
         actions.append("sleep 0.8")
 
-        for action in actions:
-            self.do_action(action, mood="restless")
+        self.do_actions(actions, mood)
 
     def address(self, mood):
         actions = []
@@ -170,8 +199,7 @@ class Automatic:
 
         actions.append("sleep 1.0")
 
-        for action in actions:
-            self.do_action(action, mood="alert")
+        self.do_actions(actions, mood)
 
     def play(self, mood):
         actions = []
@@ -186,42 +214,48 @@ class Automatic:
         if mood["volume"] > 70:
             actions.append("honk")
 
-        actions.append("sleep 1.0")
+        actions.append("sleep 1")
 
-        for action in actions:
-            self.do_action(action, mood="playful")
+        self.do_actions(actions, mood)
 
     def panic(self, mood):
         actions = []
         energy = mood["energy"]
         volume = mood["volume"]
 
-        speed = min(50, int(30 + energy * 0.5))
-        actions.append(f"backward {speed} 10")
+        speed = min(50, int(30 + energy * 0.9))
+        actions.append(f"backward {speed} 40")
 
         if volume > 50:
             actions.append("honk")
 
         actions.append("circle right")
-        actions.append("sleep 1.0")
+        actions.append("sleep 1")
 
-        for action in actions:
-            self.do_action(action, mood="alarmed")
+        self.do_actions(actions, "alarmed")
 
     def circle(self, mood):
         actions = []
         curiosity = mood["curiosity"]
         energy = mood["energy"]
 
-        actions.append("circle right")
-        
+        actions.append("turn right")
+        actions.append("turn right")
+        actions.append("turn right")
+
+        if energy > 50:
+            actions.append("turn right")
+            actions.append("turn right")
+            actions.append("turn left")
+            actions.append("turn left")
+            actions.append("turn left")
+            actions.append("turn left")
         if curiosity > 70:
             actions.append("think")
 
-        actions.append("sleep 1.2")
+        actions.append("sleep 1")
 
-        for action in actions:
-            self.do_action(action, mood="focused")
+        self.do_actions(actions, mood)
 
     def sing(self, mood):
         actions = []
@@ -230,16 +264,19 @@ class Automatic:
 
         if volume > 60:
             actions.append("celebrate")
+            actions.append("honk")
+            actions.append("celebrate")
+            actions.append("honk")
+            actions.append("honk")
         else:
             actions.append("act cute")
 
         if whimsy > 70:
             actions.append("wave hands")
 
-        actions.append("sleep 2.0")
+        actions.append("sleep 2")
 
-        for action in actions:
-            self.do_action(action)
+        self.do_actions(actions, mood)
 
     def mutter(self, mood):
         actions = []
@@ -254,42 +291,112 @@ class Automatic:
         if curiosity > 50:
             actions.append("rub hands")
 
-        actions.append("sleep 1.0")
+        actions.append("sleep 1")
 
-        for action in actions:
-            self.do_action(action, mood="brooding")
+        self.do_actions(actions, mood)
 
     def dance(self, mood):
         actions = []
         energy = mood["energy"]
         whimsy = mood["whimsy"]
 
+        actions.append("twist body")
+        actions.append("celebrate")
+        actions.append("twist body")
+        actions.append("celebrate")
+
         if whimsy > 50:
-            actions.append("twist body")
+            actions.append("forward 3 90")
+            actions.append("backward 3 90")
+            actions.append("forward 2 70")
+            actions.append("backward 3 80")
+            actions.append("forward 10 90")
+            actions.append("backward 10 90")
         else:
-            actions.append("wave hands")
+            actions.append("turn right")
+            actions.append("turn left")
+            actions.append("backward 10 90")
+            actions.append("turn right")
+            actions.append("turn left")
+            actions.append("backward 10 90")
 
         if mood["volume"] > 60:
             actions.append("celebrate")
+            actions.append("honk")
+            actions.append("celebrate")
+            actions.append("honk")
+            actions.append("honk")
+            actions.append("celebrate")
+            actions.append("honk")
+            actions.append("celebrate")
+            actions.append("celebrate")
+            actions.append("honk")
 
-        actions.append("sleep 1.5")
+        actions.append("sleep 2")
 
-        for action in actions:
-            self.do_action(action, mood="groovy")
+        self.do_actions(actions, mood)
 
-    def run_idle_loop(self, cycles=3):
+    def run_idle_loop(self, cycles=1):
+        """Run autonomous behaviors with vocalizations"""
+        if not self.gpt_car.auto_enabled:
+            return
+        
+        current_time = time.time()
+        # Add cooldown period of 5 seconds after last interaction
+        if current_time - self.last_interaction_time < 5:
+            return
+        
         for _ in range(cycles):
-            print(f"\n[auto] Mood: {self.current_mood_name}")
-            weights = self.compute_behavior_weights(
-                self.BEHAVIOR_BASE_WEIGHTS,
-                self.current_mood,
-                self.BEHAVIOR_TRAIT_BIASES
-            )
-            behavior_name = self.weighted_choice(weights)
-            print(f"[auto] Chosen behavior: {behavior_name}")
-            behavior_func = self.BEHAVIOR_FUNCTIONS.get(behavior_name)
-            if behavior_func:
-                behavior_func(self.current_mood)
+            # Check auto_enabled at start of each cycle
+            if not self.gpt_car.auto_enabled:
+                break
+            
+            rando = random.random()
+            print(f"\n[auto] Random value: {rando:.3f} ({'GPT' if rando < 0.25 else 'Behavior'})")
+            
+            if rando < 0.25:  # 25% chance of GPT
+                use_vision = random.random() < (self.current_mood.get('curiosity', 50) / 100)
+                prompt = self.get_auto_prompt(use_vision)
+                
+                # Check auto_enabled before making GPT call
+                if not self.gpt_car.auto_enabled:
+                    break
+                
+                actions, message = self.gpt_car.call_GPT(prompt, use_image=use_vision)
+                
+                # Check auto_enabled before processing response
+                if not self.gpt_car.auto_enabled:
+                    break
+                
+                # Handle speech output
+                if message:
+                    self.gpt_car.handle_TTS_generation(message)
+                    print(f"[auto speech] {message}")
+                
+                # Handle actions one at a time like in behaviors
+                if actions:
+                    self.do_actions(actions)
+            else:
+                # Use behavior system with vocalizations
+                print(f"\n[auto] Mood: {self.current_mood_name}")
+                weights = self.compute_behavior_weights(
+                    self.BEHAVIOR_BASE_WEIGHTS,
+                    self.current_mood,
+                    self.BEHAVIOR_TRAIT_BIASES
+                )
+                behavior_name = self.weighted_choice(weights)
+                print(f"[auto] Chosen behavior: {behavior_name}")
+                print(f"[auto] Mood: {self.current_mood}")
+                self.do_behavior(behavior_name, self.current_mood)
+                
+                # Wait for any speech to complete
+                while True:
+                    if not self.gpt_car.auto_enabled:
+                        break
+                    with self.gpt_car.speech_lock:
+                        if not self.gpt_car.speech_loaded:
+                            break
+                    time.sleep(.01)
 
     def get_mood_param_str(self):
         traits = self.current_mood
@@ -336,8 +443,7 @@ class Automatic:
         else:
             actions.append("think")
         
-        for action in actions:
-            self.do_action(action, mood=f"transitioning to {self.current_mood_name}")
+        self.do_actions(actions, mood=f"transitioning to {self.current_mood_name}")
 
     def get_cycle_count(self):
         # Use energy and whimsy to determine number of cycles
@@ -351,3 +457,151 @@ class Automatic:
         
         print(f"[system] Feeling {'energetic' if mood_factor > 1 else 'mellow'}, doing {cycles} cycles")
         return cycles
+
+    BEHAVIOR_VOCALIZATIONS = {
+        "explore": [
+            "Hmm...", "What's that?", "Oh!", "Interesting...",
+            "Let's see...", "Over here?", "This way!", "New thing!",
+            "Ooooh!", "Check this out!", "Neat!", "Curious..."
+        ],
+        "rest": [
+            "Ahhh...", "Mmm...", "Nice...", "Peaceful...",
+            "Just chillin'", "Break time", "Resting...", "Quiet time..."
+        ],
+        "fidget": [
+            "Woah-woah-woah!", "Can't sit still!", "Jitters!",
+            "Bouncy bouncy!", "Wiggles!", "Zoom zoom!", "Boing!"
+        ],
+        "address": [
+            "Hello wall", "Hi there!", "Oh, hi!", "Fancy meeting you here!",
+            "Well hello!", "Greetings!", "Hey hey!", "What's up!"
+        ],
+        "play": [
+            "Wheee!", "Chicken look at this!", "Watch this!",
+            "Fun fun fun!", "Yippee!", "Let's play!", "Playtime!",
+            "Woo hoo!", "Yahoo!", "This is fun!", "Yay!"
+        ],
+        "panic": [
+            "AAAHHHHH!", "git out da way!", "Coming through!",
+            "Look out!", "Beep beep!", "Emergency!", "Yikes!",
+            "Oh no oh no!", "Excuse me!", "Clear the way!"
+        ],
+        "circle": [
+            "truckin'", "Round and round...", "Spin cycle!",
+            "Dizzy...", "Wheeeee!", "Like a record baby!",
+            "Round we go!", "Spinning!", "Circle time!"
+        ],
+        "sing": [
+            "La la la...", "♪ ♫ ♬", "Doo bee doo...",
+            "Beep boop song!", "Singing time!", "♪ Happy bot ♪",
+            "Tra la la!", "♫ Robot tunes ♫", "Beep beat!"
+        ],
+        "mutter": [
+            "Hmm...", "Mmmm...", "Let's see now...",
+            "Maybe...", "Could be...", "Well well...",
+            "So then...", "Huh...", "Right right..."
+        ],
+        "dance": [
+            "Boogie!", "Let's dance!", "Got the moves!",
+            "Robot dance!", "Groove time!", "Dancing!",
+            "Watch these moves!", "Shake it!", "Robot rhythm!"
+        ],
+        "think": [
+            "Processing...", "Computing...", "Analyzing...",
+            "Deep thoughts...", "Robot thoughts...", "Calculating...",
+            "Brain waves...", "Think think...", "Pondering..."
+        ],
+        "curious": [
+            "What if...?", "I wonder...", "Could it be...?",
+            "Let me see...", "How about...", "Maybe if...",
+            "Curious...", "Investigating...", "Research time..."
+        ]
+    }
+
+    AUTO_PROMPT_EXAMPLES = {
+        "vision": [
+            "Hey Dan",
+            "Hey Danielle",
+            "What up Chicken?!?",
+            "wall",
+            "couch",
+            "Gainsborough!",
+            "Delacroix!",
+            "reading [book title]?",
+            "sculpchah!",
+            "nice painting!",
+            "is that a cat?",
+            "cool room!"
+        ],
+        "general": [
+            "Hmm",
+            "Woahhhh",
+            "beep boop bop",
+            "oh",
+            "yurrrrrrrr",
+            "dang",
+            "wut?",
+            "Whazzat?",
+            "It's Kaiser Soze!!!",
+            "meh",
+            "huh",
+            "interesting..."
+        ]
+    }
+
+    def get_auto_prompt(self, use_vision):
+        """Generate appropriate prompt for auto mode"""
+        example_list = self.AUTO_PROMPT_EXAMPLES["vision" if use_vision else "general"]
+        examples = random.sample(example_list, 3)
+        prompt = (
+            "Running in autonomous mode. Respond with a VERY brief comment "
+            f"like '{examples[0]}' or '{examples[1]}' or '{examples[2]}'. "
+            "Keep it to 1-5 words usually. Be moody and whimsical."
+        )
+        if use_vision:
+            prompt += "Comment on things you see, or let them inspire your commentary or exclamations or questions or utterances."
+        else:
+            prompt += "What's on your mind?"
+        return prompt
+
+    def do_behavior(self, behavior_name, mood):
+        """Execute behavior with possible vocalization"""
+        behavior_func = self.BEHAVIOR_FUNCTIONS.get(behavior_name)
+        if behavior_func:
+            # Maybe add vocalization 
+            vocalizations = self.BEHAVIOR_VOCALIZATIONS.get(behavior_name, [])
+            vocalization_chance = (self.current_mood["energy"] + self.current_mood["whimsy"] + self.current_mood["sociability"] + self.current_mood["curiosity"] + self.current_mood["volume"]) / 500
+            
+            print(f"[vocal] Chance {vocalization_chance:.2f} from traits: energy={self.current_mood['energy']} whimsy={self.current_mood['whimsy']} sociability={self.current_mood['sociability']} curiosity={self.current_mood['curiosity']} volume={self.current_mood['volume']}")
+            print(f"[vocal] Vocalizations: {vocalizations}")
+            if vocalizations and random.random() < vocalization_chance:
+                message = random.choice(vocalizations)
+                self.gpt_car.handle_TTS_generation(message)
+                print(f"[auto vocalization] {message}")
+            
+            # Do the behavior
+            behavior_func(mood)
+
+    def do_actions(self, actions, mood=None):
+        """Queue multiple actions for execution"""
+        if not actions:
+            return
+        
+        # Log the actions
+        action_str = ", ".join(actions)
+        print(f"[actions] Queueing: {action_str}" + (f" ({mood})" if mood else ""))
+        
+        # Queue the actions
+        with self.gpt_car.action_lock:
+            self.gpt_car.actions_to_be_done = actions
+            self.gpt_car.action_status = 'actions'
+        
+        # Wait for completion
+        while True:
+            if not self.gpt_car.auto_enabled:
+                break
+            with self.gpt_car.action_lock:
+                if self.gpt_car.action_status != 'actions':
+                    break
+            time.sleep(.01)
+

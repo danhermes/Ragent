@@ -29,6 +29,7 @@ from load_RAG_files import LoadRAGfiles
 class PiCar:
     def __init__(self):
         self.force_quit = False  # Add force quit flag
+        self.last_speech_time = 0  # Add this to track when we last spoke
         try:
             # First try to cleanup any existing resources
             from robot_hat import reset_mcu
@@ -220,6 +221,55 @@ class PiCar:
         except:
             pass
 
+    def handle_STT(self, audio):
+        """Handle speech-to-text conversion"""
+        try:
+            if audio is None:
+                print("No audio data received")
+                return None
+            
+            if check_audio_energy(audio):
+                transcript = self.openai_helper.stt(audio, language=self.LANGUAGE)
+                print("Transcript:", transcript)
+                return transcript
+            else:
+                print("Silence detected: skipping transcription.")
+                return None
+            
+        except Exception as e:
+            print(f"Error in STT: {e}")
+            return None
+
+    def listen(self):
+        """Listen for audio input and return transcript"""
+        with self.action_lock:
+            self.action_status = 'standby'
+
+        gray_print("Listening ...")
+        self.my_car.set_cam_tilt_angle(self.DEFAULT_HEAD_TILT) #TODO later make this a listen action in handler
+        listen_start = time.time()
+        _stderr_back = redirect_error_2_null()
+        
+        try:
+            with sr.Microphone(device_index=self.audio_device, 
+                              chunk_size=self.chunk_size,
+                              sample_rate=44100) as source:
+                cancel_redirect_error(_stderr_back)
+                self.recognizer.adjust_for_ambient_noise(source)
+                try:  
+                    audio = self.recognizer.listen(source, timeout=10, phrase_time_limit=10)
+                except sr.WaitTimeoutError:
+                    print("Timeout detected.")
+                    return None, time.time() - listen_start
+            
+            gray_print(f"Listen time: {time.time() - listen_start:.3f}s")
+            
+            return audio, time.time() - listen_start
+            
+        except Exception as e:
+            print(f"Error in listen: {e}")
+            return None, time.time() - listen_start
+
     def speech_handler(self):
         while True:
             with self.action_lock:
@@ -247,7 +297,7 @@ class PiCar:
                 
                 # Then handle TTS
                 gray_print(f"Playing TTS file: {self.tts_file}")
-                self.play_audio_file(self.music, self.tts_file)
+                play_audio_file(self.music, self.tts_file)
                 with self.speech_lock:
                     self.speech_loaded = False
             
@@ -322,10 +372,44 @@ class PiCar:
         # Handle other actions
         return response, None
 
+    def parse_gpt_response(self, response):
+        """Parse GPT response for actions, speech, and mood changes"""
+        try:
+            if isinstance(response, dict):
+                actions = list(response.get('actions', ['stop']))
+                answer = response.get('answer', '')
+                # Add this to handle mood from JSON response
+                if 'mood' in response and self.auto:
+                    new_mood = response['mood']
+                    old_mood = self.auto.current_mood_name
+                    if self.auto.set_mood(new_mood):
+                        gray_print(f"[mood] Changed from {old_mood} to {new_mood}")
+                        gray_print(f"[mood] New traits: {self.auto.get_mood_param_str()}")
+            else:
+                actions = []
+                answer = str(response)
+
+            # Look for mood change indicators
+            mood_match = re.search(r'\[mood: (\w+)\]', answer)
+            if mood_match:
+                new_mood = mood_match.group(1)
+                # Remove mood indicator from answer
+                answer = re.sub(r'\[mood: \w+\]', '', answer).strip()
+                # Apply mood change
+                if self.auto and new_mood:
+                    if self.auto.set_mood(new_mood):
+                        print(f"[system] Mood changed to: {new_mood}")
+
+            return actions, answer
+
+        except Exception as e:
+            print(f"Error parsing GPT response: {e}")
+            return [], ''
+
     def action_handler(self):
-        standby_actions = ['act cute', 'nod', 'depressed']
-        standby_weights = [1, 0.3, 0.1]
-        action_interval = 20 # seconds
+        #standby_actions = ['act cute', 'nod', 'depressed']
+        #standby_weights = [1, 0.3, 0.1]
+        #action_interval = 20 # seconds
         last_action_time = time.time()
         last_led_time = time.time()
 
@@ -384,254 +468,221 @@ class PiCar:
 
             time.sleep(0.01)
 
+    def handle_transcript(self, transcript):
+        """Handle the transcript from voice input"""
+        # Handle no input cases
+        if transcript is None:
+            if not self.speech_loaded and self.action_status == 'standby':
+                print("\n[system] No input detected, running automatic behaviors...")
+                self.auto_enabled = True
+                self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
+                return True  # Continue main loop
+        
+        # Check for wake word if in auto mode
+        if self.auto_enabled:
+            if transcript and "nevil" in transcript.lower():
+                print("[system] Wake word detected")
+                self.auto_enabled = False
+                self.actions_to_be_done = []
+                self.my_car.reset()
+                with self.action_lock:
+                    self.action_status = 'standby'
+            else:
+                print("\n[system] No wake word, running automatic behaviors...")
+                self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
+                return True  # Continue main loop
+        
+        # Handle shutdown command
+        if transcript and "shut down" in transcript.lower():
+            gray_print("Shutting down ...")
+            raise KeyboardInterrupt()
+        
+        return False  # Continue with normal processing
+
+    def handle_RAG(self, transcript):
+        """Load relevant RAG files based on transcript content"""
+        self.RAGtext = ""
+        
+        # Check for fitness-related content
+        fitness_terms = [
+            "gym", "fit", "pump", "The Y", "YMCA", "Tai Chi", "walk", "exercise", 
+            "motion", "movement", "skateboarding", "dance", "cardio", "strength", 
+            "endurance", "flexibility", "balance", "core", "stretching", "yoga", 
+            "pilates"
+        ]
+        if bool(re.search('|'.join(map(re.escape, fitness_terms)), transcript)):
+            try:
+                gray_print("Getting fitness schedule")    
+                self.RAGtext += LoadRAGfiles().get_files_from_Dropbox(file_type="fitness")
+            except Exception as e:  
+                gray_print(f"Error getting fitness schedule: {e}")
+        
+        # Check for work-related content
+        work_terms = [
+            "work", "job", "project", "task", "deadline", "meeting", "customer", 
+            "company", "client", "writing", "search", "contract", "proposal", 
+            "email", "consulting", "consult", "consultant", "Lexicon", "books", 
+            "book", "artwork", "art", "publishers", "galleries", "planning", 
+            "event", "talk", "calendar", "raging", "coding", "outreach"
+        ]
+        if bool(re.search('|'.join(map(re.escape, work_terms)), transcript)):
+            try:
+                gray_print("Getting work schedule")    
+                self.RAGtext += LoadRAGfiles().get_files_from_Dropbox(file_type="work")
+            except Exception as e:  
+                gray_print(f"Error getting work schedule: {e}")
+        
+        return self.RAGtext
+
+    def handle_TTS_generation(self, message):
+        """Generate TTS file from message"""
+        tts_start = time.time()
+        try:
+            _tts_status = False
+            if message != '':
+                raw_file, processed_file = generate_tts_filename(volume_db=self.VOLUME_DB)
+                
+                _tts_status = self.openai_helper.text_to_speech(
+                    message, raw_file, self.TTS_VOICE, response_format='wav'
+                )
+            
+            if _tts_status:
+                _tts_status = sox_volume(raw_file, processed_file, self.VOLUME_DB)
+                os.remove(raw_file)
+                self.tts_file = processed_file
+                with self.speech_lock:
+                    self.speech_loaded = True
+                
+            gray_print(f'TTS generation time: {time.time() - tts_start:.3f}s')
+            return _tts_status
+        
+        except Exception as e:
+            print(f'TTS generation error: {e}')
+            return False
+
+    def handle_GPT(self, transcript, rag_content):
+        """Handle GPT interaction and response processing"""
+        gpt_start = time.time()
+
+        with self.action_lock:
+            self.action_status = 'think'
+
+        # Make GPT call
+        if self.with_img:
+            img_path = './img_imput.jpg'
+            cv2_start = time.time()
+            self.cv2.imwrite(img_path, self.Vilib.img)
+            gray_print(f"Image capture time: {time.time() - cv2_start:.3f}s")
+            response = self.openai_helper.dialogue_with_img(
+                transcript + "   " + self.RAGgeneral + rag_content, 
+                img_path
+            )
+        else:
+            response = self.openai_helper.dialogue(
+                transcript + "   " + self.RAGgeneral + "   " + rag_content
+            )
+
+        gray_print(f'GPT total time: {time.time() - gpt_start:.3f}s')
+
+        # Parse response
+        parse_start = time.time()
+        actions, GPT_response = self.parse_gpt_response(response)
+        gray_print(f"Parse time: {time.time() - parse_start:.3f}s")
+
+        return actions, GPT_response
+
+    def handle_keyboard(self):
+        """Handle keyboard input mode"""
+        self.my_car.set_cam_tilt_angle(self.DEFAULT_HEAD_TILT)
+
+        with self.action_lock:
+            self.action_status = 'standby'
+
+        transcript = input(f'\033[1;30m{"input: "}\033[0m').encode(sys.stdin.encoding).decode('utf-8')
+
+        # Handle shutdown command
+        if transcript.lower() == "shut down":
+            gray_print("Shutting down ...")
+            raise KeyboardInterrupt()
+        
+        # Process input like voice
+        if self.handle_transcript(transcript):
+            return True  # for auto mode
+        
+        rag_content = self.handle_RAG(transcript)
+        
+        if not self.handle_GPT(transcript, rag_content):
+            return True  # on error
+        
+        return False
+
+    def handle_actions(self, actions):
+        """Queue actions and sounds for execution"""
+        try:
+            with self.action_lock:
+                self.actions_to_be_done = actions
+                self.action_status = 'actions'
+
+            for _sound in actions:
+                with self.speech_lock:
+                    self.sound_effects_queue.append(_sound)
+            return True
+        except Exception as e:
+            print(f'Action handling error: {e}')
+            return False
+
+    def wait_for_completion(self):
+        """Wait for speech and actions to complete"""
+        wait_start = time.time()
+        
+        if self.speech_loaded:
+            while True:
+                with self.speech_lock:
+                    if not self.speech_loaded:
+                        break
+                time.sleep(.01)
+
+        while True:
+            with self.action_lock:
+                if self.action_status != 'actions':
+                    break
+            time.sleep(.01)
+        
+        gray_print(f"Wait time for completion: {time.time() - wait_start:.3f}s")
+
     def main(self):
         self.my_car.reset()
         self.my_car.set_cam_tilt_angle(self.DEFAULT_HEAD_TILT)
 
         while True:
             if self.input_mode == 'voice':
-                self.my_car.set_cam_tilt_angle(self.DEFAULT_HEAD_TILT)
-
-                # listen
-                # ----------------------------------------------------------------
-                with self.action_lock:
-                    self.action_status = 'standby'
-
-                gray_print("Listening ...")
-                listen_start = time.time()
-                _stderr_back = redirect_error_2_null()
-                with sr.Microphone(device_index=self.audio_device, 
-                                  chunk_size=self.chunk_size,
-                                  sample_rate=44100) as source: #16000
-                    cancel_redirect_error(_stderr_back)
-                    self.recognizer.adjust_for_ambient_noise(source)
-                    try:  
-                        audio = None
-                        audio = self.recognizer.listen(source, timeout=10, phrase_time_limit=10)
-                    except sr.WaitTimeoutError:
-                        print("Timeout detected.")
-                        _user_prompt = ""
-
-                gray_print(f"Listen time: {time.time() - listen_start:.3f}s")
-
-                # After listen attempt
-                if audio is None:  # If no audio was captured
-                    print("No audio captured")
-                    _user_prompt = ""
-                    # Auto mode for no audio
-                    if not self.speech_loaded and self.action_status == 'standby':
-                        print("\n[system] No input detected, running automatic behaviors...")
-                        self.auto_enabled = True
-                        self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
-                        continue
-
-                # For Debugging only - Play back the recorded audio
-                #self.play_audio_data(audio)
-
-                # stt
-                # ----------------------------------------------------------------
-                stt_start = time.time()
+                audio, listen_time = self.listen()
+                transcript = self.handle_STT(audio)
                 
-                audio_data = None
-                rms_energy = 0
-                normalized_data = None
-
-                try:
-                    audio_data = np.frombuffer(audio.get_raw_data(), dtype=np.int16)
-                    # Normalize to -1.0 to 1.0 range
-                    normalized_data = audio_data.astype(np.float32) / 32768.0
-                    rms_energy = np.sqrt(np.mean(np.square(normalized_data)))
-                    print("RMS Energy:", rms_energy)
-                except Exception as e:
-                    print(f"Error checking audio RMS energy: {e}")
-
-                # Define your threshold for what you consider 'real' speech
-                if rms_energy >= 0.009:  # Real speech detected
-                    _user_prompt = self.openai_helper.stt(audio, language=self.LANGUAGE)
-                    print("Transcript:", _user_prompt)
+                if self.handle_transcript(transcript):
+                    continue  # for auto mode
+                
+                rag_content = self.handle_RAG(transcript)
+                actions, GPT_response = self.handle_GPT(transcript, rag_content)
+                
+                if not GPT_response:
+                    continue  # on error
                     
-                    if self.auto_enabled:
-                        if _user_prompt and "nevil" in _user_prompt.lower():
-                            # Wake word detected - process normally
-                            print("[system] Wake word detected")
-                            self.auto_enabled = False
-                            self.actions_to_be_done = []  # Clear pending actions
-                            self.my_car.reset()  # Reset car state
-                        else:
-                            # No wake word - go back to auto mode
-                            print("\n[system] No wake word, running automatic behaviors...")
-                            #self.auto_enabled = True
-                            self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
-                            continue
-                else:
-                    print("Silence detected: skipping transcription.")
-                    _user_prompt = ""
-                    # Auto mode for silence
-                    if not self.speech_loaded and self.action_status == 'standby':
-                        print("\n[system] No input detected, running automatic behaviors...")
-                        self.auto_enabled = True
-                        self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
-                        continue
-
+                if not self.handle_TTS_generation(GPT_response):
+                    print("TTS generation failed")
+                    continue  # on error
+                    
+                if not self.handle_actions(actions):
+                    continue  # on error
                 
-                gray_print(f"STT time: {time.time() - stt_start:.3f}s")
+                self.wait_for_completion()
+                gray_print(f"Total iteration time: {time.time() - listen_time:.3f}s\n")
 
-                if _user_prompt == False or _user_prompt == "":
-                    # Add automatic behavior when no input detected
-                    if not self.speech_loaded and self.action_status == 'standby':
-                        print("\n[system] No input detected, running automatic behaviors...")
-                        self.auto_enabled = True
-                        self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
-                        continue
-                if "shut down" in _user_prompt.lower():
-                    gray_print("Shutting down ...")
-                    raise KeyboardInterrupt()
-            
             elif self.input_mode == 'keyboard':
-                self.my_car.set_cam_tilt_angle(self.DEFAULT_HEAD_TILT)
-
-                with self.action_lock:
-                    self.action_status = 'standby'
-
-                _user_prompt = input(f'\033[1;30m{"intput: "}\033[0m').encode(sys.stdin.encoding).decode('utf-8')
-
-                if _user_prompt.lower() == "shut down":
-                    gray_print("Shutting down ...")
-                    raise KeyboardInterrupt()
-
+                if self.handle_keyboard():
+                    continue  # for auto mode
             else:
-                raise ValueError("Invalid input mode")
-            
-
-            # RAG file downloads
-            # ---------------------------------------------------------------- 
-            self.RAGtext=""
-            search_terms = ["gym", "fit", "pump","The Y", "YMCA", "Tai Chi", "walk", "exercise", "motion", "movement", "skateboarding", "dance", "cardio", "strength", "endurance", "flexibility", "balance", "core", "stretching", "yoga", "pilates", "dance", "cardio", "strength", "endurance", "flexibility", "balance", "core", "stretching"]
-            fitness_RAG = bool(re.search('|'.join(map(re.escape, search_terms)), _user_prompt))
-            if fitness_RAG:
-                try:
-                    gray_print("Getting fitness schedule")    
-                    self.RAGtext = self.RAGtext + LoadRAGfiles().get_files_from_Dropbox(file_type="fitness")
-                except Exception as e:  
-                    gray_print(f"Error getting fitness schedule: {e}")
-                    
-            search_terms = ["work", "job", "project", "task", "deadline", "meeting", "customer", "company", "client", "customer", "writing", "search", "contract", "proposal", "email", "consulting", "consult", "consultant", "Lexicon", "books", "book", "artwork", "art", "publishers", "galleries", "planning", "event", "talk", "calendar", "raging", "coding", "outreach"]
-            work_RAG = bool(re.search('|'.join(map(re.escape, search_terms)), _user_prompt))
-            if work_RAG:
-                try:
-                    gray_print("Getting work schedule")    
-                    self.RAGtext = self.RAGtext + LoadRAGfiles().get_files_from_Dropbox(file_type="work")
-                except Exception as e:  
-                    gray_print(f"Error getting work schedule: {e}")
-
-
-            # chat-gpt
-            # ---------------------------------------------------------------- 
-            gpt_start = time.time()
-
-            with self.action_lock:
-                self.action_status = 'think'
-
-            if self.with_img:
-                img_path = './img_imput.jpg'
-                cv2_start = time.time()
-                self.cv2.imwrite(img_path, self.Vilib.img)
-                gray_print(f"Image capture time: {time.time() - cv2_start:.3f}s")
-                response = self.openai_helper.dialogue_with_img(_user_prompt + "   " +self.RAGgeneral + self.RAGtext, img_path)
-            else:
-                response = self.openai_helper.dialogue(_user_prompt + "   " + self.RAGgeneral + "   " + self.RAGtext)
-
-            gray_print(f'GPT total time: {time.time() - gpt_start:.3f}s')
-
-            # Parse actions, answer, and sound actions
-            # ----------------------------------------------------------------
-            parse_start = time.time()
-            _sound_actions = [] 
-            try:
-                if isinstance(response, dict):
-                    if 'actions' in response:
-                        actions = list(response['actions'])
-                    else:
-                        actions = ['stop']
-                    if 'answer' in response:
-                        answer = response['answer']
-                    else:
-                        answer = ''
-                    if len(answer) > 0:
-                        _actions = list.copy(actions)
-                        for _action in _actions:
-                            if _action in self.SOUND_EFFECT_ACTIONS:
-                                _sound_actions.append(_action)
-                                actions.remove(_action)
-                else:
-                    response = str(response)
-                    if len(response) > 0:
-                        actions = []
-                        answer = response
-            except Exception as e:
-                actions = []
-                answer = ''
-            gray_print(f"Parse time: {time.time() - parse_start:.3f}s")
-            
-            # TTS
-            # ----------------------------------------------------------------
-            tts_start = time.time()
-            try:
-                _tts_status = False
-                if answer != '':
-                    _time = time.strftime("%y-%m-%d_%H-%M-%S", time.localtime())
-                    _tts_f = f"./tts/{_time}_raw.wav"
-                    
-                    _tts_status = self.openai_helper.text_to_speech(answer, _tts_f, self.TTS_VOICE, response_format='wav')
-                
-                    if _tts_status:
-                        self.tts_file = f"./tts/{_time}_{self.VOLUME_DB}dB.wav"
-                        _tts_status = sox_volume(_tts_f, self.tts_file, self.VOLUME_DB)
-                        os.remove(_tts_f)
-                gray_print(f'TTS generation time: {time.time() - tts_start:.3f}s')
-
-                # Actions and Speech
-                # ----------------------------------------------------------------
-                action_start = time.time()
-                with self.action_lock:
-                    self.actions_to_be_done = actions
-                    self.action_status = 'actions'
-
-                for _sound in _sound_actions:
-                    with self.speech_lock:
-                        self.sound_effects_queue.append(_sound)
-
-                if _tts_status:
-                    with self.speech_lock:
-                        self.speech_loaded = True
-
-            except Exception as e:
-                print(f'actions or TTS error: {e}')
-            
-            # Wait for completion
-            # ----------------------------------------------------------------
-            wait_start = time.time()
-            if _tts_status:
-                while True:
-                    with self.speech_lock:
-                        if not self.speech_loaded:
-                            break
-                    time.sleep(.01)
-
-            while True:
-                with self.action_lock:
-                    if self.action_status != 'actions':
-                        break
-                time.sleep(.01)
-            gray_print(f"Wait time for completion: {time.time() - wait_start:.3f}s")
-            gray_print(f"Total iteration time: {time.time() - listen_start:.3f}s\n")
-
-            # When going into auto mode
-            if not _user_prompt or "nevil" not in _user_prompt.lower():
-                print("\n[system] No wake word, running automatic behaviors...")
-                self.auto_enabled = True
-                self.auto.run_idle_loop(cycles=self.auto.get_cycle_count())
-                continue
+                raise ValueError("Invalid input")
 
     def cleanup(self):
         """Add this method for cleanup"""
@@ -717,6 +768,27 @@ class PiCar:
             
         except Exception as e:
             print(f"Reset error: {e}")
+
+    def call_GPT(self, user_prompt, use_image=False):
+        """Centralized method for GPT interactions"""
+        try:
+            if use_image:
+                img_path = './img_imput.jpg'
+                self.cv2.imwrite(img_path, self.Vilib.img)
+                response = self.openai_helper.dialogue_with_img(
+                    user_prompt + "   " + self.RAGgeneral + self.RAGtext, 
+                    img_path
+                )
+            else:
+                response = self.openai_helper.dialogue(
+                    user_prompt + "   " + self.RAGgeneral + "   " + self.RAGtext
+                )
+
+            return self.parse_gpt_response(response)
+
+        except Exception as e:
+            print(f"Error in GPT call: {e}")
+            return [], ''
 
 if __name__ == "__main__":
     car = None
