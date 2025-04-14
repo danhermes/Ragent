@@ -74,6 +74,42 @@ Fill your ASSISTANT_ID into the `keys.py` file.
 
 Confirm that `keys.py` is configured correctly
 
+## Automatic Mode
+
+The PiCar-X has an autonomous mode that activates when:
+1. No voice input is detected
+2. No wake word ("nevil") is heard
+3. System is idle for more than 5 seconds
+
+### Mood System
+The robot has different moods that affect its behavior:
+- Each mood has traits: energy, curiosity, whimsy, sociability, volume
+- Traits influence behavior selection and execution
+- Moods can change based on GPT responses or interactions
+
+### Behaviors
+The robot can perform various autonomous behaviors:
+- explore: Investigates surroundings based on curiosity
+- play: Playful movements with optional sounds
+- dance: Complex movement patterns with music
+- think/mutter: Contemplative behaviors
+- rest/sleep: Low energy states
+- And more...
+
+### Vocalization
+- Random comments and exclamations
+- Mood-appropriate responses
+- Vision-based observations
+- Sound effects based on mood
+
+### Usage
+Run with automatic mode:
+```bash
+sudo python3 gpt_car.py
+```
+
+The robot will switch between manual and automatic modes based on interaction.
+
 ## Run
 
 - Run with vioce
