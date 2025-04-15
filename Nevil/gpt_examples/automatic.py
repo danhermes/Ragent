@@ -4,7 +4,7 @@ import warnings
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="ALSA")
 
-# Actions: forward, backward, left, right, stop, circle left, circle right, come here, shake head, 
+# Actions: forward, backward, left, right, stop, twist left, twist right, come here, shake head, 
 #    nod, wave hands, resist, act cute, rub hands, think, twist body, celebrate, depressed, keep think
 #
 # Sounds: honk, start engine
@@ -34,10 +34,10 @@ class Automatic:
     BEHAVIOR_BASE_WEIGHTS = {
         "explore": 0.3,
         "rest": 0.1,
-        "sleep": 0.1,
+        "sleep": 0.2,
         "fidget": 0.0,
         "address": 0.0,
-        "play": 0.2,
+        "play": 0.1,
         "panic": 0.05,
         "circle": 0.05,
         "sing": 0.05,
@@ -87,8 +87,8 @@ class Automatic:
         }
 
     def do_actions(self, actions, mood=None):
-        """Queue action for execution by action thread"""
-        #print(f"[action] {action}" + (f" ({mood})" if mood else ""))
+        """Queue actions for execution by action thread"""
+        print(f"[actions] {actions.all}" + (f" ({mood})" if mood else ""))
         
         # Parse to check if it's a sound
         #action, params = self.gpt_car.parse_action(actions)
@@ -137,9 +137,9 @@ class Automatic:
         actions.append(f"forward {distance} {speed}")
 
         if curiosity > 60:
-            actions.append("circle left")
+            actions.append("left")
             actions.append("sleep 0.3")
-            actions.append("circle right")
+            actions.append("right")
             actions.append("sleep 0.3")
 
         if whimsy > 75:
@@ -159,7 +159,7 @@ class Automatic:
     def sleep(self, mood):
         actions = []
         energy = mood["energy"]
-        duration = (100 - energy) / 5
+        duration = (100 - energy)
         actions.append("depressed")
         actions.append("depressed")
         actions.append(f"sleep {duration}")
@@ -205,8 +205,11 @@ class Automatic:
         actions = []
         energy = mood["energy"]
         whimsy = mood["whimsy"]
+        volume = mood["volume"]
 
-        actions.append("circle left")
+        if volume > 50:
+            actions.append("start engine")
+        actions.append("left")
         
         if whimsy > 60:
             actions.append("wave hands")
@@ -223,13 +226,15 @@ class Automatic:
         energy = mood["energy"]
         volume = mood["volume"]
 
+        if volume > 50:
+            actions.append("start engine")
         speed = min(50, int(30 + energy * 0.9))
         actions.append(f"backward {speed} 40")
 
         if volume > 50:
             actions.append("honk")
 
-        actions.append("circle right")
+        actions.append("right")
         actions.append("sleep 1")
 
         self.do_actions(actions, "alarmed")
@@ -239,17 +244,17 @@ class Automatic:
         curiosity = mood["curiosity"]
         energy = mood["energy"]
 
-        actions.append("turn right")
-        actions.append("turn right")
-        actions.append("turn right")
+        actions.append("right")
+        actions.append("right")
+        actions.append("right")
 
         if energy > 50:
-            actions.append("turn right")
-            actions.append("turn right")
-            actions.append("turn left")
-            actions.append("turn left")
-            actions.append("turn left")
-            actions.append("turn left")
+            actions.append("right")
+            actions.append("right")
+            actions.append("right")
+            actions.append("right")
+            actions.append("right")
+            actions.append("right")
         if curiosity > 70:
             actions.append("think")
 
@@ -313,11 +318,11 @@ class Automatic:
             actions.append("forward 10 90")
             actions.append("backward 10 90")
         else:
-            actions.append("turn right")
-            actions.append("turn left")
+            actions.append("right")
+            actions.append("left")
             actions.append("backward 10 90")
-            actions.append("turn right")
-            actions.append("turn left")
+            actions.append("right")
+            actions.append("left")
             actions.append("backward 10 90")
 
         if mood["volume"] > 60:
@@ -468,6 +473,10 @@ class Automatic:
             "Ahhh...", "Mmm...", "Nice...", "Peaceful...",
             "Just chillin'", "Break time", "Resting...", "Quiet time..."
         ],
+        "sleep": [
+            "Zzzz...", "Sleepy...", "Zzz...", "Zzzz...",
+            "Zzzz...", "Zzzz...", "Zzzz...", "Zzzz..."
+        ],
         "fidget": [
             "Woah-woah-woah!", "Can't sit still!", "Jitters!",
             "Bouncy bouncy!", "Wiggles!", "Zoom zoom!", "Boing!"
@@ -556,7 +565,7 @@ class Automatic:
         prompt = (
             "Running in autonomous mode. Respond with a VERY brief comment "
             f"like '{examples[0]}' or '{examples[1]}' or '{examples[2]}'. "
-            "Keep it to 1-5 words usually. Be moody and whimsical."
+            "Keep it to 1-5 words usually."
         )
         if use_vision:
             prompt += "Comment on things you see, or let them inspire your commentary or exclamations or questions or utterances."

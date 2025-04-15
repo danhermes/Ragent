@@ -1,8 +1,9 @@
 from time import sleep
 from utils import gray_print
 from vilib import Vilib
+import time
 
-# Actions: forward, backward, left, right, stop, circle left, circle right, come here, shake head, 
+# Actions: forward, backward, left, right, stop, twist left, twist right, come here, shake head, 
 #    nod, wave hands, resist, act cute, rub hands, think, twist body, celebrate, depressed, keep think
 #
 # Sounds: honk, start engine
@@ -362,11 +363,31 @@ def celebrate(car):
     car.set_cam_pan_angle(0)
     sleep(.2)
 
-def honking(music):
-    music.sound_play("../sounds/car-double-horn.wav", 100)
+def honk(car):
+    print(f"Honk called with car object: {car}, has music: {hasattr(car, 'music')}")
+    try:
+        if hasattr(car, 'music'):
+            print(f"Car music object: {car.music}")
+            car.music.sound_play("../sounds/car-double-horn.wav", 100)
+            while car.music.pygame.mixer.music.get_busy():
+                time.sleep(0.1)
+        else:
+            gray_print("Warning: Car does not have audio capabilities")
+    except Exception as e:
+        gray_print(f"Error playing honk sound: {e}")
 
-def start_engine(music):
-    music.sound_play("../sounds/car-start-engine.wav", 50)
+def start_engine(car):
+    print(f"Start engine called with car object: {car}, has music: {hasattr(car, 'music')}")
+    try:
+        if hasattr(car, 'music'):
+            print(f"Car music object: {car.music}")
+            car.music.sound_play("../sounds/car-start-engine.wav", 50)
+            while car.music.pygame.mixer.music.get_busy():
+                time.sleep(0.1)
+        else:
+            gray_print("Warning: Car does not have audio capabilities")
+    except Exception as e:
+        gray_print(f"Error playing engine sound: {e}")
 
 # Define dictionaries after all functions are defined
 actions_dict = {
@@ -375,8 +396,8 @@ actions_dict = {
     "left": turn_left,
     "right": turn_right,
     "stop": stop,
-    "circle left": turn_left_in_place,
-    "circle right": turn_right_in_place,
+    "twist left": turn_left_in_place,
+    "twist right": turn_right_in_place,
     "come here": come_here,
     "shake head": shake_head,
     "nod": nod,
@@ -390,11 +411,8 @@ actions_dict = {
     "depressed": depressed,
     "think": think,
     "keep think": keep_think,
-}
-
-sounds_dict = {
-    "honking": honking,
-    "start engine": start_engine,
+    "honk": honk,
+    "start engine": start_engine
 }
 
 

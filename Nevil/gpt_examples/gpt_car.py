@@ -2,7 +2,7 @@ import warnings
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="ALSA")
 
 from openai_helper import OpenAiHelper
-from action_helper import actions_dict, sounds_dict, move_forward_this_way as forward, move_backward_this_way as backward, turn_left_in_place, turn_right_in_place, turn_left, turn_right, stop, shake_head, nod, wave_hands, resist, act_cute, rub_hands, think, keep_think, twist_body, celebrate, depressed
+from action_helper import actions_dict, move_forward_this_way as forward, move_backward_this_way as backward, turn_left_in_place, turn_right_in_place, turn_left, turn_right, stop, shake_head, nod, wave_hands, resist, act_cute, rub_hands, think, keep_think, twist_body, celebrate, depressed, honk, start_engine
 from utils import *
 from robot_hat import TTS
 import readline # optimize keyboard input, only need to import
@@ -90,6 +90,7 @@ class PiCar:
         except Exception as e:
             raise RuntimeError(e)
         self.music = Music()
+        self.my_car.music = self.music  # Add this line to attach music to my_car
         self.led = Pin('LED')
         self.DEFAULT_HEAD_TILT = 20
 
@@ -148,8 +149,8 @@ class PiCar:
         self.tts_file = None
 
     def init_sound_effects(self):
-        self.SOUND_EFFECT_ACTIONS = ["honking", "start engine"]
-        self.sound_effects_queue = []
+        #self.SOUND_EFFECT_ACTIONS = ["honk", "start engine"]
+        #self.sound_effects_queue = []
         
         # Initialize mixer once at startup
         try:
@@ -188,16 +189,16 @@ class PiCar:
         self.auto = Automatic(self)  # Initialize auto mode
         self.auto_enabled = False
 
-    def play_audio_file(self, music, tts_file):
-        try:
-            if os.path.exists(tts_file):
-                music.music_play(tts_file)
-                while music.pygame.mixer.music.get_busy():
-                    time.sleep(0.1)
-                music.music_stop()
-                os.remove(tts_file)
-        except Exception as e:
-            print(f"Error playing TTS: {e}")
+    # def play_audio_file(self, music, tts_file):
+    #     try:
+    #         if os.path.exists(tts_file):
+    #             music.music_play(tts_file)
+    #             while music.pygame.mixer.music.get_busy():
+    #                 time.sleep(0.1)
+    #             music.music_stop()
+    #             os.remove(tts_file)
+    #     except Exception as e:
+    #         print(f"Error playing TTS: {e}")
 
     def play_audio_data(self, audio_data):
         """Play AudioData object and clean up temp files"""
@@ -282,18 +283,18 @@ class PiCar:
 
             if _isloaded:             
                 # Handle sound effects first
-                _sound_effects = list(self.sound_effects_queue)
-                self.sound_effects_queue.clear()
-                if _sound_effects:
-                    gray_print(f"Playing sound effects: {_sound_effects}")
-                    for sound in _sound_effects:
-                        try:
-                            gray_print(f"  Playing sound: {sound}")
-                            sounds_dict[sound](self.music)
-                            while self.music.pygame.mixer.music.get_busy():
-                                time.sleep(0.1)
-                        except Exception as e:
-                            print(f'Sound effect error: {e}')
+                # _sound_effects = list(self.sound_effects_queue)
+                # self.sound_effects_queue.clear()
+                # if _sound_effects:
+                #     gray_print(f"Playing sound effects: {_sound_effects}")
+                #     for sound in _sound_effects:
+                #         try:
+                #             gray_print(f"  Playing sound: {sound}")
+                #             sounds_dict[sound](self.music)
+                #             while self.music.pygame.mixer.music.get_busy():
+                #                 time.sleep(0.1)
+                #         except Exception as e:
+                #             print(f'Sound effect error: {e}')
                 
                 # Then handle TTS
                 gray_print(f"Playing TTS file: {self.tts_file}")
@@ -410,7 +411,7 @@ class PiCar:
         #standby_actions = ['act cute', 'nod', 'depressed']
         #standby_weights = [1, 0.3, 0.1]
         #action_interval = 20 # seconds
-        last_action_time = time.time()
+        #last_action_time = time.time()
         last_led_time = time.time()
 
         while True:
@@ -445,10 +446,10 @@ class PiCar:
                 with self.action_lock:
                     gray_print(f'actions: {self.actions_to_be_done}')
                     _actions = self.actions_to_be_done
-                    self.ACTIONS["think"](self.my_car)
+                    #self.ACTIONS["think"](self.my_car)
                 for _action in _actions:
                     try:
-                        gray_print(f'actionT: {_action}')
+                        gray_print(f'action2: {_action}')
                         action, params = self.parse_action(_action)
                         if action == "sleep":
                             time.sleep(params[0])  # Sleep duration is first parameter
@@ -464,7 +465,7 @@ class PiCar:
                 gray_print("Actions complete, setting status to actions_done")
                 with self.action_lock:
                     self.action_status = 'actions_done'
-                last_action_time = time.time()
+                #last_action_time = time.time()
 
             time.sleep(0.01)
 
@@ -569,7 +570,7 @@ class PiCar:
 
         # Make GPT call
         if self.with_img:
-            img_path = './img_imput.jpg'
+            img_path = './img_input.jpg'
             cv2_start = time.time()
             self.cv2.imwrite(img_path, self.Vilib.img)
             gray_print(f"Image capture time: {time.time() - cv2_start:.3f}s")
@@ -623,9 +624,9 @@ class PiCar:
                 self.actions_to_be_done = actions
                 self.action_status = 'actions'
 
-            for _sound in actions:
-                with self.speech_lock:
-                    self.sound_effects_queue.append(_sound)
+            # for _sound in actions:
+            #     with self.speech_lock:
+            #         self.sound_effects_queue.append(_sound)
             return True
         except Exception as e:
             print(f'Action handling error: {e}')
@@ -773,7 +774,7 @@ class PiCar:
         """Centralized method for GPT interactions"""
         try:
             if use_image:
-                img_path = './img_imput.jpg'
+                img_path = './img_input.jpg'
                 self.cv2.imwrite(img_path, self.Vilib.img)
                 response = self.openai_helper.dialogue_with_img(
                     user_prompt + "   " + self.RAGgeneral + self.RAGtext, 
