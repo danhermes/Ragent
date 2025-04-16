@@ -17,6 +17,8 @@ from . import debugger
 from utils.logger import log
 from apis.autocoder.adapters.n8n_adapter import N8nAdapter
 
+logger = logging.getLogger(__name__)
+
 class AgentBuildCycle:
     def __init__(self, agent_task, max_iterations=3, log_dir="debuglog"):
         self.agent_task = agent_task
@@ -40,11 +42,11 @@ class AgentBuildCycle:
             f.write(content + "\n")
 
     def run_cycle(self):
-        self._write_log(f"Starting build cycle for task: {self.agent_task}\n")
+        logger.info(f"Starting build cycle for task: {self.agent_task}\n")
 
         if self._is_n8n_language():
             # Handle n8n workflow task
-            self._write_log("Generating n8n workflow...")
+            logger.info("Generating n8n workflow...")
             
             # Get n8n-specific context
             nodes = self.n8n_adapter.get_nodes()
@@ -77,35 +79,34 @@ class AgentBuildCycle:
                 return None
         else:
             # Handle regular Python code generation task
-            self._write_log("Generating Python code...")
+            logger.info("Generating Python code...")
             code = code_writer.CodeWriter.generate_code(self.agent_task)
             file_path = code_writer.CodeWriter().save_code(code)
             shutil.copy(file_path, os.path.join(self.debug_dir, os.path.basename(file_path)))
 
             for i in range(self.max_iterations):
-                self._write_log(f"\n--- Iteration {i+1} of {self.max_iterations} ---")
-                log(f"--- Iteration {i+1} of {self.max_iterations} ---")
+                logger.info(f"\n--- Iteration {i+1} of {self.max_iterations} ---")
 
                 tests_passed = tester.Tester().test_manager(code)
 
                 if tests_passed:
                     msg = "All tests passed"
                     log(msg)
-                    self._write_log(msg)
+                    logger.info(msg)
                     self.final_status = "success"
                     break
                 else:
                     msg = "Tests failed"
                     log(msg)
-                    self._write_log(msg)
+                    logger.info(msg)
 
             if self.final_status != "success":
                 msg = "Maximum iterations reached. Build failed."
                 log(msg)
-                self._write_log(msg)
+                logger.info(msg)
                 self.final_status = "failure"
 
         # Add summary to end of log
         summary = f"\nBuild Cycle Summary:\nStatus: {self.final_status.upper()}\nIterations: {i+1}\nLog Directory: {self.debug_dir}"
-        self._write_log(summary)
+        logger.info(summary)
         log(summary)

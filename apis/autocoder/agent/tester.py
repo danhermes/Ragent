@@ -87,7 +87,7 @@ class Tester:
             "import pytest",
             "import json",
             "import os",
-            "from requests_mock import Mocker",
+            "import requests_mock",
             "from temp_code import *",
             "",
             "# Load baseline test data",
@@ -168,6 +168,7 @@ class Tester:
         try:
             # Load baseline data if it exists
             baseline_path = os.path.join(os.path.dirname(test_file), 'baseline_test_data.json')
+            logger.info("baseline_path: %s", baseline_path)
             if os.path.exists(baseline_path):
                 with open(baseline_path, 'r', encoding='utf-8') as f:
                     baseline_data = json.load(f)
@@ -180,6 +181,10 @@ class Tester:
             if not os.path.exists(test_file):
                 logger.error(f"Test file not found: {test_file}")
                 return (False, "", f"Test file not found: {test_file}")
+            
+            # Get just the filename for Docker
+            test_filename = os.path.basename(test_file)
+            logger.info(f"Running test file: {test_filename}")
             
             # Run pytest in Docker container with baseline data
             stdout, stderr = run_code_in_docker(test_file, cleanup=True, env_var=env_var)
@@ -251,11 +256,11 @@ class Tester:
             with open(temp_code_path, 'w', encoding='utf-8') as f:
                 f.write(code)
             
-            # Generate tests
+            # Generate tests to (below) combine with baseline test data and write it to a file in local /sandbox directory
             logger.info("Generating tests...")
             test_code = self.generate_tests(temp_code_path)
             
-            # Generate baseline test data
+            # Generate baseline test data and write it to a file in local /sandbox directory
             logger.info("Generating baseline test data...")
             baseline_data = self.generate_baseline_test_data(test_code)
             
@@ -266,6 +271,7 @@ class Tester:
                     "import pytest",
                     "import json",
                     "import os",
+                    "import requests_mock",
                     "from pathlib import Path",
                     "from temp_code import *",
                     "",
@@ -278,54 +284,24 @@ class Tester:
                 ]
                 test_code = "\n".join(import_lines)
      
-            # Copy test file to sandbox
-            sandbox_test_path = os.path.join(sandbox_dir, 'test_generated.py')
+            # Copy test file to local sandbox
+            logger.info("sandbox_dir: %s", sandbox_dir)
+            sandbox_test_path = os.path.join(sandbox_dir, 'test_generated.py')   
             with open(sandbox_test_path, 'w', encoding='utf-8') as f:
                 f.write(test_code)     
             
-            # Validate tests with baseline data
-            logger.info("Validating tests with baseline data...")
-            is_valid, error_msg = self.run_pytests(sandbox_test_path)
-            if not is_valid:
-                logger.error(f"Tests with baseline data are invalid: {error_msg}")
-                
-                # First try to debug the tests
-                logger.info("Attempting to debug tests...")
-                test_code = debugger.revise_code_with_error_context(temp_code_path, error_msg=error_msg)
-                is_valid, error_msg = self.run_pytests(sandbox_test_path)
-                
-                # If debugging didn't work, try regenerating tests
-                if not is_valid:
-                    logger.error("Debugging tests failed, attempting to regenerate...")
-                    test_code = self.generate_tests(temp_code_path, error_msg=error_msg)
-                    is_valid, error_msg = self.run_pytests(sandbox_test_path)
-                    if not is_valid:
-                        logger.error("Failed to generate valid tests")
-                        return False
-                      
-            # Run tests with up to 3 debugging iterations
-            current_code_path = temp_code_path
-            for iteration in range(4):  # 0-based: 0, 1, 2, 3
-                logger.info(f"Running tests (attempt {iteration + 1} of 4)...")
-                test_result, stdout, stderr = self.run_pytests(sandbox_test_path)
-                if not test_result:
-                    logger.error(f"Tests failed on attempt {iteration + 1} of 4")
-                    if iteration < 3:  # Don't debug on last iteration (when iteration is 3)
-                        logger.info("Attempting to debug and fix code...")
-                        current_code_path = debugger.revise_code_with_error_context(current_code_path, stderr)
-                        # Update the test file to import from the revised code
-                        with open(sandbox_test_path, 'r', encoding='utf-8') as f:
-                            test_content = f.read()
-                        test_content = test_content.replace('from temp_code import *', f'from {os.path.splitext(os.path.basename(current_code_path))[0]} import *')
-                        with open(sandbox_test_path, 'w', encoding='utf-8') as f:
-                            f.write(test_content)
-                else:
-                    logger.info("Tests passed")
-                    return True
+            # Run tests and get result
+            success, stdout, stderr = self.run_pytests(sandbox_test_path)
             
-            logger.error("All debugging attempts failed")
-            return False
-            
+            if success:
+                logger.info("All tests passed")
+                return True
+            else:
+                logger.error("Tests failed")
+                logger.error(f"stdout: {stdout}")
+                logger.error(f"stderr: {stderr}")
+                return False
+                
         except Exception as e:
-            logger.error(f"Error during testing: {str(e)}")
+            logger.error(f"Error in test manager: {str(e)}")
             return False

@@ -3,6 +3,7 @@ import sys
 from typing import Any, Dict
 from pathlib import Path
 from datetime import datetime
+import re
 
 # Add the parent directory to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -162,7 +163,69 @@ GOALS: {orchestrator.goals}"""
             f.write("\n\n## Implementation Verification\n")
             f.write(self._extract_section(orchestrator, "implementation_verify"))
             
-        return deliverable_file
+        # Review and condense the document
+        reviewed_file = self.review_deliverable(deliverable_file, orchestrator)
+        return reviewed_file
+        
+    def review_deliverable(self, original_file: Path, orchestrator: Any) -> Path:
+        """Review and condense the technical design document using ChatGPT"""
+        self.logger.info("Reviewing and condensing technical design document")
+        
+        # Read the original document
+        with open(original_file, 'r', encoding='utf-8') as f:
+            original_content = f.read()
+            
+        # Create prompt for ChatGPT
+        review_prompt = f"""You are a technical documentation expert. Your task is to review and improve this technical design document while strictly following these rules:
+
+CRITICAL RULES (DO NOT VIOLATE THESE):
+1. DO NOT remove or modify ANY code blocks, technical specifications, or implementation details
+2. DO NOT remove or modify ANY class structures, method signatures, or variable definitions
+3. DO NOT remove or modify ANY API endpoints, data structures, or technical requirements
+4. DO NOT remove or modify ANY configuration settings or environment variables
+5. DO NOT remove or modify ANY testing strategies or verification steps
+
+IMPROVEMENT GUIDELINES:
+1. Keep all high-level section names intact
+2. Condense and improve the prose, particularly in the latter half of the document
+3. Remove redundant explanations while maintaining technical accuracy
+4. Merge sections only if it improves readability without losing detail
+5. Focus on making the document more concise and readable while keeping it thorough
+6. Maintain the same markdown formatting
+7. Preserve all bullet points and numbered lists
+8. Keep all technical terminology and domain-specific language
+
+VALIDATION REQUIREMENTS:
+1. The condensed document must contain ALL code blocks from the original
+2. The condensed document must contain ALL technical specifications from the original
+3. The condensed document must contain ALL implementation details from the original
+4. The condensed document must maintain the same technical depth and accuracy
+
+Here is the document to review:
+{original_content}
+
+IMPORTANT: Before providing the condensed version, verify that it meets all CRITICAL RULES and VALIDATION REQUIREMENTS. If you cannot meet these requirements, return the original document unchanged."""
+        
+        # Get condensed version from ChatGPT
+        condensed_content = orchestrator.supervisor.get_chat_response(review_prompt)
+        
+        # Validate that key technical content is preserved
+        original_code_blocks = set(re.findall(r'```.*?```', original_content, re.DOTALL))
+        condensed_code_blocks = set(re.findall(r'```.*?```', condensed_content, re.DOTALL))
+        
+        if not original_code_blocks.issubset(condensed_code_blocks):
+            self.logger.warning("Condensed document is missing code blocks from original. Using original document.")
+            condensed_content = original_content
+            
+        # Create new filename for condensed version
+        condensed_file = original_file.parent / f"technical_design_reviewed_{original_file.stem.split('_')[-1]}.md"
+        
+        # Write condensed version
+        with open(condensed_file, 'w', encoding='utf-8') as f:
+            f.write(condensed_content)
+            
+        self.logger.info(f"Condensed document saved to: {condensed_file}")
+        return condensed_file
         
     def _extract_section(self, orchestrator: Any, section_name: str) -> str:
         """Extract a specific section from conversation history"""
