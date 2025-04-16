@@ -67,5 +67,6 @@ ragers/logs/orchestrator_*.log
 ragers/workflow_*.json
 ragers/logs/
 ragers/*.json
+ragers/logs/orchestrator.log
 
 Nevil/gpt_examples/img_input.jpg
