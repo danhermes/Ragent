@@ -24,6 +24,7 @@ wheels/
 .installed.cfg
 *.egg
 *_raw.wav
+*.wav
 
 # IDE
 .idea/
@@ -46,10 +47,25 @@ __pycache__/commands.cpython-38.pyc
 __pycache__/view.cpython-38.pyc
 .goals
 
-# Ignore all files in the conversations directory
-conversations/*
-# Ignore all files in the deliverables directory
-deliverables/* 
-
+conversations/
+deliverables/ 
 logs/orchestrator.log
-  
+n8n/workflows/
+n8n/logs/
+apis/autocoder/logs/
+apis/autocoder/generated_code/
+apis/autocoder/debuglog/
+apis/autocoder/weather_data.json
+apis/autocoder/sandbox/
+apis/autocoder/tests/
+apis/autocoder/Dockerfile
+
+TinyLlama/
+llama.cpp/
+
+ragers/logs/orchestrator_*.log
+ragers/workflow_*.json
+ragers/logs/
+ragers/*.json
+
+Nevil/gpt_examples/img_input.jpg

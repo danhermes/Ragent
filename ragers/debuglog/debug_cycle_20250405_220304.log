@@ -1,0 +1,3 @@
+Starting build cycle for task: {'language': 'n8n', 'requirements': {'name': 'Generated Workflow', 'trigger': {'type': 'schedule', 'interval': 'days', 'time': '09:00'}, 'input': {'type': 'text_generation', 'source': 'openai', 'prompt': 'Generate content'}, 'transformations': [], 'output': {'type': 'file', 'destination': 'local', 'path': '/outputs', 'filename': 'output.json'}}, 'specifications': {'nodes': {}, 'workflow_examples': ''}}
+
+Generating n8n workflow...
