@@ -83,7 +83,7 @@ def main():
         # Run the cycle
         logger.info("Starting build cycle...")
         cycle.run_cycle()
-        logger.info("Build cycle completed successfully")
+        logger.info("Build cycle completed.")
         
     except FileNotFoundError as e:
         logger.error(f"Spec file error: {str(e)}")
@@ -95,7 +95,7 @@ def main():
         logger.error(f"Error in main process: {str(e)}", exc_info=True)
         raise
     finally:
-        logger.info("Autocoder main process finished")
+        logger.info("Autocoder main process finished.")
 
 if __name__ == "__main__":
     main()
