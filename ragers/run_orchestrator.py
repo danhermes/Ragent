@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+from datetime import datetime
 
 # Configure logging before any other imports
 def setup_logging():
@@ -26,14 +27,23 @@ def setup_logging():
     console_handler.setFormatter(formatter)
     root_logger.addHandler(console_handler)
     
-    # File handler
-    file_handler = logging.FileHandler('logs/orchestrator.log', mode='a')
-    file_handler.setLevel(logging.DEBUG)
-    file_handler.setFormatter(formatter)
-    root_logger.addHandler(file_handler)
+    # Main log file handler
+    main_file_handler = logging.FileHandler('logs/orchestrator.log', mode='w')
+    main_file_handler.setLevel(logging.DEBUG)
+    main_file_handler.setFormatter(formatter)
+    root_logger.addHandler(main_file_handler)
+    
+    # Timestamped log file handler
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    session_log_file = f"logs/orchestrator_{timestamp}.log"
+    session_file_handler = logging.FileHandler(session_log_file, mode='w')
+    session_file_handler.setLevel(logging.DEBUG)
+    session_file_handler.setFormatter(formatter)
+    root_logger.addHandler(session_file_handler)
     
     # Log initial message to verify logging is working
     logging.info("Logging system initialized")
+    logging.info(f"Session log file: {session_log_file}")
     logging.debug("Debug logging enabled")
 
 # Setup logging before importing other modules
@@ -42,7 +52,7 @@ setup_logging()
 # Now import other modules
 import argparse
 from orchestrator import Orchestrator
-from modes import PlanMode, AutomateMode, ProofMode
+from modes import PlanMode, AutomateMode, ProofMode, DevelopMode
 
 def run_strategic_goals(orchestrator, goals=None):
     """Run the strategic goal setting phase"""
@@ -112,7 +122,8 @@ def parse_arguments():
     parser.add_argument('--mode', choices=[
         'plan',
         'automate',
-        'proof'
+        'proof',
+        'develop'
     ], default='plan', help='Which mode to run')
     
     # Add command-line arguments
@@ -154,10 +165,12 @@ def main():
         mode_map = {
             'plan': PlanMode,
             'automate': AutomateMode,
-            'proof': ProofMode
+            'proof': ProofMode,
+            'develop': DevelopMode
         }
         mode_class = mode_map[args.mode]
-        orchestrator = Orchestrator(mode=mode_class())
+        config = {'mode': mode_class()}
+        orchestrator = Orchestrator(config=config)
         
         for iteration in range(args.ragemoot):
             if args.phase == 'all':

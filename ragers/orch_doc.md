@@ -2,6 +2,45 @@
 
 This document explains how to run the AI Agent Orchestrator with various options and configurations.
 
+## Available Modes
+
+The orchestrator supports different modes of operation:
+
+### Plan Mode
+```bash
+python run_orchestrator.py --mode plan
+```
+- Focuses on strategic planning and goal setting
+- Helps define project scope and requirements
+- Generates high-level project plans
+
+### Automate Mode
+```bash
+python run_orchestrator.py --mode automate
+```
+- Focuses on automation and workflow optimization
+- Helps identify repetitive tasks for automation
+- Generates automation scripts and workflows
+
+### Proof Mode
+```bash
+python run_orchestrator.py --mode proof
+```
+- Focuses on testing and validation
+- Helps verify requirements and functionality
+- Generates test cases and validation reports
+
+### Develop Mode
+```bash
+python run_orchestrator.py --mode develop
+```
+- Focuses on technical design and implementation
+- Helps with architecture and code design
+- Generates technical specifications and code examples
+- Reviews technical requirements and challenges
+- Designs system architecture and components
+- Provides implementation details and testing strategies
+
 ## Basic Usage
 
 ### Run All Phases in Sequence

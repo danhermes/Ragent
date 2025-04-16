@@ -6,10 +6,10 @@ from pathlib import Path
 from datetime import datetime
 import dropbox
 from dropbox.files import WriteMode
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Dict, Any
 from utils.dropboxAPI import DropboxAPI
 from dropbox.files import FileMetadata
-from modes import DEFAULT_MODE, BaseMode
+from modes import DEFAULT_MODE, BaseMode, PlanMode, AutomateMode, ProofMode, DevelopMode
 
 # Add the parent directory to the Python path
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -26,10 +26,14 @@ from agents.agent_woz import AgentWoz
 class Orchestrator:
     """Manages the company structure and conversation flow between agents"""
     
-    def __init__(self, mode: Optional[BaseMode] = None):
+    def __init__(self, config: Dict[str, Any]):
+        """Initialize the orchestrator with configuration settings."""
+        self.config = config
+        self.logger = logging.getLogger(__name__)
+        self.logger.info("Initializing orchestrator")
+        
         env_path = Path(__file__).resolve().parent.parent / '.env'
         load_dotenv(dotenv_path=env_path, override=True)
-        self.initialize_logging()
         self.initialize_goals()
         self.initialize_company()   
         self.initialize_directories()
@@ -37,29 +41,14 @@ class Orchestrator:
         self.initialize_RAG_data()
         
         # Initialize mode
-        self.mode = mode if mode else DEFAULT_MODE()
-        self.mode.initialize()
+        self.mode = config.get('mode', None)
+        if self.mode:
+            self.mode.initialize()
         
-    def initialize_logging (self):
-        # Create logs directory if it doesn't exist
-        os.makedirs('logs', exist_ok=True)
+        # Initialize conversation history
+        self.conversation_history = []
+        self.logger.info("Orchestrator initialization complete")
         
-        # Create a timestamped log file
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        log_file = f"logs/orchestrator_{timestamp}.log"
-        
-        # Configure logging
-        logging.basicConfig(
-            level=logging.DEBUG,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            handlers=[
-                logging.FileHandler(log_file),
-                logging.StreamHandler()
-            ]
-        )
-        self.logger = logging.getLogger("orchestrator")
-        self.logger.info("Initializing Orchestrator")
-      
     def initialize_directories(self):
         # Create deliverables directory
         self.deliverables_dir = "deliverables"
@@ -189,8 +178,12 @@ class Orchestrator:
         self.logger.debug(f"Content length: {len(content)}")
         self.logger.debug(f"Content: {content[:100]}...")
         
-        # Add to conversation history
-        self.conversation_history.append({"role": role, "content": content})
+        # Add to conversation history with both role and phase
+        self.conversation_history.append({
+            "role": role,
+            "phase": phase,
+            "content": content
+        })
         self.logger.debug(f"Added to conversation history. History length: {len(self.conversation_history)}")
         
         try:
@@ -424,7 +417,7 @@ Let's continue working on our deliverables and goals. What's your current focus 
         
         # Supervisor summarizes deliverables
         self.logger.debug("Generating supervisor's deliverable summary")
-        supervisor_prompt = f"Let's prepare a summary of our deliverables for Big Boss review. GOALS: {self.goals} CONVERSATION HISTORY: {self.conversation_history} RAG DATA: {self.RAG_data}"
+        supervisor_prompt = f"Let's prepare our deliverables for Big Boss review. We must deliver exactly the format and content specified in the GOALS. GOALS: {self.goals} CONVERSATION HISTORY: {self.conversation_history} RAG DATA: {self.RAG_data}"
         supervisor_response = self.supervisor.get_chat_response(supervisor_prompt)
         self.logger.debug(f"Supervisor's deliverable summary: {supervisor_response[:100]}...")
         self._log_conversation("present_deliverables", "supervisor", supervisor_response)
@@ -588,4 +581,29 @@ Let's continue working on our deliverables and goals. What's your current focus 
 
         except Exception as e:
             self.logger.error(f"Error uploading to Dropbox: {e}")
-            return False 
+            return False
+
+    def _initialize_llm(self):
+        """Initialize the LLM component"""
+        self.logger.info("Initializing LLM")
+        # TODO: Implement actual LLM initialization
+        return None
+
+    def _initialize_rag(self):
+        """Initialize the RAG component"""
+        self.logger.info("Initializing RAG")
+        # TODO: Implement actual RAG initialization
+        return None
+
+    def _initialize_agent(self):
+        """Initialize the agent component"""
+        self.logger.info("Initializing agent")
+        # TODO: Implement actual agent initialization
+        return None
+
+    def _initialize_mode(self):
+        """Initialize the mode component"""
+        self.logger.info("Initializing mode")
+        if 'mode' in self.config:
+            return self.config['mode']
+        return None 
