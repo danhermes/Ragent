@@ -1,0 +1,330 @@
+{
+  "name": "Daily Data Analysis Workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "days",
+              "triggerAtHour": 9
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -980,
+        -260
+      ],
+      "id": "855bbb20-398f-40c5-81a3-462a0d259a26",
+      "name": "Daily Schedule"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "resource": "folder",
+        "operation": "list",
+        "path": "/Reports",
+        "returnAll": true,
+        "filters": {}
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        -820,
+        -260
+      ],
+      "id": "69c0b030-73b8-4551-b4f3-004164c37bde",
+      "name": "List Excel Files",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['name']}}",
+              "value2": ".xlsx",
+              "operation": "contains"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        -820,
+        -260
+      ],
+      "id": "184fc998-ad8c-4d4c-9bc1-0703967bbeaa",
+      "name": "Get Latest Excel"
+    },
+    {
+      "parameters": {
+        "operation": "xlsx",
+        "sheetName": "Sheet1",
+        "range": "A1:D100",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.2,
+      "position": [
+        -1040,
+        -260
+      ],
+      "id": "543292d4-73da-40b7-849c-85ea696eb24e",
+      "name": "Extract Data"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "value1": "={{$json['status']}}",
+              "value2": "pending",
+              "operation": "equal"
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 1.2,
+      "position": [
+        -820,
+        -260
+      ],
+      "id": "bd63d9e9-f27c-49a2-a296-9a9e4b09d7c5",
+      "name": "Filter Data"
+    },
+    {
+      "parameters": {
+        "modelId": {
+          "__rl": true,
+          "value": "gpt-4",
+          "mode": "list",
+          "cachedResultName": "GPT-4"
+        },
+        "messages": {
+          "values": [
+            {
+              "content": "Analyze the following data and provide insights:\n{{$json}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.2,
+      "position": [
+        -660,
+        -260
+      ],
+      "id": "cfcd596b-0d7e-475f-9081-b62e26deeb5f",
+      "name": "Analyze Data",
+      "credentials": {
+        "openAiApi": {
+          "id": "E1s5v9qmBbZViUJ5",
+          "name": "OpenAi account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "fields": {
+          "subject": "Daily Data Analysis Report",
+          "body": "={{$json['choices'][0]['message']['content']}}"
+        }
+      },
+      "type": "n8n-nodes-base.editFields",
+      "typeVersion": 1.2,
+      "position": [
+        -440,
+        -260
+      ],
+      "id": "e5d33f89-ef0a-47fd-8a49-7ac39d70dffd",
+      "name": "Format Email"
+    },
+    {
+      "parameters": {
+        "fromEmail": "dan@lexicon.systems",
+        "toEmail": "team@example.com",
+        "subject": "={{$json['subject']}}",
+        "emailFormat": "text",
+        "text": "={{$json['body']}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.emailSend",
+      "typeVersion": 1.2,
+      "position": [
+        -300,
+        -260
+      ],
+      "id": "d5fcd090-569e-4ab2-bcd7-56251e92d1fc",
+      "name": "Send Report",
+      "credentials": {
+        "smtp": {
+          "id": "JTbu1l5Wfqw1zrie",
+          "name": "SMTP account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "write",
+        "fileType": "xlsx",
+        "sheetName": "Analysis Results"
+      },
+      "type": "n8n-nodes-base.spreadsheetFile",
+      "typeVersion": 1.2,
+      "position": [
+        -240,
+        -260
+      ],
+      "id": "72e713ea-8e55-412e-8a18-9bf34bbd66d4",
+      "name": "Convert Results"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "path": "/Analysis Results",
+        "fileName": "daily_analysis_{{Date.now()}}.xlsx"
+      },
+      "type": "n8n-nodes-base.dropbox",
+      "typeVersion": 1.2,
+      "position": [
+        -440,
+        -260
+      ],
+      "id": "14bbfa4a-5a3f-44d9-921d-6d02e147eb26",
+      "name": "Upload Results",
+      "credentials": {
+        "dropboxOAuth2Api": {
+          "id": "KcAhGHqBrsmriXlY",
+          "name": "Dropbox account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Daily Schedule": {
+      "main": [
+        [
+          {
+            "node": "List Excel Files",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "List Excel Files": {
+      "main": [
+        [
+          {
+            "node": "Get Latest Excel",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Get Latest Excel": {
+      "main": [
+        [
+          {
+            "node": "Extract Data",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Extract Data": {
+      "main": [
+        [
+          {
+            "node": "Filter Data",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Filter Data": {
+      "main": [
+        [
+          {
+            "node": "Analyze Data",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Analyze Data": {
+      "main": [
+        [
+          {
+            "node": "Format Email",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Format Email": {
+      "main": [
+        [
+          {
+            "node": "Convert Results",
+            "type": "main"
+          }
+        ]
+      ]
+    },
+    "Convert Results": {
+      "main": [
+        [
+          {
+            "node": "Upload Results",
+            "type": "main"
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "settings": {
+    "saveExecutionProgress": true,
+    "saveManualExecutions": true,
+    "saveDataErrorExecution": "all",
+    "saveDataSuccessExecution": "all",
+    "executionTimeout": 3600,
+    "timezone": "UTC"
+  },
+  "tags": [
+    "automation",
+    "data-analysis"
+  ],
+  "active": false,
+  "version": 1
+}
