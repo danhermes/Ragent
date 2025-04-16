@@ -5,7 +5,7 @@ from .code_writer import CodeWriter
 
 logger = logging.getLogger(__name__)
 
-class WorkerAgent:
+class OnePassAgent:
     """Agent responsible for generating code based on tasks"""
     
     def __init__(self, name: str):

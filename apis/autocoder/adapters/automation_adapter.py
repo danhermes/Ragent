@@ -9,7 +9,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-from apis.autocoder.agent.build_cycle import AgentBuildCycle
+from apis.autocoder.agent.build_cycle_agent import AgentBuildCycle
 
 class AutomationAdapter:
     """Adapter that bridges ragers automation requirements with autocoder's AgentBuildCycle"""
