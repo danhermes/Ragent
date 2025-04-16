@@ -44,6 +44,34 @@ class ChatGPTLLM(BaseLLM):
         except ImportError:
             raise ImportError("openai package not installed. Run: pip install openai")
             
+    def load_RAG_files(self, file_path: str) -> bool:
+        """Load and attach RAG files to the assistant"""
+        if not self.client:
+            raise RuntimeError("ChatGPT not initialized. Call initialize() first.")
+            
+        if not file_path or not os.path.exists(file_path):
+            print(f"File not found: {file_path}")
+            return False
+            
+        try:
+            # Upload the file
+            with open(file_path, "rb") as file:
+                file_obj = self.client.files.create(
+                    file=file,
+                    purpose="assistants"
+                )
+                print(f"File uploaded with ID: {file_obj.id}")
+                
+            # Attach file to assistant
+            self.client.beta.assistants.files.create(
+                assistant_id=self.assistant_id,
+                file_id=file_obj.id
+            )
+            return True
+        except Exception as e:
+            print(f"Error uploading file: {str(e)}")
+            return False
+            
     def generate_response(self, text: str, messages: Optional[List[Dict[str, str]]] = None, file_path: Optional[str] = None) -> Tuple[str, float]:
         if not self.client:
             raise RuntimeError("ChatGPT not initialized. Call initialize() first.")
@@ -52,21 +80,7 @@ class ChatGPTLLM(BaseLLM):
         try:
             # Create a new thread for each conversation
             self.thread = self.client.beta.threads.create()
-            
-            # Upload file if provided
-            if file_path and os.path.exists(file_path):
-                try:
-                    # Upload the file
-                    with open(file_path, "rb") as file:
-                        file_obj = self.client.files.create(
-                            file=file,
-                            purpose="assistants"
-                        )
-                        print(f"File uploaded with ID: {file_obj.id}")
-                except Exception as e:
-                    print(f"Error uploading file: {str(e)}")
-                    return "", time.time() - start_time
-            
+                       
             # Add messages to thread
             if messages:
                 for msg in messages:
@@ -175,7 +189,7 @@ class TinyLlamaLLM(BaseLLM):
             
     def generate_response(self, text: str) -> Tuple[str, float]:
         if not self.model or not self.tokenizer:
-            raise RuntimeError("TinyLlama not initialized. Call initialize() first.")
+            raise RuntimeError("LLM not initialized. Call initialize() first.")
             
         start_time = time.time()
         try:

@@ -2,15 +2,14 @@
 
 import streamlit as st
 from dotenv import load_dotenv
-from agents import DEFAULT_AGENT, AgentCliff, AgentDee, AgentDum, AgentBlane
-import logging
-import sys
-
-print("Script starting...")  # Immediate print to verify execution
 import os
 from views.agent_view import AgentView
 from agents.agent_cliff import AgentCliff
 from agents.agent_nevil import AgentNevil
+import logging
+import sys
+
+print("Script starting...")  # Immediate print to verify execution
 
 #RUN: streamlit run main.py --logger.level=debug        
 # Load environment variables
@@ -32,7 +31,12 @@ print("Logging configured...")  # Immediate print to verify execution
 
 # Configure Streamlit page
 print("Configuring Streamlit...")  # Immediate print to verify execution
-st.set_page_config(initial_sidebar_state="collapsed")
+st.set_page_config(
+    page_title="AI Agents",
+    page_icon="🤖",
+    layout="wide",
+    initial_sidebar_state="collapsed"
+)
 print("Streamlit configured...")  # Immediate print to verify execution
 
 # Get API key from environment variable
@@ -48,38 +52,37 @@ def main():
     try:
         logger.info("Starting main application...")
         
-        # Initialize AudioView only once using session state
-        if 'audio_view' not in st.session_state:
-            print("Initializing AudioView...")  # Immediate print to verify execution
-            logger.debug("Initializing AudioView in session state...")
+        # Initialize AgentView if not already in session state
+        if "agent_view" not in st.session_state:
+            print("Initializing AgentView...")  # Immediate print to verify execution
+            logger.debug("Initializing AgentView in session state...")
             
             # Add agent selection
             logger.debug("Setting up agent selection...")
             agent_type = st.sidebar.radio(
                 "Choose your agent:",
-                ("Blane", "Dee", "Dum"),
-                index=0  # Default to Blane
+                ["Cliff", "Nevil"],
+                index=0,
+                label_visibility="collapsed"
             )
             
             # Initialize the appropriate agent
             logger.debug(f"Initializing {agent_type} agent...")
-            if agent_type == "Blane":
-                agent = AgentBlane()
-            elif agent_type == "Dee":
-                agent = AgentDee()
-            else:  # Dum
-                agent = AgentDum()
+            if agent_type == "Cliff":
+                agent = AgentCliff()
+            else:
+                agent = AgentNevil()
             logger.info(f"Agent initialized: {agent.__class__.__name__}")
             
-            # Initialize AudioView with the selected agent
-            logger.debug("Creating AudioView instance...")
-            st.session_state.audio_view = AudioView(agent=agent)
-            logger.info("AudioView instance created successfully")
+            # Initialize AgentView with the selected agent
+            logger.debug("Creating AgentView instance...")
+            st.session_state.agent_view = AgentView(agent)
+            logger.info("AgentView instance created successfully")
         
-        # Use the existing AudioView instance
-        logger.debug("Starting audio view...")
-        st.session_state.audio_view.audio_view()
-        logger.info("Audio view started successfully")
+        # Use the existing AgentView instance
+        logger.debug("Starting agent view...")
+        st.session_state.agent_view.agent_view()
+        logger.info("Agent view started successfully")
         
     except Exception as e:
         print(f"Error in main: {str(e)}")  # Immediate print to verify execution
@@ -89,44 +92,6 @@ def main():
     finally:
         print("Main function finished")  # Immediate print to verify execution
         logger.info("Main application finished")
-
-def main():
-    # Load environment variables
-    load_dotenv()
-    
-    # Configure page
-    st.set_page_config(
-        page_title="AI Agents",
-        page_icon="🤖",
-        layout="wide",
-        initial_sidebar_state="collapsed"
-    )
-    
-    # Check for OpenAI API key
-    if not os.getenv("OPENAI_API_KEY"):
-        st.error("Please set your OpenAI API key in the .env file")
-        return
-    
-    # Sidebar for agent selection
-    with st.sidebar:
-        st.title("Select Agent")
-        agent_type = st.radio(
-            "Choose your agent:",
-            ["Cliff", "Nevil"],
-            index=0,
-            label_visibility="collapsed"
-        )
-    
-    # Initialize AgentView if not already in session state
-    if "agent_view" not in st.session_state:
-        # Create appropriate agent based on selection
-        if agent_type == "Cliff":
-            agent = AgentCliff()
-        else:
-            agent = AgentNevil()
-            
-        # Initialize AgentView with the selected agent
-        st.session_state.agent_view = AgentView(agent)
 
 if __name__ == "__main__":
     try:
