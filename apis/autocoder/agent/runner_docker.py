@@ -22,12 +22,13 @@ def cleanup_docker_container():
             logger.error(f"Error removing Docker container: {str(e)}", exc_info=True)
             raise
 
-def run_code_in_docker(code_path: str, cleanup: bool = False) -> Tuple[str, str]:
+def run_code_in_docker(code_path: str, cleanup: bool = False, env_var: str = None) -> Tuple[str, str]:
     """Run code in a Docker container
     
     Args:
         code_path: Path to the code file to run
         cleanup: Whether to remove the Docker container after running
+        env_var: Environment variable to pass to the container in format "KEY=VALUE"
         
     Returns:
         Tuple of (stdout, stderr) from the container
@@ -50,8 +51,8 @@ def run_code_in_docker(code_path: str, cleanup: bool = False) -> Tuple[str, str]
         logger.debug("Docker image exists")
     except subprocess.CalledProcessError:
         logger.debug("Docker image not found, building...")
-        # Get the correct path to Dockerfile - it's in the autocoder directory
-        dockerfile_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Dockerfile')
+        # Get the correct path to Dockerfile - it's in the sandbox directory
+        dockerfile_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sandbox', 'Dockerfile')
         logger.debug(f"Using Dockerfile at: {dockerfile_path}")
         
         if not os.path.exists(dockerfile_path):
@@ -74,9 +75,18 @@ def run_code_in_docker(code_path: str, cleanup: bool = False) -> Tuple[str, str]
     
     try:
         # Run code in container
-        logger.info("Starting Docker container...")
+        logger.info("Running in Docker container...")
+        # Convert Windows path to Docker-friendly format
+        docker_host_dir = host_dir.replace('\\', '/').replace(':', '')
+        if host_dir.startswith('N:'):
+            docker_host_dir = '/n' + docker_host_dir[1:]
+        cmd = ['docker', 'run', '--rm', '-v', f'{docker_host_dir}:/sandbox']
+        if env_var:
+            cmd.extend(['-e', env_var])
+        cmd.extend(['autocoder_agent_sandbox', 'pytest', container_path])
+        
         run_result = subprocess.run(
-            ['docker', 'run', '--rm', '-v', f'{host_dir}:/sandbox', 'autocoder_agent_sandbox', 'pytest', container_path],
+            cmd,
             capture_output=True,
             text=True
         )

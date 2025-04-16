@@ -1,7 +1,10 @@
 import logging
 import os
 from datetime import datetime
-from agent.worker_agent import WorkerAgent
+from apis.autocoder.agent.one_pass_agent import OnePassAgent
+
+
+# Startup main file for one coding pass
 
 def setup_logging():
     """Set up logging configuration"""
@@ -31,7 +34,7 @@ if __name__ == "__main__":
         # Initialize worker agent
         agent_name = "Agent_Worker_001"
         logger.info(f"Initializing worker agent: {agent_name}")
-        agent = WorkerAgent(name=agent_name)
+        agent = OnePassAgent(name=agent_name)
         logger.debug(f"Worker agent initialized with name: {agent.name}")
         
         # Define and run task
