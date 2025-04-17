@@ -1,13 +1,23 @@
 # RAgent (Robot Agent)
 
-**RAgent (Robot Agent)** is for creating agents that can hold LLM-powered STT/TTS conversations, provide a web interface, and even be physically mobile. RAgent runs on a core audio loop where it listens for speech and records it, converts it to text, then sends it as a prompt to an LLM along with instructions. The resulting text output is either converted to speech or displayed in a web browser. 
+**RAgent (Robot Agent)** is a framework for creating and organizing agents and agentic workflows.
+
+RAgents facilitates the construction of agents individually, in a team, as needed, or autonomously.
+
+RAgents have tools at their disposal to allow them to write code (Autocoder), write books (LitLegos), proofread books (Proofer), and automate tasks (n8n).
 
 ## The RAgents So Far
-1. Nevil - a talking PiCar robot built using a Raspberry Pi (8GB RAM) and onboard SST and LLM (TinyLlama)
-2. Blake - a smart but slow agent that employs API calls for TTS (Whisper) and ChatGPT (Nevil may employ Blake for advanced questions and situations)
-2. Cliff - a PC-based web agent that listens to conversations and provides a browser-based HUD for technical terms employing a local STT (Whisper/Vosk) and ChatGPT
+1. The Ragers - an autonomous organization of agents, loosely configured in a hierarchy (director, manager, worker), that take a goal, discuss it, and develop it into a written deliverable such as a business strategy or a technical specification.. 
+2. Cliff - a PC-based web agent that listens to conversations ambiently and provides a browser-based HUD for technical terms employing a local STT (Whisper/Vosk) and ChatGPT
+3. Nevil - a talking PiCar robot built using a Raspberry Pi (8GB RAM) and onboard SST and LLM (TinyLlama). Converses wittily, plays autonomously, and has a basic RAG function whereby it can stay abreast of your schedule and goals for the week.
 
-## RAgent Options
-- Interface: Speech(mic/speaker w/ STT/TTS), Text on web browser 
-- Speech-to-Text: OpenAI Whisper API, Whisper local, and Vosk
-- LLM: ChatGPT, TinyLlama (for Raspberry Pi-driven robots)
+## Human Interfaces
+- Voice (mic/speaker w/ STT/TTS) - OpenAI Whisper API, Whisper local, and Vosk
+- Text on web browser or mobile device
+- Command line
+
+## Brains: GPTs and LLMs
+- ChatGPT
+- Gemma2b, TinyLlama (for Raspberry Pi-driven robots)
+
+## RAgents' Toys - Agentic APIs
