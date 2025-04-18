@@ -17,8 +17,9 @@ logger = logging.getLogger(__name__)
 class Tester:
     """Handles code testing and validation"""
     
-    def __init__(self):
+    def __init__(self, test_layer = None):
         """Initialize the tester"""
+        self.test_layer = test_layer
         pass
         
     def generate_tests(self, code_path: str, error_msg: str = "") -> str:

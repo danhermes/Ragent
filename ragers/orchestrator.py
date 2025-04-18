@@ -22,6 +22,7 @@ from agents.agent_dum import AgentDum
 from agents.agent_steve import AgentSteve
 from agents.agent_bill import AgentBill
 from agents.agent_woz import AgentWoz
+from agents.agent_steinbeck import AgentSteinbeck
 
 class Orchestrator:
     """Manages the company structure and conversation flow between agents"""
@@ -115,21 +116,22 @@ class Orchestrator:
         
         self.logger.debug("Creating managers (Dee and Dum)")
         self.managers = {
-            "Dee": AgentDee(),
+            #"Dee": AgentDee(),
             "Dum": AgentDum()
         }
         
         self.logger.debug("Creating workers (Steve, Bill, and Woz)")
         self.workers = {
-            "Steve": AgentSteve(),
-            "Bill": AgentBill(),
-            "Woz": AgentWoz()
+            #"Steve": AgentSteve(),
+            #"Bill": AgentBill(),
+            "Woz": AgentWoz(),
+            "Steinbeck": AgentSteinbeck()
         }
         
         # Initialize automation adapter
-        self.logger.debug("Creating automation adapter")
-        from apis.autocoder.adapters.automation_adapter import AutomationAdapter
-        self.automation_adapter = AutomationAdapter(logger=self.logger)
+        # self.logger.debug("Creating automation adapter")
+        # from apis.autocoder.adapters.automation_adapter import AutomationAdapter
+        # self.automation_adapter = AutomationAdapter(logger=self.logger)
         
         # Initialize conversation history
         self.conversation_history = []

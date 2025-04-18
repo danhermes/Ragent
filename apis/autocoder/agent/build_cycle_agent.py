@@ -33,6 +33,12 @@ class AgentBuildCycle:
         # Initialize n8n adapter if needed
         self.n8n_adapter = N8nAdapter() if self._is_n8n_language() else None
 
+        # Initialize new CodeWriter and Tester
+        self.test_layer = None
+        self.n8n_writer = code_writer.CodeWriter(role="n8n_dev", test_layer=self.test_layer)
+        self.python_writer = code_writer.CodeWriter(role="python_dev", test_layer=self.test_layer)
+        self.tester = tester.Tester(test_layer=self.test_layer)
+
     def _is_n8n_language(self) -> bool:
         """Check if task is for n8n workflow generation"""
         return isinstance(self.agent_task, dict) and self.agent_task.get("language") == "n8n"

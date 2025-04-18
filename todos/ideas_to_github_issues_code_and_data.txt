@@ -1,0 +1,195 @@
+
+WORK ON THIS CODE, GUYS.
+I communicate with Ragent director Blaine - give him starter code and test data
+Blaine oversees Woz, the tech wiz. Woz gives updates to Blaine. Woz has access to autocoder:
+I think autocoder needs these methods for Woz to call: code(),test(),debug()
+I think autocoder needs a test harness function to mock these calls: ChatGPT, files, databases,anything....give it an in/out/storage.
+When Woz gets code working he gives update Blaine and Blaine notifies me.
+
+
+
+
+
+import os
+import openai
+import requests
+
+# === CONFIG ===
+GITHUB_REPO = "yourusername/yourrepo"
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+
+HEADERS = {
+    "Authorization": f"Bearer {GITHUB_TOKEN}",
+    "Accept": "application/vnd.github+json"
+}
+
+openai.api_key = OPENAI_API_KEY
+
+# === Step 1: Parse Tangled Ideas ===
+def parse_idea_blob(raw_text):
+    prompt = f"""
+You are an expert product manager. Take this messy list of ideas and break it down into a clean list of distinct features or tasks. Keep them actionable and clear.
+
+Raw idea dump:
+{raw_text}
+
+Return them as a numbered list of short feature/task titles. No extra commentary.
+"""
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.4
+    )
+    lines = response.choices[0].message["content"].split("\n")
+    return [line.split(". ", 1)[1] if ". " in line else line for line in lines if line.strip()]
+
+# === Step 2: Format for GitHub ===
+def format_ideas_for_github(ideas):
+    prompt = f"""
+Convert the following list of feature/task titles into GitHub issue JSON objects.
+For each, generate:
+- A clear title
+- A detailed body/description
+- A suggested list of labels (like: enhancement, bug, refactor, docs)
+
+Return in JSON list format:
+[
+  {{ "title": "...", "body": "...", "labels": ["..."] }},
+  ...
+]
+
+Ideas:
+{chr(10).join(['- ' + idea for idea in ideas])}
+"""
+    response = openai.ChatCompletion.create(
+        model="gpt-4",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.3
+    )
+    return eval(response.choices[0].message["content"])  # Replace with json.loads if safe
+
+# === Step 3: Upload to GitHub ===
+def upload_issues_to_github(issues):
+    url = f"https://api.github.com/repos/{GITHUB_REPO}/issues"
+    for issue in issues:
+        response = requests.post(url, headers=HEADERS, json=issue)
+        if response.status_code == 201:
+            print(f"✅ Created: {issue['title']}")
+        else:
+            print(f"❌ Failed to create: {issue['title']}\n{response.text}")
+
+# === Combined Runner ===
+def submit_idea_blob(raw_text):
+    parsed = parse_idea_blob(raw_text)
+    structured = format_ideas_for_github(parsed)
+    upload_issues_to_github(structured)
+
+# === Example ===
+if __name__ == "__main__":
+    tangled_ideas = """
+    - Add plugin system to Autocoder
+    - Improve logging with timestamps and structured JSON output
+    - Nevil should handle voice commands locally with Whisper
+    - extract test helpers into reusable module
+    - add priority tags to tasks (low, medium, high)
+    """
+    submit_idea_blob(tangled_ideas)
+ 
+
+DATA - IDEA_BLOB-----------------------------------------------------
+
+Suggested Next Step: Roadmap
+We split MVP polish into two fast sprints:
+
+🧱 MVP Polish A: Author-Centric
+Parse .goal (even as a simple .json)
+
+Implement formatter.py (style rules)
+
+Support per-chapter .md output
+
+CLI --chapter, --book, --test args
+
+⚙️ MVP Polish B: Tech-Scale
+Add ChatGPTClient for real calls
+
+RAG doc injection (rag_docs param → prompt embedding)
+
+Grimm-style moral generation from original prompt
+
+Template memory or tone-tracking per chapter
+
+
+Pile 2: ToDo Pile — Everything Else
+Features for future-proofing, advanced scaling, or non-Business book use cases.
+
+🧩 Modular Expansion
+ Generator support for essays, LinkedIn posts, talks
+
+ Paragraph-only and microformats (e.g. haiku, tweet threads)
+
+ Narrative arcs (pedagogical scaffolding, conflict/resolution, persona arcs)
+
+ Dynamic persona insertions (Elena returns!)
+
+ Plugin-based formatter extensions (e.g. tone shift per section)
+
+🕸️ Full RAG Architecture
+ Semantic vector indexing for doc inclusion
+
+ Retrieval-based prompt injection
+
+ Support for multiple roles/domains in a single book
+
+📦 Output & Publishing
+ Export to .docx, .pdf, .epub via pandoc or python-docx
+
+ Print layout engine (chapter headers, section footers)
+
+ Front/back cover generation (art + text)
+
+🧱 Narrative Matrix
+ Matrix-based orchestration (TOC × style × role × narrative arc)
+
+ Big Ideas propagation: themes woven subtly across chapters
+
+ Conceptual threads and callback motifs
+
+🤖 Agentic Support
+ Live hooks for Rangers (inject .goal adjustments mid-run)
+
+ Feedback loops: GPT-based critique → regenerate weak sections
+
+ Memoization of prompts, examples, structures (shared storybank)
+
+Out-of-Scope Features for LitLegos MVP
+1. generate_paragraph() and mid-level block composition
+We parked this because we haven’t locked down what constitutes a "paragraph" yet in terms of function: insight unit? rhetorical block? pattern element?
+
+2. Book auto-assembly with visual layout / export to PDF/Word
+Cool as hell, but layout/rendering and styling logic is a big beast. MVP sticks to plain text or markdown.
+
+3. Agentic self-critique or iterative re-drafting
+No review cycles, voting, or rewriting chains in the MVP. Those loops go in the “smart second-pass engine” column.
+
+4. Dynamic plugin architecture for new content types (e.g., poem, chart, scene, tweetstorm)
+MVP focuses on structured book-generation, not a universal content synthesizer. Plugins will be awesome later, once the core API is stable.
+
+5. Live chat integration with generation (e.g., author GPT co-writing assistant)
+MVP is script-based. No full conversational interface until the pipeline’s tight and predictable.
+
+6. RAG-enabled topic synthesis from uploaded source folders
+We set aside anything involving document ingestion, vector search, or contextual recall — too heavy for v1.
+
+7. Voice or multimodal input (e.g., sketch a TOC on a whiteboard)
+We had dreams of napkin-to-narrative via image/voice input, but that’s post-MVP territory.
+
+8. User-facing dashboard or web UI
+All MVP interactions are CLI or code-based. No UI/UX layer, no frontend, no userspace management.
+
+9. Autonomous pipeline execution from .goal files (fully hands-off)
+MVP still assumes you hit the buttons. Fully autonomous flow from vision to book is for v2.
+
+10. Memory between book generations / history tracking
+No persistent store of previous generations, no logs or time-machine browsing yet. MVP lives in the moment.
