@@ -63,6 +63,8 @@ apis/autocoder/Dockerfile
 TinyLlama/
 llama.cpp/
 
+todos/
+
 ragers/logs/orchestrator_*.log
 ragers/workflow_*.json
 ragers/logs/
