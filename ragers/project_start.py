@@ -158,8 +158,8 @@ class ProjectStart:
                     goal_path.parent.mkdir(parents=True, exist_ok=True)
                     with open(goal_path, 'w', encoding='utf-8') as f:
                         f.write("# Project Goals\n\n")
-                        for i, goal in enumerate(goals_list, 1):
-                            f.write(f"{i}. {goal}\n")
+                        for goal in goals_list:
+                            f.write(f"{goal}\n\n")
                     self.logger.info(f"Wrote goals to {goal_path}")
                     
                 self._log_goal(goals_content)
