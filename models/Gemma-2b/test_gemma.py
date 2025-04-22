@@ -1,4 +1,4 @@
-from agents.chat_agent import GemmaAgent
+from agents.GPT_agents.chat_agent import GemmaAgent
 import logging
 
 def main():

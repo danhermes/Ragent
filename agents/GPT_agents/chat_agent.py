@@ -2,12 +2,13 @@ import os
 import logging
 import subprocess
 from abc import ABC, abstractmethod
-from typing import Optional, List
+from typing import Optional, List, Dict, Any
 import openai
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, AutoConfig
 from pathlib import Path
 import tempfile
+from .chat_helpers import call_ChatGPT
 
 
 # Configure logging
