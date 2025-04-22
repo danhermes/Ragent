@@ -4,6 +4,127 @@
 
 Ragers is the core orchestration system that manages the entire development lifecycle of AI projects. It provides a structured approach to goal setting, project management, and deliverable generation.
 
+## Template-Based Architecture
+
+Ragers uses a template-based architecture to standardize project workflows and deliverables. The system supports multiple project types, each with its own set of templates and phases.
+
+### Project Types
+
+Ragers supports three main project types:
+
+1. **Code Projects**
+   - Focus: Software development
+   - Phases: Strategy → Kickoff → Architecture → Modules → Review
+   - Outputs: Technical designs, code modules, tests
+
+2. **Writing Projects**
+   - Focus: Documentation and content creation
+   - Phases: Planning → Outline → Draft → Review → Final
+   - Outputs: Project outlines, content drafts, final documents
+
+3. **Planning Projects**
+   - Focus: Strategic planning and project management
+   - Phases: Discovery → Analysis → Strategy → Roadmap → Review
+   - Outputs: Project plans, strategy documents, roadmaps
+
+### Template Structure
+
+Each project type follows a consistent template structure:
+
+```
+ragers/templates/
+├── code/             # Code project templates
+│   ├── code_mode.yaml
+│   ├── code_meeting_*.md
+│   └── code_review_*.md
+├── write/            # Writing project templates
+│   ├── write_mode.yaml
+│   ├── write_meeting_*.md
+│   └── write_review_*.md
+└── plan/             # Planning project templates
+    ├── plan_mode.yaml
+    ├── plan_meeting_*.md
+    └── plan_review_*.md
+```
+
+### Meeting Protocols
+
+Each project type uses standardized meeting protocols that:
+- Follow consistent prompts and headings
+- Produce atomic, reusable, agent-runnable material
+- Maintain traceability and documentation
+- Support automated processing
+
+## Command Line Interface (CLI)
+
+### Getting Started
+
+1. **Initialize a New Project**
+```bash
+python -m ragers init <project_name> --type <project_type>
+```
+
+2. **Start a Project Phase**
+```bash
+python -m ragers start <phase_name> --project <project_name>
+```
+
+3. **Run a Meeting**
+```bash
+python -m ragers meeting <meeting_type> --project <project_name>
+```
+
+### Common Commands
+
+```bash
+# List available project types
+python -m ragers list types
+
+# Show project status
+python -m ragers status <project_name>
+
+# Generate deliverables
+python -m ragers generate <deliverable_type> --project <project_name>
+
+# Review project
+python -m ragers review <project_name>
+```
+
+### Project Configuration
+
+Each project maintains its configuration in:
+- `.goals` - Project objectives
+- `.env` - Environment variables
+- `project_config.yaml` - Project-specific settings
+
+### Phase Management
+
+Phases are managed through the CLI:
+```bash
+# Start a new phase
+python -m ragers phase start <phase_name>
+
+# Complete current phase
+python -m ragers phase complete
+
+# Review phase progress
+python -m ragers phase status
+```
+
+### Meeting Management
+
+Meetings follow standardized templates:
+```bash
+# Start a new meeting
+python -m ragers meeting start <meeting_type>
+
+# Generate meeting minutes
+python -m ragers meeting minutes
+
+# Review meeting outcomes
+python -m ragers meeting review
+```
+
 ## System Architecture
 
 ```
