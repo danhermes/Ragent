@@ -1,0 +1,144 @@
+This is a two chapter book pipeline.
+Refactor this large prompt into two chapter ChatGPT prompts: /chapter_1 and /chapter_2
+Provide a technical design to allow the Autocoder to produce a python script to execute those two chapters.
+Use the exact language in the prompt. Don't lose any information.
+Provide through logging in display and in a dated file.  Make the architecture testable. Allow test mode with chapters that have only 100 words each.
+Provide code for OpenAI calls.
+
+Pipeline Prompt:
+
+[style]
+tone = "presidential, poetic, persuasive, strategic"
+voice_reference = "Obama + Jobs + Ziglar + Colbert"
+sentence_structure = "varied, eloquent, forceful, often long"
+paragraphs = "dense but clean"
+narrative_energy = "high, inspirational, tactical clarity"
+persona = "AI strategist turned business revivalist"
+banned_structures = [
+  "prose-in-bullets",
+  "narrative lists",
+  "AI capability summaries written as bullet points",
+  "GPT function descriptions in bullet list form"
+]
+allowed_lists = [
+  "brief, pure data lists (e.g. business terms)",
+  "capability tables with no prose commentary",
+  "value-neutral feature references"
+]
+style_mandates = [
+  "All exposition must be in paragraph form",
+  "Capabilities must be explained in narrative or example-based prose",
+  "GPT actions should be described with voice, not lists"
+]
+
+[prompt] name = "ChatGPT_for_Business"
+description = "You are an enterprise AI strategist and author writing a new book on how AI transforms business operations, using powerful real-world prompts and examples."
+
+[prompt.title] description = "ChatGPT for Business"
+
+[prompt.goal] description = "ChatGPT is having immediate, measurable impacts on certain aspects of business. Explore the areas of greatest impact and success."
+
+[prompt.guidance] description = "You are a brilliant, slightly distracted genius author. Keep things tight, colorful, and insightful. Show readers how to think in prompts. Use real company examples where possible. No fluff. No filler. Deliver practical gold."
+
+[prompt.features]
+domains = ["AI + Business Strategy", "Industry Use Cases", "Prompt Engineering"]
+complexity = "Beginner to Executive-Level"
+writing_style = "practical, poetic, clever, corporate-savvy"
+
+[prompt.chapters]
+description = "This book is broken into thematic chapters aligned with strategic business goals. Each chapter explores how ChatGPT, AI tools, prompts, and use cases unlock value in a specific domain of business operations."
+steps = ["Customer Experience", "Process Automation", "Data-Driven Decision Making", "Innovation and Product Development", "Workforce Transformation", "Risk Management and Compliance", "The Path Beyond Prompts"]
+
+[prompt.chapter_themes] description = "This book is about the strategic business goals best augmented by ChatGPT and AI."
+
+[prompt.templates] description = "Available chapter structure templates"
+formats = ["classic", "persona", "pattern", "playbook", "conversational"]
+
+formats = [
+  "classic",           # Standard business case narrative
+  "persona",           # Told from viewpoint of a specific role or stakeholder
+  "pattern",           # Grouped by shared issue or structural business problem
+  "playbook",          # Tactical structure with problem → action → workflow
+  "conversational"     # Includes dialogue with GPT or internal monologue
+]
+
+[prompt.templates.selection]
+mode = "random"
+memory_enforced = true
+persist_across_chapters = true
+
+[prompt.memory]
+remember_selected_formats = true
+avoid_repeat_templates = true
+track_story_tone = true
+ensure_consistency = ["story rhythm", "chapter theme", "moral rephrasing"]
+
+[prompt.commands.front_matter] description = "Write front matter of book including title page, table of contents, and introduction."
+example = "/front_matter Completing Front Matter."
+
+[prompt.commands.front_matter.title_page] description = "Title page with title 'ChatGPT for Business'. 'by Dan Hermes and ChatGPT'"
+
+[prompt.commands.front_matter.table_of_contents] description = "Table of Contents for the book."
+
+[prompt.commands.front_matter.intro]
+description = "Introduce the concept of AI Transformation. ChatGPT is the place to begin understanding what's possible"
+example = "/front_matter Completing Intro of ChatGPT for Business."
+
+[prompt.commands]
+description = "The book is broken down into commands, each indicating a block of writing to be written to an .md file. Proceed through these commands without halting or stopping to ask questions. After completing each command, output a short summary per chapter example."
+prefix = "/"
+commands = ["/front_matter", "/chapter_1", "/chapter_2", "/chapter_3", "/chapter_4", "/chapter_5", "/chapter_6", "/chapter_7", "/back_matter", "/front_cover", "/back_cover", "/book_complete"]
+
+[prompt.commands.chapter]
+description = "Each chapter has the following format: chapter title, opening paragraphs on that business function and AI relevance, followed by engaging stories of business transformation, large and small, using ChatGPT and AI—hanging on the scaffolding of ChatGPT prompts. Each chapter must use a randomly selected format from prompt.templates.formats."
+
+[prompt.commands.chapter_1]
+description = "Using a theme of Customer Experience, write Chapter One of the book using chapter format. Enhancing interactions with customers through chatbots, personalized recommendations, and 24/7 support."
+example = "/chapter_1 Completing Chapter 1 of ChatGPT for Business."
+
+[prompt.commands.chapter_1.format]
+description = "Length of 2500 words. Use one format from prompt.templates.formats. Vary format per chapter. Do not repeat previous chapter’s format."
+
+[prompt.commands.chapter_1.prompts]
+description = "Before writing this chapter, generate five chapter-appropriate ChatGPT prompts to base the chapter on."
+
+[prompt.commands.chapter_1.prompt_stories]
+description = "The ChatGPT prompts in this chapter each have a 150+ word story of transformation. Real problems solved or real situations improved by ChatGPT prompts. Work these stories into the narrative, applying the chosen format."
+
+[prompt.commands.chapter_2]
+description = "Using a theme of Process Automation, write Chapter Two of the book. Using ChatGPT and AI to streamline operations, handle repetitive tasks, and improve efficiency."
+example = "/chapter_2 Completing Chapter 2 of ChatGPT for Business."
+
+[prompt.commands.chapter_2.format]
+description = "Length of 3000 words. Use one format from prompt.templates.formats. Do not repeat previous chapter’s format."
+
+[prompt.commands.chapter_2.prompts]
+description = "Generate three prompts aligned with this theme."
+
+[prompt.commands.chapter_2.prompt_stories]
+description = "Each story must reflect real-world impact. Follow the structural logic of the selected chapter template. Prompt is reframed as a Grimm-style positive insight at the end of each story."
+
+[prompt.commands.book_complete]
+description = "After /chapter_7, compile all markdown into a single master markdown file with \newpage breaks. Add front and back matter. Export PDF and ePub versions."
+
+[workflow]
+description = "Automatically run each chapter with template logic and story structure."
+execution:
+  - for each chapter in prompt.chapters.steps:
+      - select a random format from prompt.templates.formats (avoid previous format)
+      - generate 3 prompt_story_inputs
+      - structure each chapter using selected template
+      - follow guidance from prompt.commands.chapter_X
+      - write markdown to Chat_Gpt_Chapter_X.md
+      - append \newpage after each chapter
+  - after chapter_7:
+      - run /back_matter
+      - run /book_complete
+
+[outputs]
+format = "markdown"
+per_chapter = true
+include_newpage = true
+file_naming = "Chat_Gpt_Chapter_{chapter_number}.md"
+final_assembly_file = "ChatGPT_for_Business_FULL_BOOK.md"
+

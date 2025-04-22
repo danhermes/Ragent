@@ -1,0 +1,66 @@
+default_project_type: "code"
+
+project_types:
+  code:
+    name: "Code Project"
+    description: "Software development projects producing technical designs, code modules, and tests"
+    config_file: "code/code_mode.yaml"
+    templates_dir: "code"
+    phases:
+      - strategy
+      - kickoff
+      - architecture
+      - modules
+      - review
+    required_roles:
+      - Supervisor
+      - Manager
+      - Developer
+      - Tester
+    output_files:
+      - technical_design.md
+      - architecture.md
+      - test_plan.md
+      - code_modules.md
+
+  write:
+    name: "Writing Project"
+    description: "Documentation and content creation projects"
+    config_file: "write/write_mode.yaml"
+    templates_dir: "write"
+    phases:
+      - planning
+      - outline
+      - draft
+      - review
+      - final
+    required_roles:
+      - Supervisor
+      - Writer
+      - Editor
+      - Reviewer
+    output_files:
+      - project_outline.md
+      - content_draft.md
+      - final_document.md
+
+  plan:
+    name: "Planning Project"
+    description: "Strategic planning and project management"
+    config_file: "plan/plan_mode.yaml"
+    templates_dir: "plan"
+    phases:
+      - discovery
+      - analysis
+      - strategy
+      - roadmap
+      - review
+    required_roles:
+      - Supervisor
+      - Strategist
+      - Analyst
+      - Planner
+    output_files:
+      - project_plan.md
+      - strategy_document.md
+      - roadmap.md 
