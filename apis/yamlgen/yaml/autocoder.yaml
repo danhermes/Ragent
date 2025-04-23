@@ -1,0 +1,10 @@
+project: GPT Bot Builder
+goal: Generate and maintain a modular Python chatbot system
+modules:
+  - name: core_engine
+    purpose: Main logic controller
+  - name: plugin_loader
+    purpose: Dynamic tool loading
+  - name: logger
+    purpose: Unified logging and observability
+test_mode: false

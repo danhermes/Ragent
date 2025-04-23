@@ -1,8 +1,0 @@
-Project Name: Implementation Test
-Project Type: code
-Goal: Run implementation meeting to design and document modules
-Requirements:
-- Define module interfaces
-- Document dependencies
-- Specify core methods
-- Identify potential issues 
