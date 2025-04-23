@@ -27,7 +27,6 @@ templates:
   meetings:
     strategy:
       agenda: code_strategy_meeting.md
-      doc: code_strategy_meeting.md
       input: code_project_template.goal
       output: code_project_charter.md
       attending:
@@ -50,7 +49,6 @@ templates:
 
     kickoff:
       agenda: code_kickoff_meeting.md
-      doc: code_kickoff_meeting.md
       input: code_project_charter.md
       output: code_project_charter.md
       attending:
@@ -74,7 +72,6 @@ templates:
 
     design:
       agenda: code_design_meeting.md
-      doc: code_design_meeting.md
       input: code_project_charter.md
       output: code_design_meeting.md
       attending:
@@ -96,7 +93,6 @@ templates:
 
     implementation:
       agenda: code_implementation_meeting.md
-      doc: code_implementation_meeting.md
       input: code_design_meeting.md
       output: code_implementation_meeting.md
       attending:
@@ -114,7 +110,6 @@ templates:
 
     draft:
       agenda: code_draft_meeting.md
-      doc: code_technical_design.md
       input: code_design_meeting.md, code_implementation_meeting.md
       output: code_technical_design.md
       attending:
@@ -132,7 +127,6 @@ templates:
 
     review:
       agenda: code_review_meeting.md
-      doc: code_technical_design.md
       input: code_technical_design.md
       output: code_technical_design.md
       attending:
@@ -152,12 +146,6 @@ templates:
       success_criteria:
         - "code_technical_design.md is updated and saved to disk"
         - "All agenda sections are addressed in the output"
-
-# Required roles for the project
-required_roles:
-  - Supervisor
-  - Manager
-  - Worker
 
 # Project phases
 phases:
@@ -197,30 +185,14 @@ phases:
     order: 6
     required: true
 
-roles:
-  supervisor:
-    name: "Blaine"
-    title: "Supervisor/Director"
-    responsibilities:
-      - "Project oversight"
-      - "Final approval"
-      - "Strategic direction"
-
-  manager:
-    name: ["Dee", "Dum"]
-    title: "Manager"
-    responsibilities:
-      - "Team coordination"
-      - "Technical review"
-      - "Resource allocation"
-
-  worker:
-    name: ["Woz", "Steve", "Bill"]
-    title: "Developer"
-    responsibilities:
-      - "Implementation"
-      - "Technical design"
-      - "Testing"
+# Required roles for the project
+required_roles:
+  Supervisor:
+    name: Blane
+  Manager:
+    name: Dum
+  Worker:
+    name: Woz
 
 # Project structure configuration
 project_structure:
@@ -262,10 +234,5 @@ completion_criteria:
 
 # Meeting rules
 meeting_rules:
-  max_duration: "2 hours"
   min_attendees: 2
-  required_roles:
-    - Supervisor
   documentation_required: true
-  quorum: "All required participants"
-  decision_making: "Consensus"

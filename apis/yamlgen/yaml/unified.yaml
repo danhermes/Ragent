@@ -1,0 +1,36 @@
+title: GPT Ops Manual
+prompt: >
+  Write clearly and confidently for operational leaders.
+
+style: MBA meets hacker
+big_ideas:
+  - Prompting = leverage
+themes:
+  - Change resistance
+patterns:
+  - Story, then tool
+examples:
+  - A chatbot helping HR screen resumes
+inserts:
+  - "Don't automate what you don't understand."
+
+# For LitLegos
+length: 6 chapters
+arc: narrative
+flavor: bold but grounded
+target_reader: skeptical manager
+
+# For n8n
+workflow_name: Resume Screener
+settings:
+  timezone: America/New_York
+nodes: []
+connections: []
+
+# For AutoCoder
+goal: Build a resume screener
+modules: []
+
+# For Proof
+purpose: Explain prompting’s strategic role
+sections: []
