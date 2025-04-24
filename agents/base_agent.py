@@ -73,7 +73,7 @@ class BaseAgent:
 
     def get_chat_response(self, text: str, messages: Optional[List[Dict[str, str]]] = None, file_path: Optional[str] = None) -> str:
         
-        model = "gpt-4o" #"gpt-3.5-turbo"
+        model = "gpt-4"  # Use GPT-4 model
         #TODO: Add support for other models, passed in by named and role agents
 
         #"""Get response from configured LLM service"""

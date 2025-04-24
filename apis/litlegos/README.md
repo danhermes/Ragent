@@ -2,6 +2,8 @@
 
 LitLegos is an AI-powered book generation system that creates structured, engaging content based on provided outlines and style specifications. It's designed to produce high-quality written content with consistent tone, style, and narrative flow.
 
+ Ragers -> [YAMLgen Adapters,  Autocode, APIs]  -> Deliverable (raw or upload to destination app)
+
 ## Overview
 
 LitLegos transforms a table of contents and style specifications into a complete book. It's particularly useful for:
@@ -16,6 +18,9 @@ Key features:
 - Chapter-by-chapter generation
 - Progress tracking and callbacks
 - Test mode for quick validation
+
+## Future Features - /todo
+Full yaml spec for in-dpeth, nuanced specification of book.(litlegos.yaml) This requires development of generator.py.
 
 ## Architecture
 

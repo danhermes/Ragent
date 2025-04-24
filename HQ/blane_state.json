@@ -1,0 +1,58 @@
+{
+  "task_id": "task_20250423_210840",
+  "project": "",
+  "status": "ready",
+  "awaiting_input": null,
+  "context": {
+    "type": "code",
+    "project": "bigproject55",
+    "deliverables": "mytekspec.md",
+    "constraints": "some"
+  },
+  "conversation": [
+    {
+      "role": "blane",
+      "message": "(Blane) > What is the type for this task?"
+    },
+    {
+      "role": "user",
+      "message": "type = code"
+    },
+    {
+      "role": "user",
+      "message": "project = bigproject55"
+    },
+    {
+      "role": "user",
+      "message": "deliverables = mytekspec.md"
+    },
+    {
+      "role": "user",
+      "message": "contraints = none"
+    },
+    {
+      "role": "user",
+      "message": "assignment = "
+    },
+    {
+      "role": "user",
+      "message": "finalize = "
+    },
+    {
+      "role": "user",
+      "message": "final = "
+    },
+    {
+      "role": "user",
+      "message": "finalize = "
+    },
+    {
+      "role": "user",
+      "message": "finalize = "
+    },
+    {
+      "role": "user",
+      "message": "constraints = some"
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+2025-04-18 01:48:54,599 - apis.autocoder.agent.code_writer - DEBUG - Initializing CodeWriter
+2025-04-18 01:48:55,164 - apis.autocoder.agent.code_writer - DEBUG - [CodeWriter] Initializing role: python_dev
+2025-04-18 01:48:55,165 - agent.prompts - DEBUG - [RolePrompt] Initializing role: python_dev
+2025-04-18 01:48:55,165 - apis.autocoder.agent.code_writer - INFO - CodeWriter initialized with role: python_dev

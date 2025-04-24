@@ -1,0 +1,76 @@
+title: GPT Integration Project
+project: GPT Integration Project
+goal: Create a comprehensive GPT integration system
+prompt: Develop a modular system for GPT integration
+style: professional and clear
+style_profile: professional and clear
+content_type: technical guide
+length: 5 chapters
+narrative_rhythm: problem > solution > implementation
+target_reader: technical team
+arc: technical progression
+flavor: precise and practical
+test_mode: false
+
+big_ideas:
+  - GPT integration should be modular
+  - Security and privacy are paramount
+  - Clear documentation is essential
+
+themes:
+  - API integration
+  - Security best practices
+  - Performance optimization
+
+patterns:
+  - Start with core functionality
+  - Add security layers
+  - Implement monitoring
+
+examples:
+  - API key management
+  - Rate limiting implementation
+  - Error handling patterns
+
+inserts:
+  - "Security first, features second"
+  - "Document as you build"
+
+toc:
+  - title: Introduction
+    style: technical
+    notes: Overview of GPT integration
+  - title: Core Components
+    style: technical
+    notes: Main system architecture
+
+workflow_name: GPT Integration Workflow
+settings:
+  timezone: UTC
+  retry_attempts: 3
+
+nodes:
+  - name: API Gateway
+    type: http
+    params:
+      endpoint: /api/v1/gpt
+    position: [0, 0]
+
+connections:
+  - from: API Gateway
+    to: Processing Node
+
+modules:
+  - name: api_gateway
+    purpose: Handle incoming requests
+  - name: security_layer
+    purpose: Implement security measures
+  - name: monitoring
+    purpose: Track system performance
+
+purpose: Validate GPT integration system
+sections:
+  - name: Security Review
+    goal: Ensure all security measures are in place
+  - name: Performance Test
+    goal: Verify system performance under load 

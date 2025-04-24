@@ -1,0 +1,16 @@
+2025-04-18 01:45:05,012 - apis.autocoder.agent.code_writer - DEBUG - Initializing CodeWriter
+2025-04-18 01:45:05,575 - apis.autocoder.agent.code_writer - DEBUG - [CodeWriter] Initializing role: python_dev
+2025-04-18 01:45:05,576 - agent.prompts - DEBUG - [RolePrompt] Initializing role: python_dev
+2025-04-18 01:45:05,577 - apis.autocoder.agent.code_writer - INFO - CodeWriter initialized with role: python_dev
+2025-04-18 01:45:10,677 - __main__ - INFO - Blaine assigned new task: "count to 3"
+2025-04-18 01:45:10,678 - developer_adapter - INFO - [Woz] Starting task: "count to 3"
+2025-04-18 01:45:10,681 - apis.autocoder.agent.code_writer - INFO - Generating content for task: "count to 3"
+2025-04-18 01:45:10,682 - agent.prompts - DEBUG - Generating prompt for task: "count to 3"
+2025-04-18 01:45:10,682 - apis.autocoder.agent.code_writer - ERROR - Error generating content: 'dict' object has no attribute 'name'
+Traceback (most recent call last):
+  File "f:\dev\ragent\apis\autocoder\agent\code_writer.py", line 156, in generate_code
+    prompt = get_code_generation_prompt(task, self.test_layer)
+  File "f:\dev\ragent\apis\autocoder\agent\prompts.py", line 173, in get_code_generation_prompt
+    logger.debug(f"Selected role: {role.name}")
+AttributeError: 'dict' object has no attribute 'name'
+2025-04-18 01:45:10,685 - developer_adapter - ERROR - [Woz] Fatal error during task: 'dict' object has no attribute 'name'
