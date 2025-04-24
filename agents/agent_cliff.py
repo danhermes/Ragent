@@ -1,9 +1,13 @@
 import openai
 import logging
-from .base_agent import BaseAgent, AgentType
+from ..agents.base_agent import BaseAgent, AgentType
 from helpers.speech_to_text import OpenAIWhisperSTT, LocalWhisperSTT, VoskSTT
 from helpers.LLMs import ChatGPTLLM
 from typing import Optional, List, Dict
+
+""" a PC-based web agent that listens to conversations ambiently and
+provides a browser-based HUD for technical terms employing a local STT (Whisper/Vosk) and ChatGPT
+"""
 
 class AgentCliff(BaseAgent):
     """Cliff: A friendly, knowledgeable guide with a touch of humor"""

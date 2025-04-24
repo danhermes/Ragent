@@ -4,7 +4,7 @@ import streamlit as st
 from dotenv import load_dotenv
 import os
 from views.agent_view import AgentView
-from agents.agent_cliff import AgentCliff
+from Cliff.agent_cliff import AgentCliff
 from agents.agent_nevil import AgentNevil
 import logging
 import sys

@@ -1,4 +1,4 @@
-from .agent_cliff import AgentCliff
+from ..Cliff.agent_cliff import AgentCliff
 from .agent_nevil import AgentNevil
 from .base_agent import BaseAgent, AgentType
 
