@@ -1,27 +1,40 @@
 # RAgent (Robot Agent)
 
-**RAgent (Robot Agent)** is a framework for creating and organizing agents and agentic workflows.
+**RAgent (Robot Agent)** is an AI framework for creating and organizing agents and agentic workflows.
 
-RAgent facilitates the construction of agents individually, in a team, as needed, or autonomously.
+RAgent facilitates the construction of AI agents individually, in a team, as needed, or autonomously.
+Directed by the user via HQ (Headquarters), RAgent's agents can build all kinds of stuff, such as:
+    - technical specifications
+    - automation workflows (implemented and running)
+    - python modules and scripts
+    - publications (post, article, book)
 
-RAgents have tools(toys) at their disposal to allow them to write code (Autocoder), write books (LitLegos), proofread books (Proofer), and automate tasks (n8n).
+RAgents have tools(apis)) at their disposal to allow them to write code (Autocoder), write books (LitLegos), proofread books (Proofer), and automate tasks (n8n). YAMLgen is an adapter that can help translate between agents and tools.
 
-## The RAgents So Far
-1. The Ragers - an autonomous organization of agents, loosely configured in a hierarchy (director, manager, worker, SME), that take a goal, discuss it, and develop it into a written deliverable such as a business strategy or a technical specification.
-2. Cliff - a PC-based web agent that listens to conversations ambiently and provides a browser-based HUD for technical terms employing a local STT (Whisper/Vosk) and ChatGPT
-3. Nevil - a talking PiCar robot built using a Raspberry Pi (8GB RAM) and onboard SST and LLM (TinyLlama). Converses wittily, plays autonomously, and has a basic RAG architecture whereby it can stay abreast of your schedule and goals for the week, acting as a nominally helpful digital assistant.
+## The Ragers
+An autonomous organization of agents, loosely configured in a hierarchy (director, manager, worker, SME), that take a goal, discuss it, and develop it into a written deliverable such as a business strategy or a technical specification.
 
-## Human Interfaces
+## HQ(Headquarters)
+User interfaces for RAgent, from CLI, to web UI, to voice interface.  Creates and tracks agent tasks.
+- Command Line Interface (CLI) and task dispatcher for RAgent
 - Voice - mic/speaker w/ STT/TTS) - OpenAI Whisper API, Whisper local, and Vosk
 - Text on web browser or mobile device
-- Command line
 
-## Brains: GPTs and LLMs
-- ChatGPT
-- Gemma2b, TinyLlama (for Raspberry Pi-driven robots)
-
-## RAgents' Toys - Agentic APIs
+## RAgents Tools and Adapters: APIs
 - AutoCoder - codes (Python), tests (pytest), and debugs (in temp Docker containers) against a technical spec
 - LitLegos - writes a book given a book title and Table of Contents
 - Proofer - proofreads a manuscript
 - n8n - for creating and uploading autonomous n8n workflows
+
+## The Vision:
+    Idea -> Manifestation
+
+    Goal -> Tech Specification -> Implementation -> Deliverable
+
+    Goal -> Ragers -> Tools and Adapters: YAMLgen,  Autocoder, APIs, etc.  -> Deliverable
+
+    Deliverables:
+    - technical specifications
+    - automation workflows (implemented and running)
+    - python modules and scripts
+    - publications (post, article, book)# RAgent (Robot Agent)
