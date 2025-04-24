@@ -2,7 +2,7 @@ import yaml
 from pathlib import Path
 from typing import Dict, Any, Union
 
-class TechSpecParser:
+class YamlParser:
     """Parses a generic tech spec file (.yaml or .json-like .goal) into a unified dictionary."""
 
     def __init__(self, path: Union[str, Path]):
@@ -56,4 +56,4 @@ class TechSpecParser:
             "purpose": self.spec.get("purpose"),
             "sections": self.spec.get("sections", []),
         }
-        return unified
+        return unified 

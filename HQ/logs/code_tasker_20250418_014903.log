@@ -1,0 +1,52 @@
+2025-04-18 01:49:03,097 - apis.autocoder.agent.code_writer - DEBUG - Initializing CodeWriter
+2025-04-18 01:49:03,651 - apis.autocoder.agent.code_writer - DEBUG - [CodeWriter] Initializing role: python_dev
+2025-04-18 01:49:03,652 - agent.prompts - DEBUG - [RolePrompt] Initializing role: python_dev
+2025-04-18 01:49:03,652 - apis.autocoder.agent.code_writer - INFO - CodeWriter initialized with role: python_dev
+2025-04-18 01:49:10,420 - __main__ - INFO - Blaine assigned new task: count to 3
+2025-04-18 01:49:10,420 - developer_adapter - INFO - [Woz] Starting task: count to 3
+2025-04-18 01:49:10,423 - apis.autocoder.agent.code_writer - INFO - Generating content for task: count to 3
+2025-04-18 01:49:10,424 - agent.prompts - DEBUG - Generating prompt for task: count to 3
+2025-04-18 01:49:10,424 - agent.prompts - DEBUG - Selected role: Python Developer
+2025-04-18 01:49:10,424 - agent.prompts - DEBUG - Generated prompt length: 900
+2025-04-18 01:49:10,425 - apis.autocoder.agent.code_writer - DEBUG - Generated prompt length: 900
+2025-04-18 01:49:10,425 - apis.autocoder.agent.code_writer - DEBUG - Calling OpenAI API with role: Python Developer
+2025-04-18 01:49:12,001 - apis.autocoder.agent.code_writer - DEBUG - Generated content length: 136
+2025-04-18 01:49:12,002 - apis.autocoder.agent.code_writer - INFO - Saving generated code
+2025-04-18 01:49:12,002 - apis.autocoder.agent.code_writer - DEBUG - Code length: 122
+2025-04-18 01:49:12,003 - apis.autocoder.agent.code_writer - DEBUG - Saving code to: generated_code\generated_code_20250418_014912.py
+2025-04-18 01:49:12,004 - apis.autocoder.agent.code_writer - INFO - Code saved successfully to generated_code\generated_code_20250418_014912.py
+2025-04-18 01:49:12,004 - developer_adapter - INFO - [Woz] Testing code at generated_code\generated_code_20250418_014912.py...
+2025-04-18 01:49:12,005 - apis.autocoder.agent.tester - INFO - Generating tests...
+2025-04-18 01:49:15,104 - apis.autocoder.agent.tester - INFO - Generating baseline test data...
+2025-04-18 01:49:17,354 - apis.autocoder.agent.tester - INFO - Baseline test data saved to f:\dev\ragent\apis\autocoder\sandbox\baseline_test_data.json
+2025-04-18 01:49:17,354 - apis.autocoder.agent.tester - INFO - sandbox_dir: f:\dev\ragent\apis\autocoder\sandbox
+2025-04-18 01:49:17,356 - apis.autocoder.agent.tester - INFO - baseline_path: f:\dev\ragent\apis\autocoder\sandbox\baseline_test_data.json
+2025-04-18 01:49:17,364 - apis.autocoder.agent.tester - INFO - Running test file: test_generated.py
+2025-04-18 01:49:17,365 - apis.autocoder.agent.runner_docker - INFO - Running code in Docker: f:\dev\ragent\apis\autocoder\sandbox\test_generated.py
+2025-04-18 01:49:17,365 - apis.autocoder.agent.runner_docker - INFO - Host directory: f:\dev\ragent\apis\autocoder\sandbox
+2025-04-18 01:49:17,366 - apis.autocoder.agent.runner_docker - DEBUG - Host directory: f:\dev\ragent\apis\autocoder\sandbox
+2025-04-18 01:49:17,366 - apis.autocoder.agent.runner_docker - DEBUG - Container path: /app/test_generated.py
+2025-04-18 01:49:17,367 - apis.autocoder.agent.runner_docker - DEBUG - Checking if Docker image exists
+2025-04-18 01:49:17,665 - apis.autocoder.agent.runner_docker - DEBUG - Docker image not found, building...
+2025-04-18 01:49:17,666 - apis.autocoder.agent.runner_docker - DEBUG - Using Dockerfile at: f:\dev\ragent\apis\autocoder\agent\Dockerfile
+2025-04-18 01:49:17,667 - apis.autocoder.agent.runner_docker - INFO - Building Docker image...
+2025-04-18 01:49:20,789 - apis.autocoder.agent.runner_docker - DEBUG - Docker image built successfully
+2025-04-18 01:49:20,789 - apis.autocoder.agent.runner_docker - INFO - Running in Docker container...
+2025-04-18 01:49:20,790 - apis.autocoder.agent.runner_docker - INFO - Mounting f:/dev/ragent/apis/autocoder/sandbox to /app in container
+2025-04-18 01:49:20,790 - apis.autocoder.agent.runner_docker - INFO - Running command: docker run --rm -v f:/dev/ragent/apis/autocoder/sandbox:/app -e BASELINE_DATA={"test_count_to_three": {"input": null, "output": "1\n2\n3\n"}, "test_count_to_three_output": {"input": null, "output": "1\n2\n3\n"}, "test_count_to_three_error_message": {"input": null, "output": ""}, "test_count_to_three_invalid_input": {"input": "invalid", "output": "TypeError"}, "test_count_to_three_edge_case_0": {"input": null, "output": "0\n1\n2\n3\n"}, "test_count_to_three_edge_case_neg": {"input": null, "output": "-3\n-2\n-1\n0\n1\n2\n3\n"}} autocoder_agent_sandbox pytest /app/test_generated.py
+2025-04-18 01:49:22,762 - apis.autocoder.agent.runner_docker - DEBUG - Docker container tests completed
+2025-04-18 01:49:22,762 - apis.autocoder.agent.runner_docker - INFO - Cleaning up Docker container...
+2025-04-18 01:49:22,763 - apis.autocoder.agent.runner_docker - DEBUG - Removing Docker container
+2025-04-18 01:49:22,826 - apis.autocoder.agent.runner_docker - DEBUG - Docker container already removed
+2025-04-18 01:49:22,826 - apis.autocoder.agent.tester - INFO - Test output:
+2025-04-18 01:49:22,827 - apis.autocoder.agent.tester - INFO - ============================= test session starts ==============================
+platform linux -- Python 3.11.12, pytest-8.3.5, pluggy-1.5.0
+rootdir: /app
+plugins: mock-3.14.0, requests-mock-1.12.1
+collected 6 items
+
+test_generated.py ......                                                 [100%]
+
+============================== 6 passed in 0.11s ===============================
+
+2025-04-18 01:49:22,828 - apis.autocoder.agent.tester - INFO - All tests passed

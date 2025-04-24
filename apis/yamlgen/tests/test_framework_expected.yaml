@@ -1,0 +1,14 @@
+project: Test Framework
+goal: Create a comprehensive test automation framework
+modules:
+  - name: test_runner
+    purpose: Execute test suites and manage test lifecycle
+  - name: assertion_library
+    purpose: Provide common assertion methods
+  - name: reporting
+    purpose: Generate test execution reports
+  - name: test_fixtures
+    purpose: Manage test setup and teardown
+  - name: utilities
+    purpose: Common helper functions
+test_mode: true 

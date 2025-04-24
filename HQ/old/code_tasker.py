@@ -1,4 +1,4 @@
-from developer_adapter import DeveloperAdapter
+from HQ.old.developer_adapter import DeveloperAdapter
 from workflow_cli import WorkflowCLI
 from apis.autocoder.agent.test_layer import TestLayer
 import logging
