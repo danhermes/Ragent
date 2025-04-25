@@ -16,7 +16,7 @@ RAgents have tools(apis)) at their disposal to allow them to write code (Autocod
 An autonomous organization of agents, loosely configured in a hierarchy (director, manager, worker, SME), that take a goal, discuss it, and develop it into a written deliverable such as a business strategy or a technical specification.
 
 ## HQ(Headquarters)
-User interfaces for RAgent, from CLI, to web UI, to voice interface.  Creates and tracks agent tasks.
+User interfaces for RAgent: CLI, web UI, to voice interface.  HQ creates and tracks agent tasks, providing status updates and queries to the user to unblock them.
 - Command Line Interface (CLI) and task dispatcher for RAgent
 - Voice - mic/speaker w/ STT/TTS) - OpenAI Whisper API, Whisper local, and Vosk
 - Text on web browser or mobile device
