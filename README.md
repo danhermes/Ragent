@@ -28,14 +28,15 @@ User interfaces for RAgent: CLI, web UI, to voice interface.  HQ creates and tra
 - n8n - for creating and uploading autonomous n8n workflows
 
 ## The Vision:
-    Idea -> Manifestation
+Idea -> Manifestation
 
-    Goal -> Tech Specification -> Implementation -> Deliverable
+Goal -> Tech Specification -> Implementation -> Deliverable
 
-    Goal -> Ragers -> Tools and Adapters: YAMLgen,  Autocoder, APIs, etc.  -> Deliverable
+Goal -> Ragers -> Tools and Adapters: YAMLgen,  Autocoder, APIs, etc.  -> Deliverable
 
-    Deliverables:
-    - technical specifications
-    - automation workflows (implemented and running)
-    - python modules and scripts
-    - publications (post, article, book)# RAgent (Robot Agent)
+Deliverables:
+- technical specifications
+- automation workflows (implemented and running)
+- python modules and scripts
+- publications (post, article, book)# RAgent (Robot Agent)
+- business strategy or plan for anything
