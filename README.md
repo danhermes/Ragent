@@ -8,6 +8,7 @@ Directed by the user via HQ (Headquarters), RAgent's agents can build all kinds 
 - automation workflows (implemented and running)
 - python modules and scripts
 - publications (post, article, book)
+- business strategy or plan for anything
 
 RAgents have tools(apis)) at their disposal to allow them to write code (Autocoder), write books (LitLegos), proofread books (Proofer), and automate tasks (n8n). YAMLgen is an adapter that can help translate between agents and tools.
 
