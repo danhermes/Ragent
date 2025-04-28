@@ -7,8 +7,17 @@ import string
 from typing import Dict, Any, List, Optional
 import yaml
 from dataclasses import dataclass
+from collections import defaultdict
+import sys
+
+# Add the project root to Python path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(project_root)
+
 from helpers.call_ChatGPT import CallChatGPT
 from collections import defaultdict
+from helpers.safe_formatter import formatter
+from agents import AgentBlane, AgentDum, AgentWoz
 
 @dataclass
 class Meeting:
@@ -179,6 +188,7 @@ class ProjectWork:
         recent = self.conversation_history[-limit:] if self.conversation_history else []
         return "\n".join([f"{msg['role']}: {msg['content']}" for msg in recent])
         
+
     def run_meeting(self, phase: str) -> bool:
         """Run a meeting for the specified phase"""
         try:
@@ -199,11 +209,12 @@ class ProjectWork:
             meeting_config = self.config['templates']['meetings'][phase]
 
             agenda_template = meeting_config.get('agenda')
+            self.logger.info(f"Agenda Template: {agenda_template}")
             agenda_path = module_dir / "templates" / self.project_type / agenda_template
             with open(agenda_path, 'r', encoding='utf-8') as f:
-                agenda = f.read
+                agenda = f.read()
             
-            # Load prompts from code_prompts.yaml
+            # Load prompts from code_prompts.yaml TODO refactor up outside of run_meeting
             prompts_path = module_dir / "templates" / self.project_type / "code_prompts.yaml"
             with open(prompts_path, 'r', encoding='utf-8') as f:
                 prompts_config = yaml.safe_load(f)
@@ -254,25 +265,25 @@ class ProjectWork:
                         'rag_data': self.rag_data
                     }
                     
+                    # Log the formatted context
+                    self.logger.info("Meeting context:\n" + formatter.format_context(context))
+                    
                     # Add input files to context
-                    self.logger.debug(f"Context before adding input files: {context}")
-                    self.logger.debug(f"Input files to be added: {input_files}")
+                    #self.logger.debug(f"Context before adding input files: {context}")
+                    #self.logger.debug(f"Input files to be added: {input_files}")
                     context.update(input_files)
-                    self.logger.debug(f"Context after adding input files: {context}")
-                    self.logger.debug(f"Template content: {template_content}")
+                    #self.logger.debug(f"Template content: {template_content}")
                     
                     # Replace template placeholders with correct input file keys
-                    template_content = template_content.replace('{input_file[0]}', '{input_file_0}')
-                    template_content = template_content.replace('{input_file[1]}', '{input_file_1}')
+                    #template_content = template_content.replace('{input_file[0]}', '{input_file_0}')
+                    #template_content = template_content.replace('{input_file[1]}', '{input_file_1}')
                     
-
                     # Format the template with the context
                     prompt = ""
-                    #prompt = template_content.format(**context)
-
                     safe_context = defaultdict(lambda: '[MISSING]', context)
+                    self.logger.debug(f"Safe context after adding input files: {safe_context}")
                     try:
-                        prompt = template_content.format_map(safe_context)
+                        prompt = formatter.safe_format(template_content, safe_context)
                         self.logger.debug(f"Formatted prompt: {prompt[:100]}")
                     except Exception as e:
                         self.logger.error(f"Error formatting prompt: {e}")
@@ -441,7 +452,7 @@ class ProjectWork:
             
             # Log the merged content details
             self.logger.info(f"Merged content length: {len(merged_content)}")
-            self.logger.info(f"Merged content preview: {merged_content[:1000]}...")
+            self.logger.info(f"Merged content preview: {merged_content[:100]}...")
             
             # Write to output file
             output_path = os.path.join(self.project_path, output_dir, output_file)
@@ -520,8 +531,10 @@ class ProjectWork:
             self.logger.info(f"{phase}: single input {input_list}")
             input_path = get_input_path(input_list)
             content = self._read_meeting_doc(input_path)
+            self.logger.info(f"Input_file Content: {content[:100]}")
             if content:
-                input_files['input_file'] = content
+                self.logger.info(f"Input_file Content = TRUE")
+                input_files['input_files'] = content
                 
         # Handle multiple input files
         elif isinstance(input_list, list):
@@ -530,7 +543,7 @@ class ProjectWork:
                 input_path = get_input_path(input_file)
                 content = self._read_meeting_doc(input_path)
                 if content:
-                    input_files[f'input_file_{i}'] = content
+                    input_files[f'input_files_{i}'] = content
                     self.logger.info(f"Added input file {i} content to context for {phase}")
                     
         if not input_files:
