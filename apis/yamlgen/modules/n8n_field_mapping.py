@@ -9,11 +9,11 @@ TEMPLATE_FIELDS_N8N = {
     "inputs": "Inputs",
     "outputs": "Outputs",
     "apps_services_apis": "Apps, Services, APIs",
-    "core_nodes": "Core Nodes",
-    "connections": "Connections",
-    "workflow_settings": "Workflow Settings",
-    "test_scenarios": "Test Scenarios",
+    "nodes": "Nodes {node_name, node_type, description, params}",
+    "connections": "Connections {source_node, target_node}",
+    "workflow_settings": "Workflow Settings {key, value}",
+    "test_scenarios": "Test Scenarios {condition, expected_result}",
     "authentication_permissions": "Authentication & Permissions",
     "completion_checklist": "Completion Checklist",
-    "example_node_layout": "Example Node Layout"
+    "example_node_layout": "Example Node Layout {node1, node2, node3}"
 }

@@ -9,18 +9,16 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(os.path.dirname(current_dir))
 sys.path.insert(0, parent_dir)
 
-from apis.autocoder.agent.build_cycle_agent import AgentBuildCycle
-from apis.autocoder.utils.logger import log
-
-# Set up logging
+# Set up logging first
 def setup_logging():
     """Set up logging configuration"""
     # Create logs directory if it doesn't exist
-    os.makedirs('logs', exist_ok=True)
+    logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    os.makedirs(logs_dir, exist_ok=True)
     
     # Create a timestamped log file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file = f"logs/autocoder_{timestamp}.log"
+    log_file = os.path.join(logs_dir, f"autocoder_{timestamp}.log")
     
     # Configure logging
     logging.basicConfig(
@@ -32,6 +30,12 @@ def setup_logging():
         ]
     )
     return logging.getLogger(__name__)
+
+# Initialize logger at module level
+logger = setup_logging()
+
+from apis.autocoder.agent.build_cycle_agent import AgentBuildCycle
+from apis.autocoder.utils.logger import log
 
 def read_spec_file(spec_path: str) -> str:
     """Read and parse the specification file
@@ -46,7 +50,6 @@ def read_spec_file(spec_path: str) -> str:
         FileNotFoundError: If spec file doesn't exist
         ValueError: If spec file is empty or invalid
     """
-    logger = logging.getLogger(__name__)
     logger.info(f"Reading spec file: {spec_path}")
     
     if not os.path.exists(spec_path):
@@ -63,7 +66,6 @@ def read_spec_file(spec_path: str) -> str:
 
 def main():
     """Main entry point for the autocoder"""
-    logger = setup_logging()
     logger.info("Starting autocoder main process")
     
     try:
@@ -75,9 +77,17 @@ def main():
         task = read_spec_file(spec_path)
         logger.debug(f"Task defined: {task}")
         
+
+        # Hardcode n8n for now
+        agent_task = {
+            "language": "n8n",
+            "requirements": task,
+            "specifications": ""
+        }
+
         # Initialize build cycle
         logger.info("Initializing AgentBuildCycle")
-        cycle = AgentBuildCycle(agent_task=task, max_iterations=3)
+        cycle = AgentBuildCycle(agent_task, max_iterations=3)
         logger.debug(f"Build cycle initialized with max_iterations={cycle.max_iterations}")
         
         # Run the cycle

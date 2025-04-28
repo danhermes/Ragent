@@ -13,17 +13,29 @@ os.makedirs('logs', exist_ok=True)
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
 log_file = f"logs/cli_{timestamp}.log"
 
+# Create handlers
+file_handler = logging.FileHandler(log_file, encoding='utf-8')
+console_handler = logging.StreamHandler()
+
+# Set formatters
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+file_handler.setFormatter(formatter)
+console_handler.setFormatter(formatter)
+
+# Configure root logger
 logging.basicConfig(
     level=logging.DEBUG,
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    handlers=[
-        logging.FileHandler(log_file),
-        logging.StreamHandler()
-    ]
+    handlers=[file_handler, console_handler]
 )
 
+# Configure specific loggers
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
+
+# Configure other loggers
+logging.getLogger('openai').setLevel(logging.DEBUG)
+logging.getLogger('httpcore').setLevel(logging.DEBUG)
+logging.getLogger('httpx').setLevel(logging.DEBUG)
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="YAMLgen CLI - Generate YAMLs from Automation Tech Specs")
@@ -53,10 +65,10 @@ def main():
             output_path=str(output_path),
             verbose=args.verbose
         )
-        print(f"✅ YAML generation complete.")
-        print(f"📄 Output saved to: {output_path}")
+        logger.info("YAML generation complete.")
+        logger.info(f"Output saved to: {output_path}")
     except Exception as e:
-        print(f"❌ Error: {str(e)}", file=sys.stderr)
+        logger.error(f"Error: {str(e)}")
         sys.exit(1)
 
 if __name__ == "__main__":
