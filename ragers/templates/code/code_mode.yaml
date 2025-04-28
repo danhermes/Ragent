@@ -27,7 +27,7 @@ templates:
   meetings:
     strategy:
       agenda: code_strategy_meeting.md
-      input: code_project_template.goal
+      # input: code_project_template.goal - formatted .goal
       output: code_project_charter.md
       attending:
         - Supervisor

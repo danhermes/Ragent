@@ -167,7 +167,7 @@ prompts:
       {closing}
 
       Input Files: {input}
-      Input Files Contents: {input_file}
+      Input Files Contents: {input_files}
 
   design:
     description: "Technical architecture planning"
@@ -217,7 +217,7 @@ prompts:
       {closing}
       
       Input Files: {input}
-      Input Files Contents: {input_file}
+      Input Files Contents: {input_files}
 
   implementation:
     description: "Module design and implementation planning"
@@ -278,7 +278,7 @@ prompts:
       {closing}
       
       Input Files: {input}
-      Input Files Contents: {input_file}
+      Input Files Contents: {input_files}
 
   draft:
     description: "Technical design draft review"
@@ -343,9 +343,9 @@ prompts:
       {closing}
 
       Technical Specification: 
-      {input_file_0}
+      {input_files_0}
       Module Specifications: 
-      {input_file_1}
+      {input_files_1}
 
   review:
     description: "Final technical design review"
@@ -396,7 +396,7 @@ prompts:
       Technical Specification: 
       {input}
       Technical Specification Contents: 
-      {input_file}
+      {input_files}
 
   document_meeting:
     system: "In addition to your other roles, you are a document generation assistant. Your task is to merge the template and response into a coherent document. Carry forward all module, code, and technical detail. Do not generalize or summarize technical detail such as code or architecture or APIs or module or classes or their contents, just format it into the new doc. Merge and organize, don't prune or delete."

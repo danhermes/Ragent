@@ -7,6 +7,12 @@ from typing import Dict, Any, List, Optional
 from datetime import datetime
 from dataclasses import dataclass
 
+# Add the project root to Python path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(project_root)
+
+from helpers.safe_formatter import formatter
+
 @dataclass
 class DocumentConfig:
     """Document configuration loaded from YAML"""
@@ -79,7 +85,7 @@ class ProjectDocuments:
             full_context = {**default_context, **context}
                 
             # Format template with context
-            document = template.format(**full_context)
+            document = formatter.safe_format(template, full_context)
             
             self.logger.info(f"Generated {doc_type} document: {document}")
             if doc_type == 'code_design_meeting':
@@ -150,7 +156,7 @@ class ProjectDocuments:
             
             with open(doc_path, 'w', encoding='utf-8') as f:
                 # Format template with meeting content
-                formatted_content = template_content.format(**meeting_content)
+                formatted_content = formatter.safe_format(template_content, meeting_content)
                 f.write(formatted_content)
                 
             self.logger.info(f"Generated meeting document: {doc_path}")
@@ -179,7 +185,7 @@ class ProjectDocuments:
                     template_path = Path(f"templates/{self.project_type}/{deliverable_name}")
                     with open(template_path, 'r', encoding='utf-8') as t:
                         template_content = t.read()
-                    formatted_content = template_content.format(**content)
+                    formatted_content = formatter.safe_format(template_content, content)
                     f.write(formatted_content)
                 else:
                     # Write raw content for non-markdown files
