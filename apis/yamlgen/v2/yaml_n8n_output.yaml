@@ -1,0 +1,34 @@
+workflow:
+  name: Dropbox Daily File Processor
+  settings:
+    timezone: America/New_York
+    save_successful_executions: true
+
+nodes:
+  - name: Schedule Trigger
+    type: scheduleTrigger
+    params: {}
+    position: [0, 0]
+
+  - name: Dropbox List Files
+    type: dropboxList
+    params: {}
+    position: [200, 0]
+
+  - name: Filter Files
+    type: filter
+    params: {}
+    position: [400, 0]
+
+  - name: Email Sender
+    type: emailSend
+    params: {}
+    position: [600, 0]
+
+connections:
+  - from: Schedule Trigger
+    to: Dropbox List Files
+  - from: Dropbox List Files
+    to: Filter Files
+  - from: Filter Files
+    to: Email Sender

@@ -18,7 +18,8 @@ class AgentType(Enum):
 class BaseAgent:
     """Base class for all agents"""
     
-    def __init__(self, agent_type: AgentType, stt_service: SpeechToText = None, llm_service: BaseLLM = None):
+    def __init__(self):
+    #def __init__(self, agent_type: AgentType, stt_service: SpeechToText = None, llm_service: BaseLLM = None):
         # self.agent_type = agent_type
         # self.stt_service = stt_service
         # self.llm_service = llm_service
