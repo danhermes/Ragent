@@ -41,7 +41,8 @@ class AgentBuildCycle:
 
     def _is_n8n_language(self) -> bool:
         """Check if task is for n8n workflow generation"""
-        return isinstance(self.agent_task, dict) and self.agent_task.get("language") == "n8n"
+        is_n8n = isinstance(self.agent_task, dict) and self.agent_task.get("language") == "n8n"
+        return True #is_n8n
 
     def _write_log(self, content):
         with open(self.log_file, "a", encoding='utf-8') as f:
@@ -65,9 +66,11 @@ class AgentBuildCycle:
                 "requirements": self.agent_task.get("requirements", {}),
                 "specifications": self.agent_task.get("specifications", {})
             }
-            
+            logger.info(f"n8n Context: {context}")
             # Generate workflow code
-            code = code_writer.CodeWriter.generate_code(context)
+            task_str = f"Create an n8n workflow with the following requirements:\n{context['requirements']}\n\nSpecifications:\n{context['specifications']}\n\nAvailable nodes: {context['nodes']}\n\nExample workflows: {context['workflow_examples']}"
+            code_writer_instance = code_writer.CodeWriter(role="n8n_dev")
+            code = code_writer_instance.generate_code(task_str)
             workflow_json = self.n8n_adapter.parse_workflow_code(code)
             
             # Save and deploy workflow

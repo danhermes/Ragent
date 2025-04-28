@@ -2,6 +2,8 @@
 
 A CLI tool for generating tool-specific YAML files from structured templates. Supports multiple output formats including AutoCoder, LitLegos, n8n, and Proof.
 
+Run it: ex. python ./apis/yamlgen/cli.py --input-file ./apis/yamlgen/projects/auto/automate_technical_design.md --tool n8n --enhance
+
 ## 🏗️ Architecture
 
 The tool consists of three main components:

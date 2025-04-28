@@ -110,7 +110,7 @@ def determine_role(task: str, test_layer=None) -> RolePrompt:
         Role: The most appropriate role for the task
     """
     task_lower = task.lower()
-    
+    logger.info(f"Task: {task_lower}")
     # Check for role-specific keywords
     role_keywords = {
         "python_dev": ["python", "code", "script", "function", "class", "module"],
@@ -169,6 +169,7 @@ Note: In test mode, assume a `test_layer` object is available. Use these methods
 Use these in place of live I/O, external APIs, or GPT calls when possible.
 """  
     # Determine the appropriate role
+    
     role = determine_role(task)
     logger.debug(f"Selected role: {role.name}")
     
