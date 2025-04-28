@@ -1,8 +1,8 @@
 import unittest
 import yaml
 from pathlib import Path
-from yaml_parser import YamlParser
-from yaml_generator import YAMLGenerator
+from apis.yamlgen.v2.old.yaml_parser import YamlParser
+from apis.yamlgen.modules.yaml_generator import YAMLGenerator
 
 class TestYAMLGenerator(unittest.TestCase):
     def setUp(self):

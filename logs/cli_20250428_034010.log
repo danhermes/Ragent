@@ -1,0 +1,38 @@
+2025-04-28 03:40:10,897 - root - INFO - Organized fields into structured spec (template-driven).
+2025-04-28 03:40:10,897 - root - INFO - Enhancing spec via OpenAI.
+2025-04-28 03:40:11,463 - helpers.call_ChatGPT - INFO - CHATGPT PARSED Content:
+You are a workflow designer expert.
+Enhance this automation spec by:
+- Proposing additional nodes if missing
+- Clarifying vague steps
+- Strengthening connections and logic
+
+Here is the current structured spec:
+{'workflow_name': None, 'purpose_goal': None, 'workflow_overview': None, 'trigger_node': None, 'inputs': None, 'outputs': None, 'apps_services_apis': None, 'core_nodes': None, 'connections': None, 'workflow_settings': None, 'test_scenarios': None, 'authentication_permissions': None, 'completion_checklist': None, 'example_node_layout': None}
+
+Return the improved spec in JSON format.
+2025-04-28 03:40:11,478 - openai._base_client - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'json_data': {'messages': [{'role': 'user', 'content': "You are a workflow designer expert.\nEnhance this automation spec by:\n- Proposing additional nodes if missing\n- Clarifying vague steps\n- Strengthening connections and logic\n\nHere is the current structured spec:\n{'workflow_name': None, 'purpose_goal': None, 'workflow_overview': None, 'trigger_node': None, 'inputs': None, 'outputs': None, 'apps_services_apis': None, 'core_nodes': None, 'connections': None, 'workflow_settings': None, 'test_scenarios': None, 'authentication_permissions': None, 'completion_checklist': None, 'example_node_layout': None}\n\nReturn the improved spec in JSON format."}], 'model': 'gpt-3.5-turbo'}}
+2025-04-28 03:40:11,507 - openai._base_client - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2025-04-28 03:40:11,508 - httpcore.connection - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2025-04-28 03:40:11,604 - httpcore.connection - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001FD7CE65B40>
+2025-04-28 03:40:11,605 - httpcore.connection - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x000001FD7CB5A8C0> server_hostname='api.openai.com' timeout=5.0
+2025-04-28 03:40:11,635 - httpcore.connection - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001FD7CE65BD0>
+2025-04-28 03:40:11,636 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-04-28 03:40:11,637 - httpcore.http11 - DEBUG - send_request_headers.complete
+2025-04-28 03:40:11,637 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-04-28 03:40:11,638 - httpcore.http11 - DEBUG - send_request_body.complete
+2025-04-28 03:40:11,638 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-04-28 03:40:16,671 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Mon, 28 Apr 2025 07:40:15 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-expose-headers', b'X-Request-ID'), (b'openai-organization', b'lexicon-systems'), (b'openai-processing-ms', b'4258'), (b'openai-version', b'2020-10-01'), (b'x-ratelimit-limit-requests', b'10000'), (b'x-ratelimit-limit-tokens', b'200000'), (b'x-ratelimit-remaining-requests', b'9999'), (b'x-ratelimit-remaining-tokens', b'199848'), (b'x-ratelimit-reset-requests', b'8.64s'), (b'x-ratelimit-reset-tokens', b'45ms'), (b'x-request-id', b'req_b32d48e8bb692794accdf3bb78306e80'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'cf-cache-status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=ZdnW5Dvl9B0AVWbHNl29cpPdNgthZxU8.YRo5Lulf3Q-1745826015-1.0.1.1-JD3j3BcidU3AbtfRA3cf2vV2AeqK3X6B5u4qm_V847MMrmQg_JJa7eUd7RQ2opHnVbMwTsrkbKVBUVRYreHT_xZLl3XgbRrGieV.XVShE.o; path=/; expires=Mon, 28-Apr-25 08:10:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=O6IStvMqi7YgAf_yq9RFrLsDY4Qz3.UKclQF4gQUonI-1745826015673-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'9374e8f82eb93021-BOS'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2025-04-28 03:40:16,675 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-28 03:40:16,676 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-04-28 03:40:16,677 - httpcore.http11 - DEBUG - receive_response_body.complete
+2025-04-28 03:40:16,678 - httpcore.http11 - DEBUG - response_closed.started
+2025-04-28 03:40:16,678 - httpcore.http11 - DEBUG - response_closed.complete
+2025-04-28 03:40:16,679 - openai._base_client - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers([('date', 'Mon, 28 Apr 2025 07:40:15 GMT'), ('content-type', 'application/json'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('access-control-expose-headers', 'X-Request-ID'), ('openai-organization', 'lexicon-systems'), ('openai-processing-ms', '4258'), ('openai-version', '2020-10-01'), ('x-ratelimit-limit-requests', '10000'), ('x-ratelimit-limit-tokens', '200000'), ('x-ratelimit-remaining-requests', '9999'), ('x-ratelimit-remaining-tokens', '199848'), ('x-ratelimit-reset-requests', '8.64s'), ('x-ratelimit-reset-tokens', '45ms'), ('x-request-id', 'req_b32d48e8bb692794accdf3bb78306e80'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=ZdnW5Dvl9B0AVWbHNl29cpPdNgthZxU8.YRo5Lulf3Q-1745826015-1.0.1.1-JD3j3BcidU3AbtfRA3cf2vV2AeqK3X6B5u4qm_V847MMrmQg_JJa7eUd7RQ2opHnVbMwTsrkbKVBUVRYreHT_xZLl3XgbRrGieV.XVShE.o; path=/; expires=Mon, 28-Apr-25 08:10:15 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=O6IStvMqi7YgAf_yq9RFrLsDY4Qz3.UKclQF4gQUonI-1745826015673-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '9374e8f82eb93021-BOS'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2025-04-28 03:40:16,681 - openai._base_client - DEBUG - request_id: req_b32d48e8bb692794accdf3bb78306e80
+2025-04-28 03:40:16,695 - root - INFO - Parsed and merged enhanced spec successfully.
+2025-04-28 03:40:16,696 - root - INFO - Enhancement complete.
+2025-04-28 03:40:16,697 - root - INFO - Formatted spec into n8n YAML
+2025-04-28 03:40:16,698 - root - INFO - Validation passed.
+2025-04-28 03:40:16,777 - httpcore.connection - DEBUG - close.started
+2025-04-28 03:40:16,780 - httpcore.connection - DEBUG - close.complete

@@ -1,0 +1,409 @@
+prompts:
+  # Reference documents for all meetings
+  references:
+    - code_project_template.goal
+    - code_project_charter.md
+
+  # Common meeting rules and structure
+  meeting_rules:
+    # Standard meeting structure
+    structure:
+        opening:
+          - "Review agenda and objectives"
+          - "Check previous action items"
+          - "Confirm attendees and roles"
+        closing:
+          - "Summarize key decisions"
+          - "Document action items"
+          - "Confirm next steps"
+          - "Complete the output document based on the discussion"
+          - "Verify output document creation"
+          - "Verify all agenda sections are addressed"
+
+    # Success criteria verification
+    scale:
+      - Of small, medium, large, or enterprise scale - assume small - This is important.
+      - Plan, design, and document for a small scale project
+      - Assume small scale
+      - Avoid enterprise architecture and infrastructure
+      - No APIs, no databases, no servers, no infrastructure
+      - no microservices, no cloud resources
+
+    success_criteria:
+      - "Design for an amazing, unique, and disruptive solution that will change the field forever."
+      - "Output document is created/updated and saved to disk."
+      - "Document is substantive, containing more than a cursory two or three sentences per section."
+      - "Architecture and modules are documented in detail for use by a junior programmer."
+      - "Cover abstract tech design to real-world orgs, scenarios, third party tools and frameworks, and inspirational products on the market already."
+      - "Offer both practical recommendations and creative and disruptive ideas."
+      - "All agenda sections are completed and documented"
+      - "Action items are assigned and documented"
+      - "Next steps are clearly defined"
+      - "Blockers are identified and addressed"
+      - "Risks are documented and mitigated"
+
+    # Meeting conduct rules
+    conduct:
+      - "Stay focused on the agenda items"
+      - "One person speaks at a time"
+      - "Document all decisions and action items"
+      - "Ensure all attendees have opportunity to contribute"
+      - "Offer both practical recommendations and creative and disruptive ideas."
+      - "Keep discussions technical and solution-oriented"
+      - "Respect time limits for each topic"
+      - "Escalate blockers immediately"
+
+    # Document creation rules
+    documentation:
+      - "All documents must be in Markdown format"
+      - "Include clear section headers"
+      - "Use bullet points for lists"
+      - "Include diagrams where appropriate"
+      - "Reference previous documents when relevant"
+      - "Maintain consistent formatting"
+      - "Save documents in the correct project folder"
+      - "Verify all required sections are completed"
+      - "Document is substantive, containing more than a cursory two or three sentences per section."
+      - "Architecture and modules are documented in detail for use by a junior programmer."
+      - "Include success criteria verification in closing"
+
+    no_schedule:
+      - This documentation is about the technical design of the project, not schedule or project plan.  
+      - Do not schedule anything, just document it
+      - Do not allocate resources to the schedule
+      - Do not assign weeks, months, or years to the project
+        
+  strategy:
+    description: "Initial strategy meeting"
+    attending: ["Supervisor", "Managers"]
+    output: "code_project_charter.md"
+    length: 2 pages
+    template: |
+      Meeting Rules:
+      {meeting_rules}
+
+      Meeting Opening:
+      {opening}
+
+      Based on these high-level goals from {input}:
+      {history}
+
+      Let's establish our project strategy. Focus on:
+      1. What are the real reasons and goals of this project?
+      2. Project scope and objectives alignment with goals
+      3. High-level technical approach and methodology
+      4. Team structure and responsibilities
+      5. Key milestones and deliverables
+      6. Initial risk assessment and mitigation strategies
+      7. Success criteria and validation approach
+      8. Resource requirements and constraints
+      9. Tie technical reqs to numerous real world orgs, events, scenarios, and examples.
+      10. Offering context with other solutions in the field, other alternative, their benefits and shortcomings.
+
+      Agenda:
+      {agenda}
+
+      GOALS: {goals}
+      Misc. Documentation: {rag_data}
+
+      After the discussion, create {output} with:
+      1. Project overview and objectives
+      2. Business goals with practical examples and case studies.
+      3. Vision of how this project could change the industry, world, or customer experience.
+      4. Technical approach and methodology
+      5. Team structure and roles
+      6. Key milestones and timeline
+      7. Risk assessment and mitigation
+      8. Success criteria and validation
+      9. Resource requirements
+
+      Meeting Closing:
+      {closing}
+
+  kickoff:
+    description: "Project kickoff meeting"
+    attending: ["Supervisor", "Managers", "Workers"]
+    input: "code_project_charter.md"
+    output: "code_project_charter.md"
+    length: 5 pages
+    template: |
+      Meeting Rules:
+      {meeting_rules}
+
+      Meeting Opening:
+      {opening}
+
+      Based on our strategy discussion and the project charter in {input}:
+      {history}
+
+      Let's align on the project kickoff. Address:
+      1. What are the real reasons and goals of this project?
+      2. What are practical impacts this project could and should have?
+      3. What are the team roles and responsibilities?
+      4. What are the communication channels and protocols?
+      5. What are the development standards and practices?
+      6. What are the initial technical requirements and constraints?
+      7. How do we leverage AI and contemporary development approaches?
+      8. How do we integrate with other orgs and systems to achieve our goals?
+      9. What are the timeline and milestones?
+      10. What are the next steps and immediate actions?
+
+      Agenda:
+      {agenda}
+
+      GOALS: {goals}
+      Misc. Documentation: {rag_data}
+
+      After the discussion, update {output} with:
+      1. Refined project scope and objectives
+      2. Detailed team roles and responsibilities
+      3. Communication and development standards
+      4. Technical requirements and constraints
+      5. Detailed timeline and milestones
+      6. Immediate action items
+      7. Risk assessment and mitigation
+
+      Meeting Closing:
+      {closing}
+
+      Input Files: {input}
+      Input Files Contents: {input_files}
+
+  design:
+    description: "Technical architecture planning"
+    attending: ["Workers"]
+    input: "code_project_charter.md"
+    output: "code_meeting_architecture.md"
+    length: 10 pages
+    template: |
+      Meeting Rules:
+      {meeting_rules}
+
+      Meeting Opening:
+      {opening}
+
+      Based on our kickoff discussion and the project charter in {input}:
+      {history}
+
+      Design the technical architecture focusing on:
+      1. What design do we need to address the key overarching goals?
+      2. What are the unique and disruptive aspects of this project?
+      3. What are some other alternatives solutions in the field, their benefits and shortcomings?
+      4. System components and their interactions
+      5. Technology stack and framework choices
+      6. Data flow and storage design
+      7. API design and integration points
+      8. Security considerations
+      9. Development and deployment architecture
+
+      Agenda:
+      {agenda}
+
+      Provide specific and substantial technical diagrams and specifications. This document should be a comprehensive technical design for a junior programmer.
+      GOALS: {goals}
+      Misc. Documentation: {rag_data}
+
+      After the discussion, create substantive and thorough (more than a few sentences per section) {output} with:
+      1. System architecture diagram
+      2. Technology stack details
+      3. Data flow diagrams
+      4. API specifications
+      5. Security architecture
+      6. Scalability design
+      7. Deployment architecture
+
+      Meeting Closing:
+       Don't underdo this. We need a comprehensive technical design of 10+ written pages.
+      {closing}
+      
+      Input Files: {input}
+      Input Files Contents: {input_files}
+
+  implementation:
+    description: "Module design and implementation planning"
+    attending: ["Workers"]
+    input: "code_meeting_architecture.md"
+    output: "code_meeting_modules.md"
+    length: 15 pages
+    template: |
+      Meeting Rules:
+      {meeting_rules}
+
+      Meeting Opening:
+      {opening}
+
+      Based on our architecture design in {input}:
+      {history}
+
+      Detail the module implementation plan:
+      1. Module breakdown and dependencies
+      2. Class/component structure and relationships
+      3. Interface definitions and contracts
+      4. Data models and schemas
+      5. Testing strategy per module
+      6. Implementation priorities and sequence
+      7. Technical debt considerations
+
+      Module Specifications:
+      For each module identified in the architecture:
+      1. Provide complete detailed 1+ pageYAML specification including:
+         - Module name and purpose
+         - Input/output definitions
+         - Interface contracts
+         - Core methods and logic
+         - Dependencies and integration points
+         - Testing requirements
+         - Performance considerations
+      2. Ensure equal detail for all modules
+      3. Include code examples where applicable
+      4. Document module-specific risks and mitigations
+
+      Agenda:
+      {agenda}
+
+      Include code examples and implementation details.
+      GOALS: {goals}
+      Misc. Documentation: {rag_data}
+
+      After the discussion, create {output} with:
+      1. Module breakdown and dependency diagram
+      2. Class/component diagrams
+      3. Interface specifications
+      4. Data model schemas
+      5. Module test plans
+      6. Implementation sequence
+      7. Technical debt tracking
+
+      Meeting Closing:
+      {closing}
+      
+      Input Files: {input}
+      Input Files Contents: {input_files}
+
+  draft:
+    description: "Technical design draft review"
+    attending: ["Managers", "Workers"]
+    input: 
+      - "code_meeting_architecture.md"
+      - "code_meeting_modules.md"
+    output: "code_technical_design.md"
+    length: 13 pages
+    template: |
+      Meeting Rules:
+      {meeting_rules}
+
+      Meeting Opening:
+      {opening}
+
+      Previous discussions:
+      {history}
+
+      Evaluate and provide feedback on:
+      1. Architecture and module design completeness
+      2. Technical feasibility and risks
+      3. Resource requirements and constraints
+      4. Testing coverage and strategy
+      5. Integration points and dependencies
+      6. Performance and scalability considerations
+      7. Implementation timeline and phases
+
+      Agenda:
+      {agenda}
+
+      Module Specifications:
+      For each module identified in the architecture:
+      1. Provide complete detailed 1+ pageYAML specification including:
+         - Module name and purpose
+         - Input/output definitions
+         - Interface contracts
+         - Core methods and logic
+         - Dependencies and integration points
+         - Testing requirements
+         - Performance considerations
+      2. Ensure equal detail for all modules
+      3. Include code examples where applicable
+      4. Document module-specific risks and mitigations
+
+      GOALS: {goals}
+      Misc. Documentation: {rag_data}
+
+      We need to build out a technical spec of 10+ pages with detailed directions, tool recommendations, API integrations, and real-world examples and touchbpoints.
+      
+      After the discussion, create substantive and thorough (more than a few sentences per section) {output} with:
+      1. Complete technical architecture
+      2. Detailed module specifications (all modules)
+      3. Risk assessment and mitigation
+      4. Resource requirements
+      5. Test coverage plan
+      6. Integration specifications
+      7. Performance requirements
+      8. Implementation timeline
+
+      Meeting Closing:
+      {closing}
+
+      Technical Specification: 
+      {input_files_0}
+      Module Specifications: 
+      {input_files_1}
+
+  review:
+    description: "Final technical design review"
+    attending: ["Supervisor", "Managers", "Workers"]
+    input: "code_technical_design.md"
+    output: "code_technical_design.md"
+    length: 15 pages
+    template: |
+      Meeting Rules:
+      {meeting_rules}
+
+      Meeting Opening:
+      {opening}
+
+      Final review of the technical design in {input}:
+      {history}
+
+      Verify and approve:
+      1. Goals and requirements alignment
+      2. Architecture and design completeness
+      3. Implementation feasibility
+      4. Risk assessment and mitigation
+      5. Resource allocation and timeline
+      6. Testing and quality assurance plan
+      7. Deployment and maintenance strategy
+
+      Agenda:
+      {agenda}
+
+      Previous discussions:
+      {history}
+
+      GOALS: {goals}
+      Misc. Documentation: {rag_data}
+
+      After the discussion, update {output} with:
+      1. Final architecture approval
+      2. Implementation feasibility confirmation
+      3. Risk mitigation plan
+      4. Resource allocation
+      5. Quality assurance process
+      6. Deployment strategy
+      7. Maintenance plan
+
+      Meeting Closing:
+      {closing}
+
+      Technical Specification: 
+      {input}
+      Technical Specification Contents: 
+      {input_files}
+
+  document_meeting:
+    system: "In addition to your other roles, you are a document generation assistant. Your task is to merge the template and response into a coherent document. Carry forward all module, code, and technical detail. Do not generalize or summarize technical detail such as code or architecture or APIs or module or classes or their contents, just format it into the new doc. Merge and organize, don't prune or delete."
+    user: "Template:\n{template}\n\nResponse:\n{response}\n\nPlease merge these into a coherent document, maintaining the template structure while incorporating the response content."
+
+
+
+ 
+
+  
