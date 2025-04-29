@@ -8,10 +8,12 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
+from utils.document_manager import DocumentManager
 
 @dataclass
 class ProjectConfig:
     """Project configuration loaded from YAML"""
+    project_type: str #not in the config file
     templates: Dict[str, Any]
     phases: List[str]
     required_roles: List[str]
@@ -109,6 +111,7 @@ class ProjectStart:
                     
             # Convert to strongly typed config
             self.config = ProjectConfig(
+                project_type=self.project_type,
                 templates=config['templates'],
                 phases=config['phases'],
                 required_roles=config['required_roles'],
@@ -288,6 +291,10 @@ class ProjectStart:
             if not self.create_project_structure(project_name):
                 self.logger.error("Failed to create project structure")
                 return False
+            
+            # Initialize project documents        
+            self.dm = DocumentManager(self.project_path, self.project_type)
+            self.dm.initialize_project_docs()
                 
             # Load goals if provided
             if goals_file:

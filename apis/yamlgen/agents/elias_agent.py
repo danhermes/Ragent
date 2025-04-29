@@ -1,7 +1,7 @@
 
-from agents.base_agent import BaseAgent
+from agents.base_agent import WorkerAgent
 import logging
-class EliasAgent(BaseAgent):
+class EliasAgent(WorkerAgent):
     def __init__(self):
         super().__init__()
 
@@ -35,3 +35,6 @@ class EliasAgent(BaseAgent):
         except Exception as e:
             logging.error(f"Failed to parse GPT response: {e}")
             return original_spec
+        
+    def get_chat_response(self, text: str) -> str:
+        return super().get_chat_response(text) 

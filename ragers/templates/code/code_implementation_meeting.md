@@ -1,6 +1,6 @@
 **Template File:** `code_meeting_modules.md`
 
-### 🧱 Meeting protocol — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert's Rules of Order, but for agent engineers.
+### Meeting protocol — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert's Rules of Order, but for agent engineers.
 Each topic becomes a section, and each section produces *atomic*, *reusable*, *agent-runnable* material.
 ---
 

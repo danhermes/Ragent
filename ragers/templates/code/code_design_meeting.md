@@ -1,6 +1,6 @@
 **Template File:** `code_meeting_architecture.md`
 
-### 🧱 Meeting protocol — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert's Rules of Order, but for agent engineers.
+### Meeting protocol — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert's Rules of Order, but for agent engineers.
 Each topic becomes a section, and each section produces *atomic*, *reusable*, *agent-runnable* material.
 ---
 
@@ -11,14 +11,14 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 🎯 Goals
+## Goals
 - What are we building or solving?
 - What constraints or mandates exist?
 - What will success look like?
 
 ---
 
-## 🏗️ System Architecture
+## System Architecture
 - System Overview
 - Component Breakdown (with names)
 - Data flow or control logic summary
@@ -31,7 +31,7 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 💻 Code Snippets
+## Code Snippets
 ```yaml
 module:
   name: ""
@@ -44,14 +44,14 @@ module:
 
 ---
 
-## 🧪 Test Plan
+## Test Plan
 - Test coverage requirements
 - Testing approach
 - Key test scenarios
 
 ---
 
-## ⚠️ Risks & Constraints
+## Risks & Constraints
 - Technical risks
 - Style/narrative constraints
 - Test mode limitations
@@ -59,27 +59,27 @@ module:
 
 ---
 
-## 🚦 Blockers & Decisions
+## Blockers & Decisions
 - Any unresolved technical or creative blockers?
 - Any forks in direction that need resolution?
 
 ---
 
-## 📂 Files
+## Files
 | Type | Path |
 |------|------|
 |      |      |
 
 ---
 
-## ✅ Assignments
+## Assignments
 | Agent | Task | Due |
 |-------|------|-----|
 |       |      |     |
 
 ---
 
-## ⏱️ Next Steps
+## Next Steps
 - Who's doing what?
 - What's the next deliverable?
 - When's the next checkpoint?

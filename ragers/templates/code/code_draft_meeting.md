@@ -2,7 +2,7 @@
 
 **Template File:** `meeting_topics_draft.md`
 
-### 🧱 Meeting protocol — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert’s Rules of Order, but for agent engineers.
+### Meeting protocol — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert’s Rules of Order, but for agent engineers.
 Each topic becomes a section, and each section produces *atomic*, *reusable*, *agent-runnable* material.
 ---
 
@@ -13,14 +13,14 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 🎯 Goals  
+## Goals  
 - What are we building or solving?
 - What constraints or mandates exist?
 - What will success look like?
 
 ---
 
-## 🧱 System Architecture  
+## System Architecture  
 ### Overview
 - System Overview  
 - Component Breakdown (with names)  
@@ -37,7 +37,7 @@ Example:
 
 ---
 
-## 🧠 Code Snippets  
+## Code Snippets  
 Each subsystem should be described like this:
 EXAMPLE: 
 ```yaml
@@ -54,14 +54,14 @@ EXAMPLE:
 
 ---
 
-## 🧪 Test Plan  
+## Test Plan  
 - [ ] 100-word test mode works  
 - [ ] Template selection random, no repeats  
 - [ ] Output files generated correctly
 
 ---
 
-#### 📊 **Risks & Constraints**
+#### **Risks & Constraints**
 - Technical risks
 - Style/narrative constraints
 - Test mode limitations
@@ -69,13 +69,13 @@ EXAMPLE:
 
 ---
 
-#### 🚦 **Blockers / Decisions Needed**
+#### **Blockers / Decisions Needed**
 - Any unresolved technical or creative blockers?
 - Any forks in direction that need resolution?
 
 ---
 
-## 📂 Files  
+## Files  
 EXAMPLES:
 - Prompt source: `book.goal`  
 - Script: `chapter_writer.py`  
@@ -83,7 +83,7 @@ EXAMPLES:
 
 ---
 
-## ✅ Assignments  
+## Assignments  
 EXAMPLE:
 | Agent | Task                   | Due   |
 |-------|------------------------|--------|
@@ -93,7 +93,7 @@ EXAMPLE:
 
 ---
 
-#### ⏱️ **Next Steps**
+#### **Next Steps**
 - Who’s doing what?
 - What’s the next deliverable?
 - When’s the next checkpoint?

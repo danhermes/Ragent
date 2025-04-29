@@ -5,7 +5,9 @@ Ragers is a template-driven framework for managing and executing AI-powered proj
 
 Start up. Create a .goal file and place in /goal directory (see 2. below)
 Move into /ragers directory: cd /ragers
-Call ragers: python -m ragers.cli --name "code_project_1.goal" --type code
+Call ragers: 
+  python -m ragers.cli --name "code_project_1.goal" --type code
+  python -m ragers.cli --type code
 
 ## Command Line Interface (CLI)
 

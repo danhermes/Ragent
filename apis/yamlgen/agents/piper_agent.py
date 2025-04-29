@@ -1,12 +1,12 @@
 import json
 from pathlib import Path
-from agents.base_agent import BaseAgent
+from agents.base_agent import WorkerAgent
 from apis.yamlgen.modules.markdown_spec_parser import MarkdownSpecParser
 from apis.yamlgen.modules.yaml_generator import YAMLGenerator
 from apis.yamlgen.modules.n8n_field_mapping import TEMPLATE_FIELDS_N8N
 import logging
 
-class PiperAgent(BaseAgent):
+class PiperAgent(WorkerAgent):
     """Piper Agent - Translates fuzzy Markdown into structured spec using GPT."""
 
     def __init__(self):
@@ -73,3 +73,6 @@ class PiperAgent(BaseAgent):
         for field in required_fields:
             if field not in spec or not spec[field]:
                 self.log(f"Missing critical field in structured spec: {field}", level="warning")
+
+    def get_chat_response(self, text: str) -> str:
+        return super().get_chat_response(text) 
