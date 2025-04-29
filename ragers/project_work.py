@@ -18,6 +18,7 @@ from helpers.call_ChatGPT import CallChatGPT
 from collections import defaultdict
 from helpers.safe_formatter import formatter
 from agents import AgentBlane, AgentDum, AgentWoz
+from utils.document_manager import DocumentManager
 
 @dataclass
 class Meeting:
@@ -51,6 +52,8 @@ class ProjectWork:
         
         # Load document meeting prompt
         self._load_document_meeting_prompt()
+
+        self.dm = DocumentManager(self.project_path, self.project_type)
         
     def _setup_logging(self):
         """Set up additional logging handlers for different log types"""
@@ -206,6 +209,7 @@ class ProjectWork:
             else:
                 self.logger.warning("No goals available for meeting")
             
+            meeting_context = ""
             meeting_config = self.config['templates']['meetings'][phase]
 
             agenda_template = meeting_config.get('agenda')
@@ -213,7 +217,8 @@ class ProjectWork:
             agenda_path = module_dir / "templates" / self.project_type / agenda_template
             with open(agenda_path, 'r', encoding='utf-8') as f:
                 agenda = f.read()
-            
+            self.logger.info(f"Agenda:\n{agenda}")
+
             # Load prompts from code_prompts.yaml TODO refactor up outside of run_meeting
             prompts_path = module_dir / "templates" / self.project_type / "code_prompts.yaml"
             with open(prompts_path, 'r', encoding='utf-8') as f:
@@ -226,9 +231,9 @@ class ProjectWork:
             
             # Get input files for the meeting
             self.logger.info(f"Meeting config for {phase}: {meeting_config}")
-            input_files = self._get_meeting_input(phase, meeting_config)
-            self.logger.info(f"Input files for {phase}: {input_files}")
-            
+            files = self._get_meeting_files(phase, meeting_config)
+            self.logger.info(f"Files for {phase}: {files}")
+
             # Get responses from each participant based on roles
             for role in self._get_phase_participants(phase):
                 agents = self.get_agents_by_role(role)
@@ -247,7 +252,7 @@ class ProjectWork:
                         
                     # Create a comprehensive context for template formatting
                     meeting_rules = prompts_config['prompts']['meeting_rules']
-                    self.rag_data = self.charter
+                    #self.rag_data = self.charter
                     context = {
                         'goals': "\n".join(goals),
                         'history': self._format_conversation_history(),
@@ -271,7 +276,7 @@ class ProjectWork:
                     # Add input files to context
                     #self.logger.debug(f"Context before adding input files: {context}")
                     #self.logger.debug(f"Input files to be added: {input_files}")
-                    context.update(input_files)
+                    context.update(files)
                     #self.logger.debug(f"Template content: {template_content}")
                     
                     # Replace template placeholders with correct input file keys
@@ -281,22 +286,17 @@ class ProjectWork:
                     # Format the template with the context
                     prompt = ""
                     safe_context = defaultdict(lambda: '[MISSING]', context)
-                    self.logger.debug(f"Safe context after adding input files: {safe_context}")
                     try:
                         prompt = formatter.safe_format(template_content, safe_context)
-                        self.logger.debug(f"Formatted prompt: {prompt[:100]}")
                     except Exception as e:
                         self.logger.error(f"Error formatting prompt: {e}")
                         raise
 
-                    
-                    self.logger.info(f"==-------== Prompt for {name}:\n{prompt[:200]}")
-                    
+                    #self.logger.info(f"==-------== Prompt for {name}:\n{prompt}")
                     
                     response = agent.get_chat_response(prompt)
 
-
-                    self.logger.info(f"=========== Response from {name}:\n{response}")
+                    #self.logger.info(f"=========== Response from {name}:\n{response}")
                     
                     # Log the ChatGPT interaction
                     self._log_chatgpt_interaction(f"{role}_{name}", prompt, response)
@@ -306,10 +306,11 @@ class ProjectWork:
                     # Generate meeting document for all phases
                     if agenda_template:
                         # Add the response to the context for the document
-                        context['response'] = response
-                        self.logger.info(f"Context for document generation: {context['response']}")
-                        self.logger.debug(f"Full context before document generation: {context}")
-                        self._generate_meeting_doc(phase, context)
+                        #context['response'] = response
+                        meeting_context = meeting_context + "----Next response: " + response
+            #self.logger.info(f"Context for document generation: {context['response']}")
+            self.logger.info(f"Full context before document generation: {meeting_context}")
+            self._generate_meeting_doc(phase, meeting_context)
                 
             return True
             
@@ -340,9 +341,10 @@ class ProjectWork:
             self.logger.error(f"Failed to load document meeting prompt: {str(e)}")
             raise
 
-    def _generate_meeting_doc(self, phase: str, context: dict) -> None:
+    def _generate_meeting_doc(self, phase: str, meeting_context: str) -> None:
         """Generate meeting document using template and response."""
         try:
+
             # Get meeting configuration
             meeting_config = self.config['templates']['meetings'].get(phase, {})
             if not meeting_config:
@@ -357,44 +359,55 @@ class ProjectWork:
             doc_types = self.config['templates'].get('document_types', {})
             if output_file in doc_types.get('deliverables', []):
                 output_dir = 'deliverables'
+                file_path = os.path.join(self.project_path, output_dir, output_file)
             elif output_file in doc_types.get('charters', []):
                 output_dir = 'charters'
-            elif output_file in doc_types.get('meetings', []):
-                output_dir = 'meetings'
-            else:
-                output_dir = 'meetings'  # Default to meetings directory
-            
-            # Get template path
-            module_dir = Path(__file__).parent
-            template_path = module_dir / "templates" / self.project_type / output_file
-            if not template_path.exists():
-                raise FileNotFoundError(f"Template file not found: {template_path}")
-            
-            # Read template
+                file_path = os.path.join(self.project_path, output_dir, output_file)
+            else: #elif output_file in doc_types.get('meetings', []):
+                output_dir = 'meetings'  # Default to meetings directory            
+                module_dir = Path(__file__).parent # Get file from templates directory
+                file_path = module_dir / "templates" / self.project_type / output_file
+                if not file_path.exists():
+                    raise FileNotFoundError(f"Template file not found: {file_path}")
+
+            # Read file
             try:
-                with open(template_path, 'r', encoding='utf-8') as f:
-                    self.logger.info(f"LOADING Template.")
-                    template = f.read()
-                    self.logger.info(f"LOADED----- Template:\n {repr(template[:1000])}")
-                self.logger.info(f"LOADED Template length: {len(template)}")
-                self.logger.info(f"LOADED Template type: {type(template)}")
-                self.logger.info(f"LOADED Template:\n{template[:200]}")  ########### FAILING HERE
+                template = self.dm.load_document(file_path)
+
+                # with open(template_path, 'r', encoding='utf-8') as f:
+                #     template = f.read()
+               # EMOJI and UNICODE character KILLER
+               # template = ''.join(c for c in template if c.isascii() or (c.isprintable() and not (0x1F300 <= ord(c) <= 0x1FAFF)))
+ 
+
+                # with open(template_path, 'rb') as f:
+                #     raw = f.read(200)
+                # self.logger.info("FIRST 200 BYTES (RAW HEX):")
+                # self.logger.info(raw.hex())
+                # self.logger.info("FIRST 200 BYTES (ASCII if printable):")
+                # self.logger.info(''.join(chr(b) if 32 <= b <= 126 else '.' for b in raw))
+                #safe_template = template.encode('utf-8', errors='replace').decode('utf-8')
+                #safe_template = template.replace('\r', '\\r').replace('\n', '\\n')
+
+                #self.logger.info(f"LOADED Template length: {len(template)}")
+                #self.logger.info(f"LOADED Template type: {type(template)}")
+                print(f"LOADED Template:\n{template}")  ########### FAILING HERE
             except Exception as e:
                 self.logger.error(f"Failed to read template file: {str(e)}")
-                self.logger.error(f"Template path: {template_path}")
+                self.logger.error(f"Template path: {file_path}")
                 raise
             
-            self.logger.info(f"SHOW Template Path:\n{template_path}")
-            self.logger.info(f"SHOW Template:\n{template[:1000]}...") ########### FAILING HERE
-            self.logger.info("FIELDS FOUND IN TEMPLATE:")
-            for _, field, _, _ in string.Formatter().parse(template):
-                if field:
-                    self.logger.info(" ->", field)
+            #self.logger.info(f"SHOW Template Path:\n{template_path}")
+            #self.logger.info(f"SHOW Template:\n{repr(template[:1000])}...") ########### FAILING HERE
+            # self.logger.info("FIELDS FOUND IN TEMPLATE:")
+            # for _, field, _, _ in string.Formatter().parse(template):
+            #     if field:
+            #         self.logger.info(" ->", field)
             # Get response from context
-            self.logger.info(f"Context keys available: {list(context.keys())}")
-            response = context.get('response', '')
+            #self.logger.info(f"Context keys available: {list(context.keys())}")
+            response = meeting_context #context.get('response') #, '')
             if not response:
-                self.logger.error(f"Context contents: {context}")
+                #self.logger.error(f"Context contents: {context}")
                 raise ValueError("No response found in context")
             self.logger.info(f"LOADED Response:\n{response}")
 
@@ -403,21 +416,14 @@ class ProjectWork:
                 "template": template,
                 "response": response
             }
-            
             safe_unified_context = defaultdict(lambda: '[MISSING]', unified_context)
             try:
                 unified_prompt = self.document_meeting_prompt['user'].format_map(safe_unified_context)
-                self.logger.debug(f"Formatted prompt: {unified_prompt[:100]}")
             except Exception as e:
                 self.logger.error(f"Error formatting prompt: {e}")
                 raise
 
-            #unified_prompt = self.document_meeting_prompt['user'].format(
-            #    template=template,
-            #    response=response
-            #)
-
-            self.logger.info(f"UNIFIED Prompt:\n{unified_prompt}")
+            self.logger.info(f"UNIFIED Prompt:\n{unified_prompt}") ######### FAILS (EMPTY)
             
             # Create messages for document worker
             messages = [
@@ -454,12 +460,14 @@ class ProjectWork:
             self.logger.info(f"Merged content length: {len(merged_content)}")
             self.logger.info(f"Merged content preview: {merged_content[:100]}...")
             
-            # Write to output file
-            output_path = os.path.join(self.project_path, output_dir, output_file)
-            os.makedirs(os.path.dirname(output_path), exist_ok=True)
+            #os.makedirs(os.path.dirname(output_path), exist_ok=True)
             
-            with open(output_path, 'w', encoding='utf-8') as f:
-                f.write(merged_content)
+            # with open(output_path, 'w', encoding='utf-8') as f:
+            #     f.write(merged_content)
+                 # Write to output file
+            output_path = os.path.join(self.project_path, output_dir, output_file)
+            
+            self.dm.save_document(output_path, merged_content)
             
             # Log file write details
             self.logger.info(f"Wrote merged content to: {output_path}")
@@ -492,10 +500,25 @@ class ProjectWork:
             self.logger.error(f"Failed to read meeting document: {str(e)}")
             return None
 
-    def _get_meeting_input(self, phase: str, meeting_config: Dict[str, Any]) -> Dict[str, Any]:
-        """Get input files for a meeting"""
-        input_files = {}
+    def _get_meeting_files(self, phase: str, meeting_config: Dict[str, Any]) -> Dict[str, Any]:
+        """Get input and output files for a meeting"""
+        files = {}
         module_dir = Path(__file__).parent
+        # Get output from config and handle comma-separated files
+        output_config = meeting_config.get('output', '')
+        if not output_config:
+            self.logger.warning(f"No output files specified for {phase}")
+            return files
+        
+        # Handle single output file
+        if isinstance(output_config, str):
+            self.logger.info(f"{phase}: single input {output_config}")
+            output_path = module_dir / "templates" / self.project_type / output_config
+            output_content = self._read_meeting_doc(output_path)
+            self.logger.info(f"Output_file Content: {output_content[:100]}")
+            if output_content:
+                self.logger.info(f"Output_file Content = TRUE")
+                files['output_files'] = output_content
         
         def get_input_path(input_file: str) -> Path:
             """Determine the correct input path based on file type"""
@@ -516,7 +539,7 @@ class ProjectWork:
         input_config = meeting_config.get('input', '')
         if not input_config:
             self.logger.warning(f"No input files specified for {phase}")
-            return input_files
+            return files
             
         # Split input into list if it's a comma-separated string
         if isinstance(input_config, str):
@@ -530,28 +553,28 @@ class ProjectWork:
         if isinstance(input_list, str):
             self.logger.info(f"{phase}: single input {input_list}")
             input_path = get_input_path(input_list)
-            content = self._read_meeting_doc(input_path)
-            self.logger.info(f"Input_file Content: {content[:100]}")
-            if content:
+            input_content = self._read_meeting_doc(input_path)
+            self.logger.info(f"Input_file Content: {input_content[:100]}")
+            if input_content:
                 self.logger.info(f"Input_file Content = TRUE")
-                input_files['input_files'] = content
+                files['input_files'] = input_content
                 
         # Handle multiple input files
         elif isinstance(input_list, list):
             self.logger.info(f"{phase}: {len(input_list)} inputs")
             for i, input_file in enumerate(input_list):
                 input_path = get_input_path(input_file)
-                content = self._read_meeting_doc(input_path)
-                if content:
-                    input_files[f'input_files_{i}'] = content
+                input_content = self._read_meeting_doc(input_path)
+                if input_content:
+                    files[f'input_files_{i}'] = input_content
                     self.logger.info(f"Added input file {i} content to context for {phase}")
                     
-        if not input_files:
+        if not files:
             self.logger.warning(f"No input files found for {phase}")
         else:
-            self.logger.info(f"{phase}: loaded {len(input_files)} inputs")
+            self.logger.info(f"{phase}: loaded {len(files)} inputs")
             
-        return input_files
+        return files
         
     def run_all_meetings(self) -> bool:
         """Run all meetings in configured order"""
@@ -595,3 +618,4 @@ class ProjectWork:
         except Exception as e:
             self.logger.error(f"Error validating completion: {e}")
             return False 
+        

@@ -1,6 +1,6 @@
 **Template File:** `code_meeting_strategy.md`
 
-### 🧱 Suggested Format for "Ragent Meeting Memos"
+### Suggested Format for "Ragent Meeting Memos"
 **meeting protocol** — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert's Rules of Order, but for agent engineers.
 Each topic becomes a section, and each section produces *atomic*, *reusable*, *agent-runnable* material.
 ---
@@ -11,14 +11,14 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 🎯 Goals
+## Goals
 - What is our objective?
 - What problems are we trying to solve?
 - What will success look like?
 
 ---
 
-## 🎯 Requirements
+## Requirements
 - What are the business objectives?
 - What are the outcomes, workflows, and end results desired?
 - What are we building or solving?
@@ -26,14 +26,14 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 🧱 Technical Constraints
+## Technical Constraints
 - Things that can't be done or will require significant resources
 - IT and cloud limitations
 - Performance, latency, and other technical constraints
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 - System Overview
 - Component Breakdown (with names)
 - Data flow or control logic summary
@@ -46,13 +46,13 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 🧪 Test Plan
+## Test Plan
 - High Level Test Plan Approach
 - Main Areas to test
 
 ---
 
-## ⚠️ Risks
+## Risks
 - Project risks
 - Style/narrative constraints
 - Test mode limitations
@@ -60,27 +60,27 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 🚦 Blockers
+## Blockers
 - Any unresolved technical or creative blockers?
 - Any forks in direction that need resolution?
 
 ---
 
-## 📂 Files
+## Files
 | Type | Path |
 |------|------|
 |      |      |
 
 ---
 
-## ✅ Assignments
+## Assignments
 | Agent | Task | Due |
 |-------|------|-----|
 |       |      |     |
 
 ---
 
-## ⏱️ Next Steps
+## Next Steps
 - Who's doing what?
 - What's the next deliverable?
 - When's the next checkpoint?

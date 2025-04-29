@@ -1,9 +1,9 @@
-# 📋 Meeting Agenda – Phase 4: Review (Code Project)
+# Meeting Agenda – Phase 4: Review (Code Project)
 
 This agenda guides the structured review of the final technical deliverables for a Code-mode project.
 
 ---
-### 🧱 Meeting protocol — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert’s Rules of Order, but for agent engineers.
+### Meeting protocol — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert’s Rules of Order, but for agent engineers.
 Each topic becomes a section, and each section produces *atomic*, *reusable*, *agent-runnable* material.
 ---
 
@@ -15,7 +15,7 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 🧾 Documents Reviewed
+## Documents Reviewed
 
 - `technical_design.md`
 - `pipeline.py`
@@ -24,7 +24,7 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 🎯 Agenda Topics
+## Agenda Topics
 
 1. **Deliverable Verification**
    - Confirm all deliverables from charter are present
@@ -46,7 +46,7 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## ✅ Review Outcome
+## Review Outcome
 
 | Topic                    | Decision         | Notes                           |
 |--------------------------|------------------|---------------------------------|
@@ -57,7 +57,7 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 📝 Action Items (if any)
+## Action Items (if any)
 
 - [ ] ...
 - [ ] ...

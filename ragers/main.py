@@ -21,6 +21,8 @@ class ProjectMain:
             
             # Initialize project
             project = ProjectStart()
+            
+            logging.info(f"Initializing project {project_name}")
             if not project.initialize_project(project_name, project_type, goals_file):
                 self.logger.error("Failed to initialize project")
                 return False

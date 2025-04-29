@@ -1,6 +1,6 @@
 **Template File:** `code_meeting_kickoff.md`
 
-### 🧱 Meeting protocol — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert’s Rules of Order, but for agent engineers.
+### Meeting protocol — a consistent set of prompts or headings — that Ragers follow every time they write a report. Think of it as a technical version of Robert’s Rules of Order, but for agent engineers.
 Each topic becomes a section, and each section produces *atomic*, *reusable*, *agent-runnable* material.
 ---
 
@@ -11,14 +11,14 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 🎯 GOALS
+## GOALS
 - What is our objective?
 - What problems are we trying to solve?
 - What will success look like?
 
 ---
 
-## 🎯 Requirements  
+## Requirements  
 - What are the business objectives?
 - What are the outcomes, workflows, and end results desired?
 - What are we building or solving?
@@ -26,14 +26,14 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 
 ---
 
-## 🧱 Technical Constraints and Limitations
+## Technical Constraints and Limitations
 ### Overview
 - Things that can't be done or will require significtion resources.
 - IT and cloud limitations
 = performance, latency, and other info
 
 ---
-## 🧱 Design and Architecture Considerations 
+## Design and Architecture Considerations 
 ### Overview
 - System Overview  
 - Component Breakdown (with names)  
@@ -50,13 +50,13 @@ Example:
 
 ---
 
-## 🧪 Test Plan  
+## Test Plan  
 - [ ] High Level Test Plan Approach
 - [ ] Main Areas to test
 
 ---
 
-#### 📊 **Risks & Constraints**
+#### **Risks & Constraints**
 - Project risks
 - Style/narrative constraints
 - Test mode limitations
@@ -64,13 +64,13 @@ Example:
 
 ---
 
-#### 🚦 **Blockers / Decisions Needed**
+#### **Blockers / Decisions Needed**
 - Any unresolved technical or creative blockers?
 - Any forks in direction that need resolution?
 
 ---
 
-## 📂 Files  
+## Files  
 EXAMPLES:
 - Prompt source: `book.goal`  
 - Script: `chapter_writer.py`  
@@ -78,7 +78,7 @@ EXAMPLES:
 
 ---
 
-## ✅ Assignments  
+## Assignments  
 EXAMPLE:
 | Agent | Task                   | Due   |
 |-------|------------------------|--------|
@@ -88,7 +88,7 @@ EXAMPLE:
 
 ---
 
-#### ⏱️ **Next Steps**
+#### **Next Steps**
 - Who’s doing what?
 - What’s the next deliverable?
 - When’s the next checkpoint?
