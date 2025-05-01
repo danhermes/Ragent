@@ -18,9 +18,10 @@ class ProjectConfig:
     phases: List[str]
     required_roles: List[str]
     project_structure: Dict[str, Any]
+    input_files: List[str]
     output_files: List[str]
-    completion_criteria: List[str]
-    meeting_rules: Dict[str, Any]
+    #completion_criteria: List[str]
+    #meeting_rules: Dict[str, Any]
     goals: List[str]
 
 class ProjectStart:
@@ -58,7 +59,7 @@ class ProjectStart:
             try:
                 with open(goals_file, 'r', encoding='utf-8') as f:
                     content = f.read()
-                    self.logger.debug(f"Goals file content: {content[:200]}...")  # Log first 200 chars
+                    #self.logger.debug(f"Goals file content: {content[:200]}...")  # Log first 200 chars
                     
                     # Look for Project Type section
                     if "## 🔧 Project Type" in content:
@@ -101,28 +102,34 @@ class ProjectStart:
             with open(self.config_file, 'r', encoding='utf-8') as f:
                 config = yaml.safe_load(f)
                 
-            # Validate required fields
-            required_fields = ['templates', 'phases', 'required_roles', 'project_structure', 
-                             'output_files', 'completion_criteria', 'meeting_rules']
-            for field in required_fields:
+            # Validate required top-level fields
+            top_level_fields = ['templates', 'phases', 'required_roles', 'project_structure']
+            for field in top_level_fields:
                 if field not in config:
-                    self.logger.error(f"Missing required field in config: {field}")
+                    self.logger.error(f"Missing top-level field: {field}")
                     return False
-                    
-            # Convert to strongly typed config
+
+            # Validate nested meeting fields (e.g., for 'strategy')
+            strategy = config.get('templates', {}).get('meetings', {}).get('strategy', {})
+            meeting_fields = ['input_files', 'output_files']
+            for field in meeting_fields:
+                if field not in strategy:
+                    self.logger.error(f"Missing meeting field in 'strategy': {field}")
+                    return False
+
+            # Create strongly typed config
             self.config = ProjectConfig(
                 project_type=self.project_type,
                 templates=config['templates'],
                 phases=config['phases'],
                 required_roles=config['required_roles'],
                 project_structure=config['project_structure'],
-                output_files=config['output_files'],
-                completion_criteria=config['completion_criteria'],
-                meeting_rules=config['meeting_rules'],
+                input_files=strategy['input_files'],
+                output_files=strategy['output_files'],
                 goals=[]
             )
             
-            self.logger.info(f"Loaded project configuration from {self.config_file}")
+            #self.logger.info(f"Loaded project configuration from {self.config_file}")
             return True
             
         except Exception as e:
@@ -163,7 +170,7 @@ class ProjectStart:
                         f.write("# Project Goals\n\n")
                         for goal in goals_list:
                             f.write(f"{goal}\n\n")
-                    self.logger.info(f"Wrote goals to {goal_path}")
+                    #self.logger.info(f"Wrote goals to {goal_path}")
                     
                 self._log_goal(goals_content)
                 self.logger.info("Successfully loaded and logged goals")

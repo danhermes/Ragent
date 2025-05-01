@@ -29,9 +29,30 @@ Each topic becomes a section, and each section produces *atomic*, *reusable*, *a
 |--------|------|
 |        |      |
 
+## Handoff Notes to Implementation
+
+- Each module described above should be implemented as a class or callable module.
+- Prefer functional interfaces where shared state is avoided unless explicitly noted.
+- Use consistent naming conventions across modules and methods.
+- Maintain compatibility with JSON-based I/O and CLI interaction using `argparse`.
+- Stub or placeholder methods must be marked with `[TODO]` and include comments describing expected behavior.
+- Unit test stubs should be generated alongside each method, with edge cases listed or outlined.
+- All inputs and outputs must be typed, documented, and validated where appropriate.
+
 ---
 
 ## Code Snippets
+```python
+def print():
+    stuff = [
+        "things and stuff"
+    ]
+
+    print(f"- {stuff}")
+...
+print()
+```
+
 ```yaml
 module:
   name: ""

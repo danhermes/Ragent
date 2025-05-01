@@ -3,16 +3,21 @@ description: Code-mode projects produce technical designs for software developme
   scripts, data files, and other artifacts. Managed via structured meetings and validated against
   a technical design deliverable.
 
-templates:
-  # Project-wide templates
-  goal: code_project_template.goal
-  charter: code_project_charter.md
-  technical_design: code_technical_design.md
+# Project structure configuration
+project_structure:
+  base_folder: projects/{project_name}/
+  subfolders:
+    - goals/
+    - charters/
+    - meetings/
+    - questions/
+    - deliverables/
+    - src/
+    - tests/
 
-  # Reference documents for all meetings
-  references:
-    - code_project_template.goal
-    - code_project_charter.md
+
+
+templates:
 
   # Document types
   document_types:
@@ -25,127 +30,66 @@ templates:
 
   # Meeting configurations
   meetings:
-    strategy:
-      agenda: code_strategy_meeting.md
-      # input: code_project_template.goal - formatted .goal
-      output: code_project_charter.md
-      attending:
+      strategy:
+        description: Define project goals, scope, risks, and success criteria.
+        agenda: code_strategy_meeting.md
+        attending:
         - Supervisor
         - Manager
-      agenda_sections:
-        - goals
-        - requirements
-        - technical_constraints
-        - architecture
-        - test_plan
-        - risks
-        - blockers
-        - files
-        - assignments
-        - next_steps
-      success_criteria:
-        - "code_project_charter.md is created and saved to disk"
-        - "All agenda sections are addressed in the output"
+        prompt_key: strategy
+         # input_files: code_project_template.goal - formatted /goal/.goal
+        input_files: goals.md
+        output_files: code_project_charter.md
 
-    kickoff:
-      agenda: code_kickoff_meeting.md
-      input: code_project_charter.md
-      output: code_project_charter.md
-      attending:
+      kickoff:
+        description: Discuss how to begin executing the project and clarify goals.
+        agenda: code_kickoff_meeting.md
+        attending:
         - Supervisor
         - Manager
         - Worker
-      agenda_sections:
-        - goals
-        - requirements
-        - technical_constraints
-        - architecture
-        - test_plan
-        - risks
-        - blockers
-        - files
-        - assignments
-        - next_steps
-      success_criteria:
-        - "code_project_charter.md is created and saved to disk"
-        - "All agenda sections are addressed in the output"
+        prompt_key: kickoff
+        input_files: code_project_charter.md
+        output_files: code_project_charter.md
 
-    design:
-      agenda: code_design_meeting.md
-      input: code_project_charter.md
-      output: code_design_meeting.md
-      attending:
+      design:
+        description: Translate strategic goals into system architecture.
+        agenda: code_design_meeting.md
+        attending:
         - Manager
         - Worker
-      agenda_sections:
-        - goals
-        - system_architecture
-        - code_snippets
-        - test_plan
-        - risks_constraints
-        - blockers_decisions
-        - files
-        - assignments
-        - next_steps
-      success_criteria:
-        - "code_meeting_architecture.md is created and saved to disk"
-        - "All agenda sections are addressed in the output"
+        prompt_key: design
+        input_files: code_project_charter.md
+        output_files: code_design_meeting.md
 
-    implementation:
-      agenda: code_implementation_meeting.md
-      input: code_design_meeting.md
-      output: code_implementation_meeting.md
-      attending:
+      implementation:
+        description: Expand architecture into technical module specifications.
+        agenda: code_implementation_meeting.md
+        attending:
         - Worker
-      agenda_sections:
-        - module_name
-        - purpose
-        - inputs_outputs
-        - interfaces_dependencies
-        - core_methods
-        - notes_questions
-      success_criteria:
-        - "code_meeting_modules.md is created and saved to disk"
-        - "All agenda sections are addressed in the output"
+        prompt_key: implementation
+        input_files: code_design_meeting.md
+        output_files: code_implementation_meeting.md
 
-    draft:
-      agenda: code_draft_meeting.md
-      input: code_design_meeting.md, code_implementation_meeting.md
-      output: code_technical_design.md
-      attending:
+      draft:
+        description: Merge outputs from all prior meetings into full technical design.
+        agenda: code_technical_design.md
+        attending:
         - Worker
-      agenda_sections:
-        - module_name
-        - purpose
-        - inputs_outputs
-        - interfaces_dependencies
-        - core_methods
-        - notes_questions
-      success_criteria:
-        - "code_meeting_modules.md is created and saved to disk"
-        - "All agenda sections are addressed in the output"
+        prompt_key: technical_design
+        input_files: code_project_charter.md, code_design_meeting.md, code_implementation_meeting.md
+        output_files: code_technical_design.md
 
-    review:
-      agenda: code_review_meeting.md
-      input: code_technical_design.md
-      output: code_technical_design.md
-      attending:
+      review:
+        description: Validate the full design document and highlight any final issues.
+        agenda: code_review_meeting.md
+        attending:
         - Supervisor
         - Manager
         - Worker
-      agenda_sections:
-        - goals
-        - final_review
-        - implementation_verification
-        - test_plan
-        - risks_constraints
-        - blockers_decisions
-        - files
-        - assignments
-        - next_steps
-      success_criteria:
-        - "code_technical_design.md is updated and saved to disk"
-        - "All agenda sections are addressed in the output"
+        prompt_key: review
+        input_files: code_technical_design.md
+        output_files: code_technical_design.md
 
 # Project phases
 phases:
@@ -193,46 +137,5 @@ required_roles:
     name: Dum
   Worker:
     name: Woz
-
-# Project structure configuration
-project_structure:
-  base_folder: projects/{project_name}/
-  subfolders:
-    - goals/
-    - charters/
-    - meetings/
-    - questions/
-    - deliverables/
-    - src/
-    - tests/
-
-# Output files
-output_files:
-  strategy:
-    - code_project_charter.md
-  design:
-    - code_meeting_architecture.md
-  implementation:
-    - code_meeting_modules.md
-  review:
-    - code_technical_design.md
-  common:
-    - code_conversations_*.md
-    - code_questions_*.md
-  technical_design: deliverables/code_technical_design.md
-
-# Completion criteria
-completion_criteria:
-  - All meetings completed
-  - Technical design reviewed and approved
-  - q_doc is closed
-  - Deliverables present in folder
-  - "Technical design document completed"
-  - "Implementation completed"
-  - "Tests passing"
-  - "All meetings documented"
-
-# Meeting rules
-meeting_rules:
-  min_attendees: 2
-  documentation_required: true
+  Documenter:
+    name: Toby

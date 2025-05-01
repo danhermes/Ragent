@@ -78,7 +78,10 @@ prompts:
     attending: ["Supervisor", "Managers"]
     output: "code_project_charter.md"
     length: 2 pages
-    template: |
+    template: | 
+
+      The purpose of this meeting is to generate the first draft of the **Project Strategy Charter** ({output}).
+  
       Meeting Rules:
       {meeting_rules}
 
@@ -86,7 +89,6 @@ prompts:
       {opening}
 
       Based on these high-level goals from {input}:
-      {history}
 
       Let's establish our project strategy. Focus on:
       1. What are the real reasons and goals of this project?
@@ -106,7 +108,7 @@ prompts:
       GOALS: {goals}
       Misc. Documentation: {rag_data}
 
-      After the discussion, create {output_files} with:
+      After the discussion, create **Project Strategy Charter** ({output}) with:
       1. Project overview and objectives
       2. Business goals with practical examples and case studies.
       3. Vision of how this project could change the industry, world, or customer experience.
@@ -119,6 +121,9 @@ prompts:
 
       Meeting Closing:
       {closing}
+      
+      Output Files Contents:
+      {output_files}
 
   kickoff:
     description: "Project kickoff meeting"
@@ -127,15 +132,17 @@ prompts:
     output: "code_project_charter.md"
     length: 5 pages
     template: |
+
+      The purpose of this meeting is to kick off the project, review the goals, 
+      and finalize the **Project Strategy Charter** ({output}).
+
       Meeting Rules:
       {meeting_rules}
 
       Meeting Opening:
       {opening}
 
-      Based on our strategy discussion and the project charter in {input}:
-      {history}
-
+      Based on our strategy discussion and the project charter in {input},
       Let's align on the project kickoff. Address:
       1. What are the real reasons and goals of this project?
       2. What are practical impacts this project could and should have?
@@ -154,7 +161,7 @@ prompts:
       GOALS: {goals}
       Misc. Documentation: {rag_data}
 
-      After the discussion, update {output_files} with:
+      After the discussion, update **Project Strategy Charter** ({output}) with:
       1. Refined project scope and objectives
       2. Detailed team roles and responsibilities
       3. Communication and development standards
@@ -167,15 +174,22 @@ prompts:
       {closing}
 
       Input Files: {input}
-      Input Files Contents: {input_files}
+      Input Files Contents: 
+      {input_files}
+
+      History:
+      {history}
 
   design:
     description: "Technical architecture planning"
     attending: ["Workers"]
     input: "code_project_charter.md"
-    output: "code_meeting_architecture.md"
-    length: 10 pages
+    output: "code_design_meeting.md"
+    length: 5 pages
     template: |
+
+      The purpose of this meeting is to generate the first draft of the **Technical Design** ({output}).
+
       Meeting Rules:
       {meeting_rules}
 
@@ -185,7 +199,7 @@ prompts:
       Based on our kickoff discussion and the project charter in {input}:
       {history}
 
-      Design the technical architecture focusing on:
+      Design the technical architecture and update **Technical Design** ({output}) focusing on:
       1. What design do we need to address the key overarching goals?
       2. What are the unique and disruptive aspects of this project?
       3. What are some other alternatives solutions in the field, their benefits and shortcomings?
@@ -195,6 +209,8 @@ prompts:
       7. API design and integration points
       8. Security considerations
       9. Development and deployment architecture
+      10. Getting the document to the appropriate length: {length}.
+
 
       Agenda:
       {agenda}
@@ -203,7 +219,7 @@ prompts:
       GOALS: {goals}
       Misc. Documentation: {rag_data}
 
-      After the discussion, create substantive and thorough (more than a few sentences per section) {output_files} with:
+      After the discussion, create substantive and thorough (more than a few sentences per section) {output} with:
       1. System architecture diagram
       2. Technology stack details
       3. Data flow diagrams
@@ -219,13 +235,18 @@ prompts:
       Input Files: {input}
       Input Files Contents: {input_files}
 
+      Output Files Contents:
+      {output_files}
+
   implementation:
     description: "Module design and implementation planning"
     attending: ["Workers"]
-    input: "code_meeting_architecture.md"
-    output: "code_meeting_modules.md"
-    length: 15 pages
+    input: "code_design_meeting.md"
+    output: "code_implementation_meeting.md"
+    length: 5 pages
     template: |
+
+      The purpose of this meeting is to generate the first draft of the **Module Design**.
       Meeting Rules:
       {meeting_rules}
 
@@ -235,7 +256,7 @@ prompts:
       Based on our architecture design in {input}:
       {history}
 
-      Detail the module implementation plan:
+      Detail the module implementation plan focusing on:
       1. Module breakdown and dependencies
       2. Class/component structure and relationships
       3. Interface definitions and contracts
@@ -257,6 +278,7 @@ prompts:
       2. Ensure equal detail for all modules
       3. Include code examples where applicable
       4. Document module-specific risks and mitigations
+      5. Getting the document to the appropriate length: {length}.
 
       Agenda:
       {agenda}
@@ -265,7 +287,7 @@ prompts:
       GOALS: {goals}
       Misc. Documentation: {rag_data}
 
-      After the discussion, create {output_files} with:
+      After the discussion, create substantive and thorough (more than a few sentences per section) **Module Design** ({output}) with:
       1. Module breakdown and dependency diagram
       2. Class/component diagrams
       3. Interface specifications
@@ -280,15 +302,21 @@ prompts:
       Input Files: {input}
       Input Files Contents: {input_files}
 
+      Output Files Contents:
+      {output_files}
+
   draft:
     description: "Technical design draft review"
     attending: ["Managers", "Workers"]
     input: 
-      - "code_meeting_architecture.md"
-      - "code_meeting_modules.md"
+      - "code_design_meeting.md"
+      - "code_implementation_meeting.md"
     output: "code_technical_design.md"
-    length: 13 pages
+    length: 15 pages
     template: |
+
+      The purpose of this meeting is to review the **Technical Design** and **Module Design** to create the final **Technical Design**.
+      
       Meeting Rules:
       {meeting_rules}
 
@@ -298,7 +326,7 @@ prompts:
       Previous discussions:
       {history}
 
-      Evaluate and provide feedback on:
+      Evaluate and provide feedback on the **Technical Design**:
       1. Architecture and module design completeness
       2. Technical feasibility and risks
       3. Resource requirements and constraints
@@ -311,8 +339,8 @@ prompts:
       {agenda}
 
       Module Specifications:
-      For each module identified in the architecture:
-      1. Provide complete detailed 1+ pageYAML specification including:
+      For each module in the **Module Design**:
+      1. Provide complete detailed 1+ page YAML specification including:
          - Module name and purpose
          - Input/output definitions
          - Interface contracts
@@ -329,7 +357,7 @@ prompts:
 
       We need to build out a technical spec of 10+ pages with detailed directions, tool recommendations, API integrations, and real-world examples and touchbpoints.
       
-      After the discussion, create substantive and thorough (more than a few sentences per section) {output_files} with:
+      After the discussion, create substantive and thorough (more than a few sentences per section) **Technical Design** ({output}) with:
       1. Complete technical architecture
       2. Detailed module specifications (all modules)
       3. Risk assessment and mitigation
@@ -338,7 +366,7 @@ prompts:
       6. Integration specifications
       7. Performance requirements
       8. Implementation timeline
-
+      9. Getting the document to the appropriate length: {length}.
       Meeting Closing:
       {closing}
 
@@ -347,13 +375,20 @@ prompts:
       Module Specifications: 
       {input_files_1}
 
+      Output Files Contents:
+       {output_files}
+
   review:
     description: "Final technical design review"
     attending: ["Supervisor", "Managers", "Workers"]
     input: "code_technical_design.md"
     output: "code_technical_design.md"
     length: 15 pages
-    template: |
+    template: | 
+
+      The purpose of this meeting is to review the final **Technical Design** ({output}) 
+       and getting it to the proper length: {length}.
+      
       Meeting Rules:
       {meeting_rules}
 
@@ -361,7 +396,6 @@ prompts:
       {opening}
 
       Final review of the technical design in {input}:
-      {history}
 
       Verify and approve:
       1. Goals and requirements alignment
@@ -381,7 +415,7 @@ prompts:
       GOALS: {goals}
       Misc. Documentation: {rag_data}
 
-      After the discussion, update {output_files} with:
+      After the discussion, update **Technical Design** ({output}) with:
       1. Final architecture approval
       2. Implementation feasibility confirmation
       3. Risk mitigation plan
@@ -398,11 +432,11 @@ prompts:
       Technical Specification Contents: 
       {input_files}
 
+      {history}
+
   document_meeting:
     system: "In addition to your other roles, you are a document generation assistant. Your task is to merge the template and response into a coherent document. Carry forward all module, code, and technical detail. Do not generalize or summarize technical detail such as code or architecture or APIs or module or classes or their contents, just format it into the new doc. Merge and organize, don't prune or delete."
-    user: "Template:\n{template}\n\nResponse:\n{response}\n\nPlease merge these into a coherent document, maintaining the template structure while incorporating the response content."
-
-
+    user: "Template:\n{template}\n\nResponse:\n{response}\n\nPlease merge this Template and Response into a coherent document, maintaining the template structure by replacing the questions and topic definitions, preserving existing goal-related technical content while incorporating the new response content."
 
  
 

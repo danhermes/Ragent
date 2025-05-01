@@ -75,8 +75,12 @@ class BaseAgent:
 
     def get_chat_response(self, text: str, messages: Optional[List[Dict[str, str]]] = None, file_path: Optional[str] = None) -> str:
         
-        model = "gpt-3.5-turbo" #"gpt-4"  # Use GPT-4 model
+        model = "gpt-4o"  # Use GPT-4 model # "gpt-3.5-turbo" #
         #TODO: Add support for other models, passed in by named and role agents
+        #Dum = RagerAgent(name="Dum", model="gpt-4o")
+        #Woz = RagerAgent(name="Woz", model="gpt-4o")
+        #Worker = RagerAgent(name="Worker", model="gpt-4-turbo")
+        #Piper = RagerAgent(name="Piper", model="gpt-4-mini")
 
         #"""Get response from configured LLM service"""
         # if not self.llm_service:
