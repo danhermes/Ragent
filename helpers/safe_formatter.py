@@ -5,6 +5,16 @@ from typing import Dict, Any, List, Optional
 import logging
 import re
 
+    # # Format the template with the context
+    # prompt = ""
+    # safe_context = defaultdict(lambda: '[MISSING]', context)
+    # try:
+    #     prompt = formatter.safe_format(template_content, safe_context)
+    # except Exception as e:
+    #     self.logger.error(f"Error formatting prompt: {e}")
+    #     raise
+
+
 class SafeFormatter:
     def __init__(self, missing_default=""):
         self.logger = logging.getLogger(__name__)

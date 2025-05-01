@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Optional, Dict
 from project_start import ProjectStart
 from project_work import ProjectWork
-from project_documents import ProjectDocuments
+#from project_documents import ProjectDocuments
 from utils.strict_logging import enable_strict_logging
 
 class ProjectMain:

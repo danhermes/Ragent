@@ -1,0 +1,264 @@
+prompts:
+  # Reference documents for all meetings
+  references:
+    - code_project_template.goal
+    - code_project_charter.md
+
+  # Common meeting rules and structure
+  meeting_rules:
+    # Standard meeting structure
+    structure:
+        opening:
+          - "Review agenda and objectives"
+          - "Check previous action items"
+          - "Confirm attendees and roles"
+        closing:
+          - "Summarize key decisions"
+          - "Document action items"
+          - "Confirm next steps"
+          - "Complete the output document based on the discussion"
+          - "Verify output document creation"
+          - "Verify all agenda sections are addressed"
+
+    # Success criteria verification
+    scale:
+      - Of small, medium, large, or enterprise scale - assume small - This is important.
+      - Plan, design, and document for a small scale project
+      - Assume small scale
+      - Avoid enterprise architecture and infrastructure
+      - No APIs, no databases, no servers, no infrastructure
+      - no microservices, no cloud resources
+
+    success_criteria:
+      - "Design for an amazing, unique, and disruptive solution that will change the field forever."
+      - "Output document is created/updated and saved to disk."
+      - "Document is substantive, containing more than a cursory two or three sentences per section."
+      - "Architecture and modules are documented in detail for use by a junior programmer."
+      - "Cover abstract tech design to real-world orgs, scenarios, third party tools and frameworks, and inspirational products on the market already."
+      - "Offer both practical recommendations and creative and disruptive ideas."
+      - "All agenda sections are completed and documented"
+      - "Action items are assigned and documented"
+      - "Next steps are clearly defined"
+      - "Blockers are identified and addressed"
+      - "Risks are documented and mitigated"
+
+    # Meeting conduct rules
+    conduct:
+      - "Stay focused on the agenda items"
+      - "One person speaks at a time"
+      - "Document all decisions and action items"
+      - "Ensure all attendees have opportunity to contribute"
+      - "Offer both practical recommendations and creative and disruptive ideas."
+      - "Keep discussions technical and solution-oriented"
+      - "Respect time limits for each topic"
+      - "Escalate blockers immediately"
+
+    # Document creation rules
+    documentation:
+      - "All documents must be in Markdown format"
+      - "Include clear section headers"
+      - "Use bullet points for lists"
+      - "Include diagrams where appropriate"
+      - "Reference previous documents when relevant"
+      - "Maintain consistent formatting"
+      - "Save documents in the correct project folder"
+      - "Verify all required sections are completed"
+      - "Document is substantive, containing more than a cursory two or three sentences per section."
+      - "Architecture and modules are documented in detail for use by a junior programmer."
+      - "Include success criteria verification in closing"
+
+    no_schedule:
+      - This documentation is about the technical design of the project, not schedule or project plan.  
+      - Do not schedule anything, just document it
+      - Do not allocate resources to the schedule
+      - Do not assign weeks, months, or years to the project
+        
+  strategy:
+    description: "Initial strategy meeting"
+    attending: ["Supervisor", "Managers"]
+    output: "code_project_charter.md"
+    length: 2 pages
+    template: | 
+
+      # Strategy Meeting
+
+      ## Goals
+        {goal_summary}
+
+      ## Output Document
+        {output}
+      ### Project Charter Document:
+        {output_files}
+
+      ## Task
+      Using the documents above, synthesize a Project Charter.
+      - Refine weak areas
+      - Add traceability from goals to components
+      - Fill structural gaps and propose improvements
+
+      Use markdown format. Add [TODO]s where content is missing or unresolved.
+
+  kickoff:
+    description: "Project kickoff meeting"
+    attending: ["Supervisor", "Managers", "Workers"]
+    input: "code_project_charter.md"
+    output: "code_project_charter.md"
+    length: 5 pages
+    template: |
+
+      # Kickoff Meeting
+
+      ## Goals
+        {goal_summary}
+
+      ## Input Document
+        {input}
+      ### Project Charter Document:
+        {input_files}
+
+      ## Output Document
+        {output}
+      ### Project Charter Document:
+        {output_files}
+
+      ## Task
+      Using the documents above, finalize a Project Charter.
+      - Refine weak areas
+      - Add traceability from goals to components
+      - Fill structural gaps and propose improvements
+
+      Use markdown format. Add [TODO]s where content is missing or unresolved.
+
+  design:
+    description: "Technical architecture planning"
+    attending: ["Workers"]
+    input: "code_project_charter.md"
+    output: "code_design_meeting.md"
+    length: 5 pages
+    template: |
+
+      # Technical Design Meeting
+
+      ## Goals
+        {goal_summary}
+
+      ## Input Document 
+        {input}
+      ### Project Charter Document:
+        {input_files}
+
+      ## Output Document 
+        {output}
+      ### Technical Design Document:
+        {output_files}
+
+      ## Task
+      Using the documents above, synthesize a Technical Design Document.
+      - Refine weak areas
+      - Add traceability from goals to components
+      - Fill structural gaps and propose improvements
+
+      Use markdown format. Add [TODO]s where content is missing or unresolved.
+
+  implementation:
+    description: "Module design and implementation planning"
+    attending: ["Workers"]
+    input: "code_design_meeting.md"
+    output: "code_implementation_meeting.md"
+    length: 5 pages
+    template: |
+
+      # Technical Implementation Meeting
+
+      ## Goals
+        {goal_summary}
+
+      ## Input Document 
+        {input}
+      ### Technical Design Document:
+        {input_files}
+
+      ## Output Document 
+        {output}
+      ### Technical Implementation Document:
+        {output_files}
+
+      ## Task
+      Using the documents above, synthesize a Technical Implementation Document.
+      - Refine weak areas
+      - Add traceability from goals to components
+      - Fill structural gaps and propose improvements
+
+      Use markdown format. Add [TODO]s where content is missing or unresolved.
+
+  draft:
+    description: "Technical design draft review"
+    attending: ["Managers", "Workers"]
+    input: 
+      - "code_design_meeting.md"
+      - "code_implementation_meeting.md"
+    output: "code_technical_design.md"
+    length: 15 pages
+    template: |
+
+      # Technical Specification Meeting
+
+      ## Goals
+        {goal_summary}
+
+      ## Input Document 
+        {input}
+      ### Technical Design Document:
+        {input_files_0}
+
+      ## Input Document 
+        #{input}
+      ### Technical Design Document:
+        {input_files_1}
+
+      ## Output Document 
+        {output}
+      ### Technical Implementation Document:
+        {output_files}
+
+      ## Task
+      Using the documents above, synthsize a Technical Specification Document.
+      - Refine weak areas
+      - Add traceability from goals to components
+      - Fill structural gaps and propose improvements
+
+      Use markdown format. Add [TODO]s where content is missing or unresolved.
+
+  review:
+    description: "Final technical design review"
+    attending: ["Supervisor", "Managers", "Workers"]
+    input: "code_technical_design.md"
+    output: "code_technical_design.md"
+    length: 15 pages
+    template: | 
+
+      # Technical Specification Review Meeting
+
+      ## Goals
+        {goal_summary}
+
+      ## Input Document 
+        {input}
+      ### Technical Design Document:
+        {input_files}
+
+      ## Task
+      Using the documents above, synthsize a Technical Specification Document.
+      - Refine weak areas
+      - Add traceability from goals to components
+      - Fill structural gaps and propose improvements
+
+      Use markdown format. Add [TODO]s where content is missing or unresolved.
+
+  document_meeting:
+    system: "In addition to your other roles, you are a document generation assistant. Your task is to merge the template and response into a coherent document. Carry forward all module, code, and technical detail. Do not generalize or summarize technical detail such as code or architecture or APIs or module or classes or their contents, just format it into the new doc. Merge and organize, don't prune or delete."
+    user: "Template:\n{template}\n\nResponse:\n{response}\n\nPlease merge this Template and Response into a coherent document, maintaining the template structure by replacing the questions and topic definitions, preserving existing goal-related technical content while incorporating the new response content."
+
+ 
+
+  

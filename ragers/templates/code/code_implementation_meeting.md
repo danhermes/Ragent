@@ -30,8 +30,6 @@ Meeting approach: Define all modules. Loop thru and discuss each in turn.
 
 EXAMPLES:
 
----
-
 ## Module: ChapterWriter
 
 **Purpose:**  
@@ -78,7 +76,6 @@ class ChapterWriter:
 - Should formatting logic be separate from generation?
 - How to persist template memory across longer books?
 
----
 
 ## Module: Logger
 
@@ -109,8 +106,6 @@ def setup_logging(self):
 - Should logs be JSON for later parsing?  
 - Add logging level (DEBUG, INFO, ERROR)?
 
----
-
 ## Module: PromptRefactorer (Planned)
 
 **Purpose:**  
@@ -131,7 +126,6 @@ _Not yet implemented_
 - Should this be a callable LLM tool?  
 - Where should tone-checking live?
 
----
 
 ## Module: Main Runner
 

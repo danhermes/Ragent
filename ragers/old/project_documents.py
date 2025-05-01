@@ -87,7 +87,7 @@ class ProjectDocuments:
             # Format template with context
             document = formatter.safe_format(template, full_context)
             
-            self.logger.info(f"Generated {doc_type} document: {document}")
+            #self.logger.info(f"Generated {doc_type} document: {document}")
             if doc_type == 'code_design_meeting':
                 self.design_doc = document
             elif doc_type == 'code_implementation_meeting':
