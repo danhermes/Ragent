@@ -1,0 +1,66 @@
+# Code – Goal Template
+
+**Template File:** `code_project_template.goal`
+
+# Code Project Goals
+
+This file defines the high-level vision, context, and execution strategy for a Code-mode Ragent project. It serves as the input to initialize planning, workflows, and meetings.
+
+---
+
+## Project Name
+<insert short identifier or working name>
+
+---
+
+## Summary
+A brief paragraph summarizing what this project will achieve, what it creates, and what problem it solves.
+
+---
+
+## Project Type
+`Code`
+
+---
+
+## Related Goals or Projects
+List any related systems, prior work, documents, or upstream/downstream dependencies.
+
+---
+
+## Field / Domain Context
+Define the broader technical or business context this project fits within (e.g. DevOps, Data Engineering, Backend Infrastructure, Finance Automation).
+
+---
+
+## Primary Objectives
+- <clear, measurable objective #1>
+- <objective #2>
+- <objective #3>
+
+---
+
+## Expected Deliverables
+Describe the types of artifacts expected (code modules, libraries, packages, scripts, tests, design docs, etc.)
+
+---
+
+## Tooling Required
+List systems and tools needed to fulfill the goal. For Code projects, this may include AutoCoder, pytest, GitHub CLI, etc.
+
+---
+
+## Stakeholder Notes
+Include stakeholder expectations, nonfunctional concerns (e.g., performance, testability), or additional background.
+
+---
+
+## Known Constraints
+Mention technical, runtime, data, organizational, or platform-specific constraints.
+
+---
+
+## Definition of Done
+Specify what conditions must be met for this goal to be marked complete and successful.
+
+---

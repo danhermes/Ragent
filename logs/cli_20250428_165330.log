@@ -1,0 +1,485 @@
+2025-04-28 16:53:30,039 - root - INFO - Starting YAML generation for tool: n8n
+2025-04-28 16:53:30,040 - root - INFO - Input path: ./apis/yamlgen/projects/auto/automate_technical_design.md
+2025-04-28 16:53:30,040 - root - INFO - Enhance mode: True
+2025-04-28 16:53:30,040 - root - INFO - Output path: apis\yamlgen\generated_yamls\n8n.yaml
+2025-04-28 16:53:30,041 - root - INFO - Step 1: Parsing input with Piper
+2025-04-28 16:53:30,599 - helpers.call_ChatGPT - INFO - CHATGPT PARSED Content:
+You are a JSON spec structuring assistant.
+
+Given the following messy Markdown document, extract and organize it into a clean JSON dictionary with these fields as keys:
+
+- workflow_name (Workflow Name)
+- purpose_goal (Purpose / Goal)
+- workflow_overview (Workflow Overview)
+- trigger_node (Trigger)
+- inputs (Inputs)
+- outputs (Outputs)
+- apps_services_apis (Apps, Services, APIs)
+- nodes (Nodes {node_name, node_type, description, params})
+- connections (Connections {source_node, target_node})
+- workflow_settings (Workflow Settings {key, value})
+- test_scenarios (Test Scenarios {condition, expected_result})
+- authentication_permissions (Authentication & Permissions)
+- completion_checklist (Completion Checklist)
+- example_node_layout (Example Node Layout {node1, node2, node3})
+
+Each key must be present in the JSON. If information is missing for a key, use `null`.
+
+Markdown delimiters include but are not limited to:':','➔','-','➔'. Here is the Markdown document:
+
+# 🧠 Technical Design – n8n Workflow Project
+
+---
+
+## 📛 Workflow Name
+Dropbox Daily File Processor
+
+---
+
+## 🎯 Purpose / Goal
+Scan a specific Dropbox folder daily and send a summary email listing all new PDF files.
+
+---
+
+## 🧩 Workflow Overview
+Triggered every morning, the workflow will connect to Dropbox, list files in a target folder, filter for PDFs, and email a summary of file names to a recipient.
+
+---
+
+## 📥 Trigger
+scheduleTrigger
+
+---
+
+## 📂 Inputs
+- Daily scheduled time (6 AM)
+- Dropbox folder path: `/DailyReports/`
+
+---
+
+## 📤 Outputs
+- Email notification listing newly found PDF files.
+
+---
+
+## 🔗 Apps, Services, APIs
+- Dropbox API
+- SMTP Email Service
+
+---
+
+## 🧠 Core Nodes
+- Schedule Trigger: scheduleTrigger - Activates daily at 6 AM.
+- Dropbox List Files: dropboxList - Lists files from `/DailyReports/`.
+- Filter Files: filter - Filters for `.pdf` files only.
+- Email Sender: emailSend - Sends an email listing the filtered files.
+
+---
+
+## 🔄 Connections
+- Schedule Trigger ➔ Dropbox List Files
+- Dropbox List Files ➔ Filter Files
+- Filter Files ➔ Email Sender
+
+---
+
+## 🛠 Workflow Settings (Optional)
+- Timezone: America/New_York
+- Save successful executions: true
+
+---
+
+## 🧪 Test Scenarios
+1. Folder contains 5 PDFs ➔ Email lists 5 file names.
+2. Folder is empty ➔ Email states \"No files found today.\"
+3. Dropbox API call fails ➔ Error is logged and workflow stops.
+
+---
+
+## 🔒 Authentication & Permissions
+- Dropbox: Dropbox OAuth2 API
+- SMTP Email: SMTP Credentials
+
+---
+
+## ✅ Completion Checklist
+- [ ] Workflow triggers reliably every morning.
+- [ ] Only `.pdf` files are selected and listed.
+- [ ] Summary email is formatted and sent successfully.
+- [ ] API errors are logged correctly.
+- [ ] Stakeholder approval obtained after successful tests.
+
+---
+
+## 📄 Example Node Layout (Optional Appendix)
+- Schedule Trigger ➔ Dropbox List Files ➔ Filter Files ➔ Email Sender
+
+---
+
+
+Output ONLY valid JSON.
+2025-04-28 16:53:30,617 - openai._base_client - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'json_data': {'messages': [{'role': 'user', 'content': 'You are a JSON spec structuring assistant.\n\nGiven the following messy Markdown document, extract and organize it into a clean JSON dictionary with these fields as keys:\n\n- workflow_name (Workflow Name)\n- purpose_goal (Purpose / Goal)\n- workflow_overview (Workflow Overview)\n- trigger_node (Trigger)\n- inputs (Inputs)\n- outputs (Outputs)\n- apps_services_apis (Apps, Services, APIs)\n- nodes (Nodes {node_name, node_type, description, params})\n- connections (Connections {source_node, target_node})\n- workflow_settings (Workflow Settings {key, value})\n- test_scenarios (Test Scenarios {condition, expected_result})\n- authentication_permissions (Authentication & Permissions)\n- completion_checklist (Completion Checklist)\n- example_node_layout (Example Node Layout {node1, node2, node3})\n\nEach key must be present in the JSON. If information is missing for a key, use `null`.\n\nMarkdown delimiters include but are not limited to:\':\',\'➔\',\'-\',\'➔\'. Here is the Markdown document:\n\n# 🧠 Technical Design – n8n Workflow Project\n\n---\n\n## 📛 Workflow Name\nDropbox Daily File Processor\n\n---\n\n## 🎯 Purpose / Goal\nScan a specific Dropbox folder daily and send a summary email listing all new PDF files.\n\n---\n\n## 🧩 Workflow Overview\nTriggered every morning, the workflow will connect to Dropbox, list files in a target folder, filter for PDFs, and email a summary of file names to a recipient.\n\n---\n\n## 📥 Trigger\nscheduleTrigger\n\n---\n\n## 📂 Inputs\n- Daily scheduled time (6 AM)\n- Dropbox folder path: `/DailyReports/`\n\n---\n\n## 📤 Outputs\n- Email notification listing newly found PDF files.\n\n---\n\n## 🔗 Apps, Services, APIs\n- Dropbox API\n- SMTP Email Service\n\n---\n\n## 🧠 Core Nodes\n- Schedule Trigger: scheduleTrigger - Activates daily at 6 AM.\n- Dropbox List Files: dropboxList - Lists files from `/DailyReports/`.\n- Filter Files: filter - Filters for `.pdf` files only.\n- Email Sender: emailSend - Sends an email listing the filtered files.\n\n---\n\n## 🔄 Connections\n- Schedule Trigger ➔ Dropbox List Files\n- Dropbox List Files ➔ Filter Files\n- Filter Files ➔ Email Sender\n\n---\n\n## 🛠 Workflow Settings (Optional)\n- Timezone: America/New_York\n- Save successful executions: true\n\n---\n\n## 🧪 Test Scenarios\n1. Folder contains 5 PDFs ➔ Email lists 5 file names.\n2. Folder is empty ➔ Email states \\"No files found today.\\"\n3. Dropbox API call fails ➔ Error is logged and workflow stops.\n\n---\n\n## 🔒 Authentication & Permissions\n- Dropbox: Dropbox OAuth2 API\n- SMTP Email: SMTP Credentials\n\n---\n\n## ✅ Completion Checklist\n- [ ] Workflow triggers reliably every morning.\n- [ ] Only `.pdf` files are selected and listed.\n- [ ] Summary email is formatted and sent successfully.\n- [ ] API errors are logged correctly.\n- [ ] Stakeholder approval obtained after successful tests.\n\n---\n\n## 📄 Example Node Layout (Optional Appendix)\n- Schedule Trigger ➔ Dropbox List Files ➔ Filter Files ➔ Email Sender\n\n---\n\n\nOutput ONLY valid JSON.'}], 'model': 'gpt-3.5-turbo'}}
+2025-04-28 16:53:30,643 - openai._base_client - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2025-04-28 16:53:30,644 - httpcore.connection - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2025-04-28 16:53:30,768 - httpcore.connection - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x00000187096024A0>
+2025-04-28 16:53:30,768 - httpcore.connection - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x00000187091D6CC0> server_hostname='api.openai.com' timeout=5.0
+2025-04-28 16:53:30,789 - httpcore.connection - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x0000018709602530>
+2025-04-28 16:53:30,789 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-04-28 16:53:30,790 - httpcore.http11 - DEBUG - send_request_headers.complete
+2025-04-28 16:53:30,790 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-04-28 16:53:30,791 - httpcore.http11 - DEBUG - send_request_body.complete
+2025-04-28 16:53:30,791 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-04-28 16:53:39,706 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Mon, 28 Apr 2025 20:53:37 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-expose-headers', b'X-Request-ID'), (b'openai-organization', b'lexicon-systems'), (b'openai-processing-ms', b'8811'), (b'openai-version', b'2020-10-01'), (b'x-ratelimit-limit-requests', b'10000'), (b'x-ratelimit-limit-tokens', b'200000'), (b'x-ratelimit-remaining-requests', b'9999'), (b'x-ratelimit-remaining-tokens', b'199257'), (b'x-ratelimit-reset-requests', b'8.64s'), (b'x-ratelimit-reset-tokens', b'222ms'), (b'x-request-id', b'req_a70b17ccddce5fbec8d54447654a016c'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'cf-cache-status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=_9aNVpasxmruG96fwNNzF1hnZDIRc5s0mkpZziUAs6w-1745873617-1.0.1.1-juflKlVBrm9dQklWNHQxgNPje1fSRIszihyv9Jsr9hxQeDZz34shOew7CvHb_kJhc0uBqUdqMrlPRt1fNr3Kb421NeQpyfIyav2ryucRdVs; path=/; expires=Mon, 28-Apr-25 21:23:37 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=1JyB5f1z9O74l2UgdZB7tIuYXQ2Y7klftpPeEz55c2w-1745873617095-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'937973033d759045-BOS'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2025-04-28 16:53:39,710 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-28 16:53:39,710 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-04-28 16:53:39,711 - httpcore.http11 - DEBUG - receive_response_body.complete
+2025-04-28 16:53:39,711 - httpcore.http11 - DEBUG - response_closed.started
+2025-04-28 16:53:39,712 - httpcore.http11 - DEBUG - response_closed.complete
+2025-04-28 16:53:39,712 - openai._base_client - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers([('date', 'Mon, 28 Apr 2025 20:53:37 GMT'), ('content-type', 'application/json'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('access-control-expose-headers', 'X-Request-ID'), ('openai-organization', 'lexicon-systems'), ('openai-processing-ms', '8811'), ('openai-version', '2020-10-01'), ('x-ratelimit-limit-requests', '10000'), ('x-ratelimit-limit-tokens', '200000'), ('x-ratelimit-remaining-requests', '9999'), ('x-ratelimit-remaining-tokens', '199257'), ('x-ratelimit-reset-requests', '8.64s'), ('x-ratelimit-reset-tokens', '222ms'), ('x-request-id', 'req_a70b17ccddce5fbec8d54447654a016c'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=_9aNVpasxmruG96fwNNzF1hnZDIRc5s0mkpZziUAs6w-1745873617-1.0.1.1-juflKlVBrm9dQklWNHQxgNPje1fSRIszihyv9Jsr9hxQeDZz34shOew7CvHb_kJhc0uBqUdqMrlPRt1fNr3Kb421NeQpyfIyav2ryucRdVs; path=/; expires=Mon, 28-Apr-25 21:23:37 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=1JyB5f1z9O74l2UgdZB7tIuYXQ2Y7klftpPeEz55c2w-1745873617095-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '937973033d759045-BOS'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2025-04-28 16:53:39,714 - openai._base_client - DEBUG - request_id: req_a70b17ccddce5fbec8d54447654a016c
+2025-04-28 16:53:39,719 - root - INFO - Successfully parsed structured spec from GPT response.
+2025-04-28 16:53:39,720 - root - INFO - Piper parsed spec: {
+  "workflow_name": "Dropbox Daily File Processor",
+  "purpose_goal": "Scan a specific Dropbox folder daily and send a summary email listing all new PDF files.",
+  "workflow_overview": "Triggered every morning, the workflow will connect to Dropbox, list files in a target folder, filter for PDFs, and email a summary of file names to a recipient.",
+  "trigger_node": "scheduleTrigger",
+  "inputs": [
+    "Daily scheduled time (6 AM)",
+    "Dropbox folder path: `/DailyReports/`"
+  ],
+  "outputs": [
+    "Email notification listing newly found PDF files."
+  ],
+  "apps_services_apis": [
+    "Dropbox API",
+    "SMTP Email Service"
+  ],
+  "nodes": [
+    {
+      "node_name": "Schedule Trigger",
+      "node_type": "scheduleTrigger",
+      "description": "Activates daily at 6 AM.",
+      "params": null
+    },
+    {
+      "node_name": "Dropbox List Files",
+      "node_type": "dropboxList",
+      "description": "Lists files from `/DailyReports/`.",
+      "params": null
+    },
+    {
+      "node_name": "Filter Files",
+      "node_type": "filter",
+      "description": "Filters for `.pdf` files only.",
+      "params": null
+    },
+    {
+      "node_name": "Email Sender",
+      "node_type": "emailSend",
+      "description": "Sends an email listing the filtered files.",
+      "params": null
+    }
+  ],
+  "connections": [
+    {
+      "source_node": "Schedule Trigger",
+      "target_node": "Dropbox List Files"
+    },
+    {
+      "source_node": "Dropbox List Files",
+      "target_node": "Filter Files"
+    },
+    {
+      "source_node": "Filter Files",
+      "target_node": "Email Sender"
+    }
+  ],
+  "workflow_settings": [
+    {
+      "key": "Timezone",
+      "value": "America/New_York"
+    },
+    {
+      "key": "Save successful executions",
+      "value": true
+    }
+  ],
+  "test_scenarios": [
+    {
+      "condition": "Folder contains 5 PDFs",
+      "expected_result": "Email lists 5 file names."
+    },
+    {
+      "condition": "Folder is empty",
+      "expected_result": "Email states \"No files found today.\""
+    },
+    {
+      "condition": "Dropbox API call fails",
+      "expected_result": "Error is logged and workflow stops."
+    }
+  ],
+  "authentication_permissions": {
+    "Dropbox": "Dropbox OAuth2 API",
+    "SMTP Email": "SMTP Credentials"
+  },
+  "completion_checklist": [
+    {
+      "task": "Workflow triggers reliably every morning.",
+      "completed": false
+    },
+    {
+      "task": "Only `.pdf` files are selected and listed.",
+      "completed": false
+    },
+    {
+      "task": "Summary email is formatted and sent successfully.",
+      "completed": false
+    },
+    {
+      "task": "API errors are logged correctly.",
+      "completed": false
+    },
+    {
+      "task": "Stakeholder approval obtained after successful tests.",
+      "completed": false
+    }
+  ],
+  "example_node_layout": {
+    "node1": "Schedule Trigger",
+    "node2": "Dropbox List Files",
+    "node3": "Filter Files"
+  }
+}
+2025-04-28 16:53:39,729 - root - INFO - Step 2: Enhancing spec with Elias
+2025-04-28 16:53:39,730 - root - INFO - Enhancing spec via OpenAI.
+2025-04-28 16:53:40,215 - helpers.call_ChatGPT - INFO - CHATGPT PARSED Content:
+You are a workflow designer expert.
+Enhance this automation spec by:
+- Proposing additional nodes if missing
+- Clarifying vague steps
+- Strengthening connections and logic
+
+Here is the current structured spec:
+{'workflow_name': 'Dropbox Daily File Processor', 'purpose_goal': 'Scan a specific Dropbox folder daily and send a summary email listing all new PDF files.', 'workflow_overview': 'Triggered every morning, the workflow will connect to Dropbox, list files in a target folder, filter for PDFs, and email a summary of file names to a recipient.', 'trigger_node': 'scheduleTrigger', 'inputs': ['Daily scheduled time (6 AM)', 'Dropbox folder path: `/DailyReports/`'], 'outputs': ['Email notification listing newly found PDF files.'], 'apps_services_apis': ['Dropbox API', 'SMTP Email Service'], 'nodes': [{'node_name': 'Schedule Trigger', 'node_type': 'scheduleTrigger', 'description': 'Activates daily at 6 AM.', 'params': None}, {'node_name': 'Dropbox List Files', 'node_type': 'dropboxList', 'description': 'Lists files from `/DailyReports/`.', 'params': None}, {'node_name': 'Filter Files', 'node_type': 'filter', 'description': 'Filters for `.pdf` files only.', 'params': None}, {'node_name': 'Email Sender', 'node_type': 'emailSend', 'description': 'Sends an email listing the filtered files.', 'params': None}], 'connections': [{'source_node': 'Schedule Trigger', 'target_node': 'Dropbox List Files'}, {'source_node': 'Dropbox List Files', 'target_node': 'Filter Files'}, {'source_node': 'Filter Files', 'target_node': 'Email Sender'}], 'workflow_settings': [{'key': 'Timezone', 'value': 'America/New_York'}, {'key': 'Save successful executions', 'value': True}], 'test_scenarios': [{'condition': 'Folder contains 5 PDFs', 'expected_result': 'Email lists 5 file names.'}, {'condition': 'Folder is empty', 'expected_result': 'Email states "No files found today."'}, {'condition': 'Dropbox API call fails', 'expected_result': 'Error is logged and workflow stops.'}], 'authentication_permissions': {'Dropbox': 'Dropbox OAuth2 API', 'SMTP Email': 'SMTP Credentials'}, 'completion_checklist': [{'task': 'Workflow triggers reliably every morning.', 'completed': False}, {'task': 'Only `.pdf` files are selected and listed.', 'completed': False}, {'task': 'Summary email is formatted and sent successfully.', 'completed': False}, {'task': 'API errors are logged correctly.', 'completed': False}, {'task': 'Stakeholder approval obtained after successful tests.', 'completed': False}], 'example_node_layout': {'node1': 'Schedule Trigger', 'node2': 'Dropbox List Files', 'node3': 'Filter Files'}}
+
+Return the improved spec in JSON format.
+2025-04-28 16:53:40,222 - openai._base_client - DEBUG - Request options: {'method': 'post', 'url': '/chat/completions', 'files': None, 'json_data': {'messages': [{'role': 'user', 'content': 'You are a workflow designer expert.\nEnhance this automation spec by:\n- Proposing additional nodes if missing\n- Clarifying vague steps\n- Strengthening connections and logic\n\nHere is the current structured spec:\n{\'workflow_name\': \'Dropbox Daily File Processor\', \'purpose_goal\': \'Scan a specific Dropbox folder daily and send a summary email listing all new PDF files.\', \'workflow_overview\': \'Triggered every morning, the workflow will connect to Dropbox, list files in a target folder, filter for PDFs, and email a summary of file names to a recipient.\', \'trigger_node\': \'scheduleTrigger\', \'inputs\': [\'Daily scheduled time (6 AM)\', \'Dropbox folder path: `/DailyReports/`\'], \'outputs\': [\'Email notification listing newly found PDF files.\'], \'apps_services_apis\': [\'Dropbox API\', \'SMTP Email Service\'], \'nodes\': [{\'node_name\': \'Schedule Trigger\', \'node_type\': \'scheduleTrigger\', \'description\': \'Activates daily at 6 AM.\', \'params\': None}, {\'node_name\': \'Dropbox List Files\', \'node_type\': \'dropboxList\', \'description\': \'Lists files from `/DailyReports/`.\', \'params\': None}, {\'node_name\': \'Filter Files\', \'node_type\': \'filter\', \'description\': \'Filters for `.pdf` files only.\', \'params\': None}, {\'node_name\': \'Email Sender\', \'node_type\': \'emailSend\', \'description\': \'Sends an email listing the filtered files.\', \'params\': None}], \'connections\': [{\'source_node\': \'Schedule Trigger\', \'target_node\': \'Dropbox List Files\'}, {\'source_node\': \'Dropbox List Files\', \'target_node\': \'Filter Files\'}, {\'source_node\': \'Filter Files\', \'target_node\': \'Email Sender\'}], \'workflow_settings\': [{\'key\': \'Timezone\', \'value\': \'America/New_York\'}, {\'key\': \'Save successful executions\', \'value\': True}], \'test_scenarios\': [{\'condition\': \'Folder contains 5 PDFs\', \'expected_result\': \'Email lists 5 file names.\'}, {\'condition\': \'Folder is empty\', \'expected_result\': \'Email states "No files found today."\'}, {\'condition\': \'Dropbox API call fails\', \'expected_result\': \'Error is logged and workflow stops.\'}], \'authentication_permissions\': {\'Dropbox\': \'Dropbox OAuth2 API\', \'SMTP Email\': \'SMTP Credentials\'}, \'completion_checklist\': [{\'task\': \'Workflow triggers reliably every morning.\', \'completed\': False}, {\'task\': \'Only `.pdf` files are selected and listed.\', \'completed\': False}, {\'task\': \'Summary email is formatted and sent successfully.\', \'completed\': False}, {\'task\': \'API errors are logged correctly.\', \'completed\': False}, {\'task\': \'Stakeholder approval obtained after successful tests.\', \'completed\': False}], \'example_node_layout\': {\'node1\': \'Schedule Trigger\', \'node2\': \'Dropbox List Files\', \'node3\': \'Filter Files\'}}\n\nReturn the improved spec in JSON format.'}], 'model': 'gpt-3.5-turbo'}}
+2025-04-28 16:53:40,226 - openai._base_client - DEBUG - Sending HTTP Request: POST https://api.openai.com/v1/chat/completions
+2025-04-28 16:53:40,227 - httpcore.connection - DEBUG - connect_tcp.started host='api.openai.com' port=443 local_address=None timeout=5.0 socket_options=None
+2025-04-28 16:53:40,244 - httpcore.connection - DEBUG - connect_tcp.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001870967F100>
+2025-04-28 16:53:40,244 - httpcore.connection - DEBUG - start_tls.started ssl_context=<ssl.SSLContext object at 0x000001870956ACC0> server_hostname='api.openai.com' timeout=5.0
+2025-04-28 16:53:40,277 - httpcore.connection - DEBUG - start_tls.complete return_value=<httpcore._backends.sync.SyncStream object at 0x000001870967EE90>
+2025-04-28 16:53:40,278 - httpcore.http11 - DEBUG - send_request_headers.started request=<Request [b'POST']>
+2025-04-28 16:53:40,279 - httpcore.http11 - DEBUG - send_request_headers.complete
+2025-04-28 16:53:40,279 - httpcore.http11 - DEBUG - send_request_body.started request=<Request [b'POST']>
+2025-04-28 16:53:40,280 - httpcore.http11 - DEBUG - send_request_body.complete
+2025-04-28 16:53:40,280 - httpcore.http11 - DEBUG - receive_response_headers.started request=<Request [b'POST']>
+2025-04-28 16:53:47,276 - httpcore.http11 - DEBUG - receive_response_headers.complete return_value=(b'HTTP/1.1', 200, b'OK', [(b'Date', b'Mon, 28 Apr 2025 20:53:44 GMT'), (b'Content-Type', b'application/json'), (b'Transfer-Encoding', b'chunked'), (b'Connection', b'keep-alive'), (b'access-control-expose-headers', b'X-Request-ID'), (b'openai-organization', b'lexicon-systems'), (b'openai-processing-ms', b'6913'), (b'openai-version', b'2020-10-01'), (b'x-ratelimit-limit-requests', b'10000'), (b'x-ratelimit-limit-tokens', b'200000'), (b'x-ratelimit-remaining-requests', b'9999'), (b'x-ratelimit-remaining-tokens', b'199337'), (b'x-ratelimit-reset-requests', b'8.64s'), (b'x-ratelimit-reset-tokens', b'198ms'), (b'x-request-id', b'req_5622d38ea77519668cdda0e0879c64d9'), (b'strict-transport-security', b'max-age=31536000; includeSubDomains; preload'), (b'cf-cache-status', b'DYNAMIC'), (b'Set-Cookie', b'__cf_bm=HQJXS35yCt2hFxfraIDcQMOgk7TEu2OakR1lYY9ILgE-1745873624-1.0.1.1-DkgFoMmZhq4W9TR9KH5hYVxs7vhtBn70SOi0ywaPG4iVEf9.YouS_WLG5tp2o65b8EHu8qoJSLgakQyPsmLWyyP5NTcpbNK188_tPquluDM; path=/; expires=Mon, 28-Apr-25 21:23:44 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'X-Content-Type-Options', b'nosniff'), (b'Set-Cookie', b'_cfuvid=gCtTsk3QQGtqx77448N3LGMsFWfyBVUOcy3WY9BtZxM-1745873624666-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), (b'Server', b'cloudflare'), (b'CF-RAY', b'9379733e8fd79057-BOS'), (b'Content-Encoding', b'gzip'), (b'alt-svc', b'h3=":443"; ma=86400')])
+2025-04-28 16:53:47,279 - httpx - INFO - HTTP Request: POST https://api.openai.com/v1/chat/completions "HTTP/1.1 200 OK"
+2025-04-28 16:53:47,280 - httpcore.http11 - DEBUG - receive_response_body.started request=<Request [b'POST']>
+2025-04-28 16:53:47,280 - httpcore.http11 - DEBUG - receive_response_body.complete
+2025-04-28 16:53:47,281 - httpcore.http11 - DEBUG - response_closed.started
+2025-04-28 16:53:47,281 - httpcore.http11 - DEBUG - response_closed.complete
+2025-04-28 16:53:47,281 - openai._base_client - DEBUG - HTTP Response: POST https://api.openai.com/v1/chat/completions "200 OK" Headers([('date', 'Mon, 28 Apr 2025 20:53:44 GMT'), ('content-type', 'application/json'), ('transfer-encoding', 'chunked'), ('connection', 'keep-alive'), ('access-control-expose-headers', 'X-Request-ID'), ('openai-organization', 'lexicon-systems'), ('openai-processing-ms', '6913'), ('openai-version', '2020-10-01'), ('x-ratelimit-limit-requests', '10000'), ('x-ratelimit-limit-tokens', '200000'), ('x-ratelimit-remaining-requests', '9999'), ('x-ratelimit-remaining-tokens', '199337'), ('x-ratelimit-reset-requests', '8.64s'), ('x-ratelimit-reset-tokens', '198ms'), ('x-request-id', 'req_5622d38ea77519668cdda0e0879c64d9'), ('strict-transport-security', 'max-age=31536000; includeSubDomains; preload'), ('cf-cache-status', 'DYNAMIC'), ('set-cookie', '__cf_bm=HQJXS35yCt2hFxfraIDcQMOgk7TEu2OakR1lYY9ILgE-1745873624-1.0.1.1-DkgFoMmZhq4W9TR9KH5hYVxs7vhtBn70SOi0ywaPG4iVEf9.YouS_WLG5tp2o65b8EHu8qoJSLgakQyPsmLWyyP5NTcpbNK188_tPquluDM; path=/; expires=Mon, 28-Apr-25 21:23:44 GMT; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('x-content-type-options', 'nosniff'), ('set-cookie', '_cfuvid=gCtTsk3QQGtqx77448N3LGMsFWfyBVUOcy3WY9BtZxM-1745873624666-0.0.1.1-604800000; path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None'), ('server', 'cloudflare'), ('cf-ray', '9379733e8fd79057-BOS'), ('content-encoding', 'gzip'), ('alt-svc', 'h3=":443"; ma=86400')])
+2025-04-28 16:53:47,283 - openai._base_client - DEBUG - request_id: req_5622d38ea77519668cdda0e0879c64d9
+2025-04-28 16:53:47,284 - root - INFO - Parsed and merged enhanced spec successfully.
+2025-04-28 16:53:47,285 - root - INFO - Enhancement complete.
+2025-04-28 16:53:47,285 - root - INFO - Elias enhanced spec: {
+  "workflow_name": "Dropbox Daily File Processor",
+  "purpose_goal": "Scan a specific Dropbox folder daily and send a summary email listing all new PDF files.",
+  "workflow_overview": "This workflow is triggered every morning to connect to a specified Dropbox folder, list all files, filter for PDFs, and send an email notification with a summary of the newly found PDF files to a designated recipient.",
+  "trigger_node": "scheduleTrigger",
+  "inputs": [
+    "Daily scheduled time (6 AM)",
+    "Dropbox folder path: `/DailyReports/`"
+  ],
+  "outputs": [
+    "Email notification listing newly found PDF files."
+  ],
+  "apps_services_apis": [
+    "Dropbox API",
+    "SMTP Email Service"
+  ],
+  "nodes": [
+    {
+      "node_name": "Schedule Trigger",
+      "node_type": "scheduleTrigger",
+      "description": "Activates daily at 6 AM.",
+      "params": null
+    },
+    {
+      "node_name": "Dropbox List Files",
+      "node_type": "dropboxList",
+      "description": "Lists files from `/DailyReports/`.",
+      "params": null
+    },
+    {
+      "node_name": "Filter Files",
+      "node_type": "filter",
+      "description": "Filters for `.pdf` files only.",
+      "params": null
+    },
+    {
+      "node_name": "Email Sender",
+      "node_type": "emailSend",
+      "description": "Sends an email listing the filtered files.",
+      "params": null
+    },
+    {
+      "node_name": "Check Empty Folder",
+      "node_type": "isEmpty",
+      "description": "Checks if the folder is empty.",
+      "params": null
+    },
+    {
+      "node_name": "Error Handler",
+      "node_type": "errorHandle",
+      "description": "Handles errors during the workflow.",
+      "params": null
+    }
+  ],
+  "connections": [
+    {
+      "source_node": "Schedule Trigger",
+      "target_node": "Dropbox List Files"
+    },
+    {
+      "source_node": "Dropbox List Files",
+      "target_node": "Check Empty Folder"
+    },
+    {
+      "source_node": "Check Empty Folder",
+      "target_node": "Filter Files"
+    },
+    {
+      "source_node": "Filter Files",
+      "target_node": "Email Sender"
+    },
+    {
+      "source_node": "Dropbox List Files",
+      "target_node": "Error Handler"
+    },
+    {
+      "source_node": "Filter Files",
+      "target_node": "Error Handler"
+    }
+  ],
+  "workflow_settings": [
+    {
+      "key": "Timezone",
+      "value": "America/New_York"
+    },
+    {
+      "key": "Save successful executions",
+      "value": true
+    }
+  ],
+  "test_scenarios": [
+    {
+      "condition": "Folder contains 5 PDFs",
+      "expected_result": "Email lists 5 file names."
+    },
+    {
+      "condition": "Folder is empty",
+      "expected_result": "Email states 'No files found today.'"
+    },
+    {
+      "condition": "Dropbox API call fails",
+      "expected_result": "Error is logged and workflow stops."
+    }
+  ],
+  "authentication_permissions": {
+    "Dropbox": "Dropbox OAuth2 API",
+    "SMTP Email": "SMTP Credentials"
+  },
+  "completion_checklist": [
+    {
+      "task": "Workflow triggers reliably every morning.",
+      "completed": false
+    },
+    {
+      "task": "Only `.pdf` files are selected and listed.",
+      "completed": false
+    },
+    {
+      "task": "Summary email is formatted and sent successfully.",
+      "completed": false
+    },
+    {
+      "task": "API errors are logged correctly.",
+      "completed": false
+    },
+    {
+      "task": "Stakeholder approval obtained after successful tests.",
+      "completed": false
+    }
+  ],
+  "example_node_layout": {
+    "node1": "Schedule Trigger",
+    "node2": "Dropbox List Files",
+    "node3": "Filter Files"
+  }
+}
+2025-04-28 16:53:47,296 - root - INFO - Step 3: Formatting YAML
+2025-04-28 16:53:47,296 - root - INFO - Method name: generate_n8n_yaml
+2025-04-28 16:53:47,297 - root - INFO - Building nodes: [{'node_name': 'Schedule Trigger', 'node_type': 'scheduleTrigger', 'description': 'Activates daily at 6 AM.', 'params': None}, {'node_name': 'Dropbox List Files', 'node_type': 'dropboxList', 'description': 'Lists files from `/DailyReports/`.', 'params': None}, {'node_name': 'Filter Files', 'node_type': 'filter', 'description': 'Filters for `.pdf` files only.', 'params': None}, {'node_name': 'Email Sender', 'node_type': 'emailSend', 'description': 'Sends an email listing the filtered files.', 'params': None}, {'node_name': 'Check Empty Folder', 'node_type': 'isEmpty', 'description': 'Checks if the folder is empty.', 'params': None}, {'node_name': 'Error Handler', 'node_type': 'errorHandle', 'description': 'Handles errors during the workflow.', 'params': None}]
+2025-04-28 16:53:47,297 - root - INFO - Building node: Schedule Trigger
+2025-04-28 16:53:47,298 - root - INFO - Building node: Dropbox List Files
+2025-04-28 16:53:47,298 - root - INFO - Building node: Filter Files
+2025-04-28 16:53:47,298 - root - INFO - Building node: Email Sender
+2025-04-28 16:53:47,298 - root - INFO - Building node: Check Empty Folder
+2025-04-28 16:53:47,298 - root - INFO - Building node: Error Handler
+2025-04-28 16:53:47,299 - root - INFO - Building connections: [{'source_node': 'Schedule Trigger', 'target_node': 'Dropbox List Files'}, {'source_node': 'Dropbox List Files', 'target_node': 'Check Empty Folder'}, {'source_node': 'Check Empty Folder', 'target_node': 'Filter Files'}, {'source_node': 'Filter Files', 'target_node': 'Email Sender'}, {'source_node': 'Dropbox List Files', 'target_node': 'Error Handler'}, {'source_node': 'Filter Files', 'target_node': 'Error Handler'}]
+2025-04-28 16:53:47,300 - root - INFO - Nodes: [{'node_name': 'Schedule Trigger', 'node_type': 'scheduleTrigger', 'description': 'Activates daily at 6 AM.'}, {'node_name': 'Dropbox List Files', 'node_type': 'dropboxList', 'description': 'Lists files from `/DailyReports/`.'}, {'node_name': 'Filter Files', 'node_type': 'filter', 'description': 'Filters for `.pdf` files only.'}, {'node_name': 'Email Sender', 'node_type': 'emailSend', 'description': 'Sends an email listing the filtered files.'}, {'node_name': 'Check Empty Folder', 'node_type': 'isEmpty', 'description': 'Checks if the folder is empty.'}, {'node_name': 'Error Handler', 'node_type': 'errorHandle', 'description': 'Handles errors during the workflow.'}]
+2025-04-28 16:53:47,301 - root - INFO - Generated YAML content: {
+  "workflow": {
+    "name": "Dropbox Daily File Processor",
+    "settings": {
+      "key": "Save successful executions",
+      "value": true,
+      "timezone": "UTC"
+    }
+  },
+  "nodes": [
+    {
+      "node_name": "Schedule Trigger",
+      "node_type": "scheduleTrigger",
+      "description": "Activates daily at 6 AM."
+    },
+    {
+      "node_name": "Dropbox List Files",
+      "node_type": "dropboxList",
+      "description": "Lists files from `/DailyReports/`."
+    },
+    {
+      "node_name": "Filter Files",
+      "node_type": "filter",
+      "description": "Filters for `.pdf` files only."
+    },
+    {
+      "node_name": "Email Sender",
+      "node_type": "emailSend",
+      "description": "Sends an email listing the filtered files."
+    },
+    {
+      "node_name": "Check Empty Folder",
+      "node_type": "isEmpty",
+      "description": "Checks if the folder is empty."
+    },
+    {
+      "node_name": "Error Handler",
+      "node_type": "errorHandle",
+      "description": "Handles errors during the workflow."
+    }
+  ],
+  "connections": []
+}
+2025-04-28 16:53:47,304 - root - INFO - Step 4: Validating YAML content
+2025-04-28 16:53:47,304 - root - INFO - Step 5: Saving YAML to apis\yamlgen\generated_yamls\n8n.yaml
+2025-04-28 16:53:47,308 - root - INFO - YAML saved successfully
+2025-04-28 16:53:47,308 - __main__ - INFO - YAML generation complete.
+2025-04-28 16:53:47,309 - __main__ - INFO - Output saved to: apis\yamlgen\generated_yamls\n8n.yaml
+2025-04-28 16:53:47,363 - httpcore.connection - DEBUG - close.started
+2025-04-28 16:53:47,364 - httpcore.connection - DEBUG - close.complete
+2025-04-28 16:53:47,365 - httpcore.connection - DEBUG - close.started
+2025-04-28 16:53:47,365 - httpcore.connection - DEBUG - close.complete

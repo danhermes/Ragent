@@ -1,18 +1,24 @@
 import logging
 import os
+import sys
 from datetime import datetime
-from agent.build_cycle import AgentBuildCycle
-from utils.logger import log
+from pathlib import Path
 
-# Set up logging
+# Add parent directory to Python path for proper imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(os.path.dirname(current_dir))
+sys.path.insert(0, parent_dir)
+
+# Set up logging first
 def setup_logging():
     """Set up logging configuration"""
     # Create logs directory if it doesn't exist
-    os.makedirs('logs', exist_ok=True)
+    logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    os.makedirs(logs_dir, exist_ok=True)
     
     # Create a timestamped log file
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    log_file = f"logs/autocoder_{timestamp}.log"
+    log_file = os.path.join(logs_dir, f"autocoder_{timestamp}.log")
     
     # Configure logging
     logging.basicConfig(
@@ -25,32 +31,81 @@ def setup_logging():
     )
     return logging.getLogger(__name__)
 
+# Initialize logger at module level
+logger = setup_logging()
+
+from apis.autocoder.agent.build_cycle_agent import AgentBuildCycle
+from apis.autocoder.utils.logger import log
+
+def read_spec_file(spec_path: str) -> str:
+    """Read and parse the specification file
+    
+    Args:
+        spec_path: Path to the .spec file
+        
+    Returns:
+        str: The task specification
+        
+    Raises:
+        FileNotFoundError: If spec file doesn't exist
+        ValueError: If spec file is empty or invalid
+    """
+    logger.info(f"Reading spec file: {spec_path}")
+    
+    if not os.path.exists(spec_path):
+        raise FileNotFoundError(f"Spec file not found: {spec_path}")
+        
+    with open(spec_path, 'r', encoding='utf-8') as f:
+        content = f.read().strip()
+        
+    if not content:
+        raise ValueError("Spec file is empty")
+        
+    logger.info(f"Successfully read spec file. Content length: {len(content)}")
+    return content
+
 def main():
     """Main entry point for the autocoder"""
-    logger = setup_logging()
     logger.info("Starting autocoder main process")
     
     try:
-        # Define the task
-        task = "Write a Python script that fetches current weather data for a list of cities " \
-               "using a public weather API and stores the results in a JSON file."
+        # Get spec file path from environment or use default
+        spec_path = os.getenv('AUTOCODER_SPEC', '.spec')
+        logger.info(f"Using spec file: {spec_path}")
+        
+        # Read task from spec file
+        task = read_spec_file(spec_path)
         logger.debug(f"Task defined: {task}")
         
+
+        # Hardcode n8n for now
+        agent_task = {
+            "language": "n8n",
+            "requirements": task,
+            "specifications": ""
+        }
+
         # Initialize build cycle
         logger.info("Initializing AgentBuildCycle")
-        cycle = AgentBuildCycle(agent_task=task, max_iterations=3)
+        cycle = AgentBuildCycle(agent_task, max_iterations=3)
         logger.debug(f"Build cycle initialized with max_iterations={cycle.max_iterations}")
         
         # Run the cycle
         logger.info("Starting build cycle...")
         cycle.run_cycle()
-        logger.info("Build cycle completed successfully")
+        logger.info("Build cycle completed.")
         
+    except FileNotFoundError as e:
+        logger.error(f"Spec file error: {str(e)}")
+        raise
+    except ValueError as e:
+        logger.error(f"Spec file content error: {str(e)}")
+        raise
     except Exception as e:
         logger.error(f"Error in main process: {str(e)}", exc_info=True)
         raise
     finally:
-        logger.info("Autocoder main process finished")
+        logger.info("Autocoder main process finished.")
 
 if __name__ == "__main__":
     main()

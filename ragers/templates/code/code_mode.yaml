@@ -1,0 +1,141 @@
+project_type: code
+description: Code-mode projects produce technical designs for software development such as software modules,
+  scripts, data files, and other artifacts. Managed via structured meetings and validated against
+  a technical design deliverable.
+
+# Project structure configuration
+project_structure:
+  base_folder: projects/{project_name}/
+  subfolders:
+    - goals/
+    - charters/
+    - meetings/
+    - questions/
+    - deliverables/
+    - src/
+    - tests/
+
+
+
+templates:
+
+  # Document types
+  document_types:
+    deliverables:
+      - code_technical_design.md
+      - code_implementation_meeting.md
+      - code_design_meeting.md
+    charters:
+      - code_project_charter.md
+
+  # Meeting configurations
+  meetings:
+      strategy:
+        description: Define project goals, scope, risks, and success criteria.
+        agenda: code_strategy_meeting.md
+        attending:
+        - Supervisor
+        - Manager
+        prompt_key: strategy
+         # input_files: code_project_template.goal - formatted /goal/.goal
+        input_files: goals.md
+        output_files: code_project_charter.md
+
+      kickoff:
+        description: Discuss how to begin executing the project and clarify goals.
+        agenda: code_kickoff_meeting.md
+        attending:
+        - Supervisor
+        - Manager
+        - Worker
+        prompt_key: kickoff
+        input_files: code_project_charter.md
+        output_files: code_project_charter.md
+
+      design:
+        description: Translate strategic goals into system architecture.
+        agenda: code_design_meeting.md
+        attending:
+        - Manager
+        - Worker
+        prompt_key: design
+        input_files: code_project_charter.md
+        output_files: code_design_meeting.md
+
+      implementation:
+        description: Expand architecture into technical module specifications.
+        agenda: code_implementation_meeting.md
+        attending:
+        - Worker
+        prompt_key: implementation
+        input_files: code_design_meeting.md
+        output_files: code_implementation_meeting.md
+
+      draft:
+        description: Merge outputs from all prior meetings into full technical design.
+        agenda: code_technical_design.md
+        attending:
+        - Worker
+        prompt_key: technical_design
+        input_files: code_project_charter.md, code_design_meeting.md, code_implementation_meeting.md
+        output_files: code_technical_design.md
+
+      review:
+        description: Validate the full design document and highlight any final issues.
+        agenda: code_review_meeting.md
+        attending:
+        - Supervisor
+        - Manager
+        - Worker
+        prompt_key: review
+        input_files: code_technical_design.md
+        output_files: code_technical_design.md
+
+# Project phases
+phases:
+  strategy:
+    name: "Strategy Planning"
+    description: "Initial project planning and requirements gathering"
+    order: 1
+    required: true
+
+  kickoff:
+    name: "Kickoff"
+    description: "Team Project Kickoff and Planning"
+    order: 2
+    required: true
+
+  design:
+    name: "Architecture Design"
+    description: "Technical architecture planning and design"
+    order: 3
+    required: true
+
+  implementation:
+    name: "Architecture Implementation"
+    description: "Detailed module design and implementation planning"
+    order: 4
+    required: true
+
+  draft:
+    name: "Draft Tech Design"
+    description: "Final technical design review and approval"
+    order: 5
+    required: true
+
+  review:
+    name: "Final Review"
+    description: "Final technical design review and approval"
+    order: 6
+    required: true
+
+# Required roles for the project
+required_roles:
+  Supervisor:
+    name: Blane
+  Manager:
+    name: Dum
+  Worker:
+    name: Woz
+  Documenter:
+    name: Toby

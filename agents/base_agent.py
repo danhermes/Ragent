@@ -5,6 +5,7 @@ from helpers.speech_to_text import SpeechToText
 from helpers.LLMs import BaseLLM
 import re
 from typing import Dict, List, Optional
+from helpers.call_ChatGPT import CallChatGPT
 
 # Configure logging
 logger = logging.getLogger("streamlit")
@@ -17,10 +18,12 @@ class AgentType(Enum):
 class BaseAgent:
     """Base class for all agents"""
     
-    def __init__(self, agent_type: AgentType, stt_service: SpeechToText = None, llm_service: BaseLLM = None):
+    
+    #def __init__(self):
+    def __init__(self, agent_type: AgentType): #, stt_service: SpeechToText = None, llm_service: BaseLLM = None):
         self.agent_type = agent_type
-        self.stt_service = stt_service
-        self.llm_service = llm_service
+        # self.stt_service = stt_service
+        # self.llm_service = llm_service
         self.logger = logging.getLogger(self.__class__.__name__)
     
     def transcribe_audio(self, audio_file: str) -> Optional[str]:
@@ -71,14 +74,33 @@ class BaseAgent:
     #         return None
 
     def get_chat_response(self, text: str, messages: Optional[List[Dict[str, str]]] = None, file_path: Optional[str] = None) -> str:
-        """Get response from configured LLM service"""
-        if not self.llm_service:
-            raise ValueError("LLM service not configured")
-        response, _ = self.llm_service.generate_response(text, messages, file_path)
-        return response 
-        """Get a response from the agent"""
-        # For testing, return a simple response based on the agent type
-        if self.agent_type == AgentType.TEXT:
-            return f"I am {self.__class__.__name__} and I received your message: {text}"
-        else:
-            return f"Code agent {self.__class__.__name__} received: {text}" 
+        
+        model = "gpt-4o"  # Use GPT-4 model # "gpt-3.5-turbo" #
+        #TODO: Add support for other models, passed in by named and role agents
+        #Dum = RagerAgent(name="Dum", model="gpt-4o")
+        #Woz = RagerAgent(name="Woz", model="gpt-4o")
+        #Worker = RagerAgent(name="Worker", model="gpt-4-turbo")
+        #Piper = RagerAgent(name="Piper", model="gpt-4-mini")
+
+        #"""Get response from configured LLM service"""
+        # if not self.llm_service:
+        #     raise ValueError("LLM service not configured")
+            
+        # # If messages is provided, use it directly
+        # if messages is not None:
+        #     response, _ = self.llm_service.generate_response(None, messages, file_path)
+        # # Otherwise, use the text parameter
+        # else:
+        #     response, _ = self.llm_service.generate_response(text, None, file_path)
+        # return response 
+
+        try:
+            # If messages is provided, use it directly
+            if messages is not None:
+                return CallChatGPT().get_response(model, messages)
+            # Otherwise, create a message from the text
+            else:
+                return CallChatGPT().get_response(model, [{"role": "user", "content": text}])
+        except Exception as e:
+            logger.error(f"Error getting chat response: {str(e)}")
+            return None

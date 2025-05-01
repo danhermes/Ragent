@@ -1,0 +1,23 @@
+import unicodedata
+
+def clean_text(text):
+    # Replace all control characters (category C*) with '?'
+    return ''.join(
+        c if unicodedata.category(c)[0] != 'C' else '?'
+        for c in text
+    )
+
+def clean_file(input_path, output_path=None):
+    with open(input_path, 'r', encoding='utf-8', errors='replace') as f:
+        dirty = f.read()
+
+    clean = clean_text(dirty)
+
+    if output_path:
+        with open(output_path, 'w', encoding='utf-8') as f:
+            f.write(clean)
+        print(f"✅ Cleaned file written to: {output_path}")
+    else:
+        with open(input_path, 'w', encoding='utf-8') as f:
+            f.write(clean)
+        print(f"✅ File cleaned in place: {input_path}")

@@ -1,9 +1,13 @@
 import openai
 import logging
-from .base_agent import BaseAgent, AgentType
+from ..agents.base_agent import BaseAgent, AgentType
 from helpers.speech_to_text import OpenAIWhisperSTT, LocalWhisperSTT, VoskSTT
 from helpers.LLMs import ChatGPTLLM
 from typing import Optional, List, Dict
+
+""" a PC-based web agent that listens to conversations ambiently and
+provides a browser-based HUD for technical terms employing a local STT (Whisper/Vosk) and ChatGPT
+"""
 
 class AgentCliff(BaseAgent):
     """Cliff: A friendly, knowledgeable guide with a touch of humor"""
@@ -14,8 +18,13 @@ class AgentCliff(BaseAgent):
         stt.initialize()
         
         self.assistant_id = "asst_FqW27FDBYLurUdqWVtV7wblJ"  # Add the Assistant ID here
-        self.llm = ChatGPTLLM(model="gpt-3.5-turbo", assistant_id=self.assistant_id)
+        self.llm = ChatGPTLLM(model="", assistant_id=self.assistant_id)
         self.llm.initialize()
+        
+        # # Load RAG files
+        # file_path = "./RAG/ML_LLM.docx"  # hard code for now
+        # if not self.llm.load_RAG_files(file_path):
+        #     logging.error(f"Failed to load RAG file: {file_path}")
         
         # Initialize base agent with services
         super().__init__(AgentType.TEXT, stt_service=stt, llm_service=self.llm)
@@ -23,13 +32,13 @@ class AgentCliff(BaseAgent):
     def get_chat_response(self, text: str) -> str:
         try:
             messages = [
-                {"role": "system", "content": "OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook."},
-                {"role": "system", "content": "Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:"},
-                {"role": "system", "content": "First give the technical term, beneath that give a terse definition of the term in a single sentence."},
-                {"role": "system", "content": "Beneath that, give a line of space and then a brief definition of the term in less than five sentences."},
-                {"role": "system", "content": "Beneath that, give a terse example of the term in a sentence or two without saying 'for example'."},
-                {"role": "system", "content": "Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium"},
-                {"role": "system", "content": "Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc."},
+                # {"role": "system", "content": "OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook."},
+                # {"role": "system", "content": "Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:"},
+                # {"role": "system", "content": "First give the technical term as a title, beneath that give a terse definition of the term in a single sentence."},
+                # {"role": "system", "content": "Beneath that, give a line of space and then a brief definition of the term in less than five sentences."},
+                # {"role": "system", "content": "Beneath that, give a terse example of the term in a sentence or two without saying 'for example'."},
+                # {"role": "system", "content": "Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium"},
+                # {"role": "system", "content": "Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc."},
                 {"role": "user", "content": text}
             ]
             

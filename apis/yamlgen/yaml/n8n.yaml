@@ -1,0 +1,22 @@
+workflow:
+  name: GPT File Processor
+  settings:
+    timezone: UTC
+
+nodes:
+  - name: Schedule Trigger
+    type: scheduleTrigger
+    params:
+      hour: 6
+      interval: days
+    position: [0, 0]
+
+  - name: Get Files
+    type: dropboxList
+    params:
+      folder: /GPTReports
+    position: [200, 0]
+
+connections:
+  - from: Schedule Trigger
+    to: Get Files

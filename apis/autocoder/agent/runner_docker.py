@@ -22,12 +22,13 @@ def cleanup_docker_container():
             logger.error(f"Error removing Docker container: {str(e)}", exc_info=True)
             raise
 
-def run_code_in_docker(code_path: str, cleanup: bool = False) -> Tuple[str, str]:
+def run_code_in_docker(code_path: str, cleanup: bool = False, env_var: str = None) -> Tuple[str, str]:
     """Run code in a Docker container
     
     Args:
         code_path: Path to the code file to run
         cleanup: Whether to remove the Docker container after running
+        env_var: Environment variable to pass to the container in format "KEY=VALUE"
         
     Returns:
         Tuple of (stdout, stderr) from the container
@@ -37,7 +38,8 @@ def run_code_in_docker(code_path: str, cleanup: bool = False) -> Tuple[str, str]
     # Get absolute paths
     code_path = os.path.abspath(code_path)
     host_dir = os.path.dirname(code_path)
-    container_path = f"/sandbox/{os.path.basename(code_path)}"
+    logger.info(f"Host directory: {host_dir}")
+    container_path = f"/app/{os.path.basename(code_path)}"
     
     logger.debug(f"Host directory: {host_dir}")
     logger.debug(f"Container path: {container_path}")
@@ -50,8 +52,8 @@ def run_code_in_docker(code_path: str, cleanup: bool = False) -> Tuple[str, str]
         logger.debug("Docker image exists")
     except subprocess.CalledProcessError:
         logger.debug("Docker image not found, building...")
-        # Get the correct path to Dockerfile - it's in the autocoder directory
-        dockerfile_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'Dockerfile')
+        # Get the correct path to Dockerfile - it's in the agent directory
+        dockerfile_path = os.path.join(os.path.dirname(__file__), 'Dockerfile')
         logger.debug(f"Using Dockerfile at: {dockerfile_path}")
         
         if not os.path.exists(dockerfile_path):
@@ -74,15 +76,34 @@ def run_code_in_docker(code_path: str, cleanup: bool = False) -> Tuple[str, str]
     
     try:
         # Run code in container
-        logger.info("Starting Docker container...")
+        logger.info("Running in Docker container...")
+        # Convert Windows path to Docker-friendly format
+        docker_host_dir = host_dir.replace('\\', '/')
+        if host_dir.startswith('F:'):
+            docker_host_dir = '/f' + docker_host_dir[2:]
+            
+        # Mount the entire sandbox directory
+        sandbox_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sandbox')
+        docker_sandbox_dir = sandbox_dir.replace('\\', '/')
+        if sandbox_dir.startswith('F:'):
+            docker_sandbox_dir = '/f' + docker_sandbox_dir[2:]
+            
+        logger.info(f"Mounting {docker_sandbox_dir} to /app in container")
+        cmd = ['docker', 'run', '--rm', 
+               '-v', f'{docker_sandbox_dir}:/app']
+        if env_var:
+            cmd.extend(['-e', env_var])
+        cmd.extend(['autocoder_agent_sandbox', 'pytest', f'/app/{os.path.basename(code_path)}'])
+        
+        logger.info(f"Running command: {' '.join(cmd)}")
         run_result = subprocess.run(
-            ['docker', 'run', '--rm', '-v', f'{host_dir}:/sandbox', 'autocoder_agent_sandbox', 'pytest', container_path],
+            cmd,
             capture_output=True,
             text=True
         )
         
         # Always return the output, even if tests fail
-        logger.debug("Docker container execution completed")
+        logger.debug("Docker container tests completed")
         return run_result.stdout, run_result.stderr
         
     finally:
