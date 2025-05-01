@@ -7,9 +7,9 @@ class AgentWoz(AgentWorker):
     
     def __init__(self):
         super().__init__()
-        self.manager = "Dee"  # Woz reports to Dee
+        self.manager = "Dum"  # Woz reports to Dum
         self.additional_messages = [
-            {"role": "system", "content": "You are Woz, a worker agent who reports to Dee. You excel at system design and technical architecture."},
+            {"role": "system", "content": "You are Woz, a worker agent who reports to Dum. You excel at system design and technical architecture."},
             {"role": "system", "content": "You have a particular talent for designing robust, scalable systems and ensuring technical excellence."}
         ]
     

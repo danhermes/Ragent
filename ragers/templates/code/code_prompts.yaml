@@ -1,0 +1,347 @@
+prompts:
+  # Reference documents for all meetings
+  references:
+    - code_project_template.goal
+    - code_project_charter.md
+
+  # Common meeting rules and structure
+  meeting_rules:
+    # Standard meeting structure
+    structure:
+        opening:
+          - "Review agenda and objectives"
+          - "Check previous action items"
+          - "Confirm attendees and roles"
+        closing:
+          - "Summarize key decisions"
+          - "Document action items"
+          - "Confirm next steps"
+          - "Complete the output document based on the discussion"
+          - "Verify output document creation"
+          - "Verify all agenda sections are addressed"
+
+    # Success criteria verification
+    scale:
+      - Of small, medium, large, or enterprise scale - assume small - This is important.
+      - Plan, design, and document for a small scale project
+      - Assume small scale
+      - Avoid enterprise architecture and infrastructure
+      - No APIs, no databases, no servers, no infrastructure
+      - no microservices, no cloud resources
+
+    success_criteria:
+      - "Design for an amazing, unique, and disruptive solution that will change the field forever."
+      - "Output document is created/updated and saved to disk."
+      - "Document is substantive, containing more than a cursory two or three sentences per section."
+      - "Architecture and modules are documented in detail for use by a junior programmer."
+      - "Cover abstract tech design to real-world orgs, scenarios, third party tools and frameworks, and inspirational products on the market already."
+      - "Offer both practical recommendations and creative and disruptive ideas."
+      - "All agenda sections are completed and documented"
+      - "Action items are assigned and documented"
+      - "Next steps are clearly defined"
+      - "Blockers are identified and addressed"
+      - "Risks are documented and mitigated"
+
+    # Meeting conduct rules
+    conduct:
+      - "Stay focused on the agenda items"
+      - "One person speaks at a time"
+      - "Document all decisions and action items"
+      - "Ensure all attendees have opportunity to contribute"
+      - "Offer both practical recommendations and creative and disruptive ideas."
+      - "Keep discussions technical and solution-oriented"
+      - "Respect time limits for each topic"
+      - "Escalate blockers immediately"
+
+    # Document creation rules
+    documentation:
+      - "All documents must be in Markdown format"
+      - "Include clear section headers"
+      - "Use bullet points for lists"
+      - "Include diagrams where appropriate"
+      - "Reference previous documents when relevant"
+      - "Maintain consistent formatting"
+      - "Save documents in the correct project folder"
+      - "Verify all required sections are completed"
+      - "Document is substantive, containing more than a cursory two or three sentences per section."
+      - "Architecture and modules are documented in detail for use by a junior programmer."
+      - "Include success criteria verification in closing"
+
+    no_schedule:
+      - This documentation is about the technical design of the project, not schedule or project plan.  
+      - Do not schedule anything, just document it
+      - Do not allocate resources to the schedule
+      - Do not assign weeks, months, or years to the project
+        
+  strategy:
+    description: "Project strategy and charter development"
+    attending: ["Managers", "Supervisors"]
+    input: "goals.md"
+    output: "code_project_charter.md"
+    length: 10-15 pages
+    template: |
+
+      # Strategy Session
+
+      ## Goals
+        {goal_summary}
+
+      ## Output Document 
+        {output}
+      ### Charter Document:
+        {output_files}
+
+      ## Task
+      Use the source goals to author a complete Project Charter, with a target length of {length}.
+
+      1. Define project scope clearly:
+        - What is **in scope** vs **out of scope**?
+        - What is the business or civic objective?
+
+      2. Identify target users or stakeholders.
+
+      3. Highlight known constraints:
+        - Budget, tools, timelines, political, ethical, technical
+
+      4. List initial risks and external dependencies.
+
+      5. Add `[TODO]` markers for any unresolved issues — these will be expanded in future meetings.
+
+      ## Output
+      Produce a charter in Markdown that includes:
+      - Goals
+      - In/Out Scope
+      - Target Personas
+      - Constraints
+      - Risks
+
+      Be precise, realistic, and leave nothing blank without reason.
+
+  kickoff:
+    description: "Kickoff session to clarify goals, assumptions, and architecture boundaries"
+    attending: ["Managers", "Workers", "Supervisors"]
+    input: "code_project_charter.md"
+    output: "code_project_charter.md"
+    length: 10-15 pages
+    template: |
+
+      # Project Kickoff Meeting
+
+      ## Goals
+        {goal_summary}
+
+      ## Input Document 
+        {input}
+      ### Charter Document:
+        {input_files}
+
+      ## Task
+      Review the Project Charter, with a target length of {length}, and open the project formally by resolving the following:
+
+      1. **Confirm Project Scope**
+        - Validate that the `Goals`, `In Scope`, and `Out of Scope` sections are clearly stated.
+        - Flag anything ambiguous, unprioritized, or missing.
+
+      2. **Enumerate Project Assumptions**
+        - What technologies, teams, APIs, and timelines are assumed?
+        - What constraints must be respected (budget, infra, tools)?
+
+      3. **Initial Risks and Unknowns**
+        - Identify any open questions that need to be resolved in future meetings.
+        - Suggest where `[TODO]` markers should go in other docs.
+
+      4. **Preliminary Architecture Thoughts**
+        - Are there already clear architectural patterns implied?
+        - Name any modules/components already known or required.
+
+      ## Output
+      Produce a full kickoff notes file capturing:
+      - Scope validation
+      - Project assumptions
+      - Initial risks
+      - Any emerging design ideas
+
+      This document sets the stage for Design. Be precise.
+
+  design:
+    description: "Architecture and modular system design"
+    attending: ["Managers", "Workers"]
+    input: "code_project_charter.md"
+    output: "code_design_meeting.md"
+    length: 15-20 pages
+    template: |
+
+      # System Design Meeting
+
+      ## Goals
+        {goal_summary}
+
+      ## Input Document 
+        {input}
+      ### Charter Document:
+        {input_files}
+
+      ## Output Document 
+        {output}
+      ### Architecture Design Notes:
+        {output_files}
+
+      ## Task
+      Translate the Project Charter into a modular system design, with a target length of {length}.
+
+      For each module:
+      - Name and define its responsibilities
+      - List inputs, outputs, and any external APIs
+      - Sketch interfaces (CLI, function signatures, etc.)
+      - Map dependencies and control flow
+      - Identify constraints (compute, data, auth)
+      - Add `[TODO]` if necessary, but explain what’s missing
+
+      Do not summarize or condense — this document should be executable by the Implementation agent with no ambiguity.
+
+      Include a `## Handoff Notes to Implementation` section at the end:
+      - State how each module should be scaffolded
+      - Confirm naming, structure, and expectations for implementation
+
+      ## Output
+      A full design doc with at least 4–10 modules and architecture depth.
+        Produce a design doc that includes:
+        - Named modules
+        - Module responsibilities
+        - Interactions and data flow
+        - Emerging technical considerations
+        
+      Do not repeat the charter. Expand on it.
+
+  implementation:
+    description: "Module design and implementation planning"
+    attending: ["Workers"]
+    input: "code_design_meeting.md"
+    output: "code_implementation_meeting.md"
+    length: 15-20 pages
+    template: |
+
+      # Technical Implementation Meeting
+
+      ## Goals
+        {goal_summary}
+
+      ## Input Document 
+        {input}
+      ### Technical Design Document:
+        {input_files}
+
+      ## Output Document 
+        {output}
+      ### Technical Implementation Document:
+        {output_files}
+
+      ## Task
+      Using the documents above, synthesize a Technical Implementation Document, with a target length of {length}.
+
+      1. List all classes, methods, and interfaces
+      2. For each method:
+        - Write a complete signature with type annotations
+        - List internal logic bullets for step-by-step behavior
+        - Add docstring explaining the method’s role
+        - Include `[TODO]` only if logic is truly unknown
+      3. Add runtime considerations:
+        - Input validation, frequency, errors, fallbacks, retries
+      4. CLI hooks and config loading behavior (argparse, env vars)
+      5. Mention testing hooks or stub strategies
+
+      You are not done until every module includes this structure.
+
+      Do not include module examples from the template. Do not repeat prior descriptions. Expand and complete any `[TODO]` blocks.
+      Leave `[TODO]` only if absolutely necessary, and explain why.
+
+  draft:
+      description: "Technical design draft review"
+      attending: ["Managers", "Workers"]
+      input: ["code_design_meeting.md", "code_implementation_meeting.md"]
+      output: "code_technical_design.md"
+      length: 20-25 pages
+      template: |
+
+        # Technical Specification Meeting
+
+        ## Goals
+          {goal_summary}
+
+        ## Input Document 
+          {input}
+        ### Technical Design Document:
+          {input_files_0}
+
+        ## Input Document 
+          #{input}
+        ### Technical Implementation Document:
+          {input_files_1}
+
+        ## Output Document 
+          {output}
+        ### Technical Specification Document:
+          {output_files}
+
+        ## Task
+        Merge the previous technical design and implementation documents into a complete Technical Specification, with a target length of {length}.
+
+        - Preserve and refine module, method, and interface details
+        - Fill in structural or content gaps
+        - Ensure every module includes inputs, outputs, method specs, logic bullets, and edge handling
+        - Flag and resolve all `[TODO]`s where possible
+
+        Do not summarize. This is a final draft spec for handoff to developers.
+
+
+  review:
+    description: "Final review of the technical specification"
+    attending: ["Managers", "Workers"]
+    input: "code_technical_design.md"
+    output: "code_technical_design.md"
+    length: 20-25 pages
+    template: |
+
+      # Final Review Meeting
+
+      ## Goals
+        {goal_summary}
+
+      ## Input Document 
+        {input}
+      ### Technical Specification Document:
+        {input_files}
+
+      ## Task
+      Review the full technical specification, with a target length of {length}, with the following responsibilities:
+
+      1. **Completeness Check**
+        - Are all sections present and meaningfully filled?
+        - Do any `[TODO]`s remain? If so, explain what is missing and suggest how to fill them.
+
+      2. **Depth Check**
+        - Are all modules defined with method signatures and internal logic?
+        - Are inputs/outputs detailed per method or process?
+
+      3. **Clarity & Consistency**
+        - Identify any unclear terminology, inconsistent formatting, or ambiguous references.
+        - Call out redundant or duplicated content from earlier meetings.
+
+      4. **Final Readiness**
+        - Is the spec ready to hand to developers or does it require one more pass?
+
+      ## Output
+      Produce a list of inline comments, per-section feedback, and a final summary.
+      Mark clearly any sections that are:
+      - Approved
+      - Needs Refinement
+      - Incomplete
+
+      Leave no section uninspected.
+
+  document_meeting:
+    user: "Template:\n{template}\n\nResponse:\n{response}\n\nPlease merge this Template and Response into a coherent document, maintaining the template structure by replacing the questions and topic definitions, preserving existing goal-related technical content while incorporating the new response content."
+
+ 
+
+  

@@ -52,6 +52,7 @@ deliverables/
 logs/orchestrator.log
 n8n/workflows/
 n8n/logs/
+
 apis/autocoder/logs/
 apis/autocoder/generated_code/
 apis/autocoder/debuglog/
@@ -63,9 +64,18 @@ apis/autocoder/Dockerfile
 TinyLlama/
 llama.cpp/
 
+todos/
+
 ragers/logs/orchestrator_*.log
 ragers/workflow_*.json
 ragers/logs/
 ragers/*.json
+ragers/logs/orchestrator.log
+ragers/projects/
+ragers/goal/
+ragers/goal/old/
 
 Nevil/gpt_examples/img_input.jpg
+
+agent_workflows/logs/code_tasker_*.log
+agent_workflows/generated_code/generated_code_*.py

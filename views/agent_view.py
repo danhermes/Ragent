@@ -201,7 +201,7 @@ class AgentView:
     def text_display_view(self, text: str) -> None:
         """Display text responses in the chat interface"""
         # Guardrails: Skip ChatGPT apologies
-        if "sorry" in text.lower() or "apologies" in text.lower():
+        if "sorry" in text.lower() or "could you" in text.lower() or "your message" in text.lower() or "please provide" in text.lower() or "apologies" in text.lower() or "I can assist you" in text.lower():
             return
             
         # Add response to chat history
@@ -236,7 +236,14 @@ class AgentView:
             # Set stop flag first
             self.audio_handler.should_stop = True
             # Then do cleanup
-            self.audio_handler.cleanup()
+            if hasattr(self.audio_handler, 'stream') and self.audio_handler.stream:
+                self.audio_handler.stream.stop()
+                self.audio_handler.stream.close()
+                self.audio_handler.stream = None
+            self.audio_handler.audio_buffer = []
+            self.audio_handler.processing_lock = False
+            self.audio_handler.is_speaking = False
+            self.audio_handler.silence_frames = 0
         if 'audio_view_running' in st.session_state:
             st.session_state.audio_view_running = False
 

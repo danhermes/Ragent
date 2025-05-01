@@ -1,0 +1,71 @@
+title: Your Book Title
+content_type: book
+length: 7 chapters
+prompt: >
+  Write in a professional yet engaging tone for a curious audience.
+
+style_profile: Visionary strategist with warmth
+narrative_rhythm: confusion > clarity > empowerment
+target_reader: Time-strapped executive
+arc: pedagogical progression
+flavor: calm disruption
+test_mode: false
+
+big_ideas:
+  - The future of communication is conversational.
+  - AI doesn't replace clarity—it demands it.
+
+themes:
+  - Prompting as skill
+  - Cultural friction with AI
+  - Speed vs. trust
+
+patterns:
+  - First third: stories
+  - Middle: examples + techniques
+  - End: philosophy + strategy
+
+examples:
+  - A sales team automating outreach with GPT
+  - A school using AI for feedback
+
+inserts:
+  - "Stat: 68% of employees still don't use GPT tools."
+  - "Prompting is like convincing a dragon to write emails."
+
+toc:
+  - title: Introduction to Prompting
+    style: narrative
+    notes: Introduce human-AI collaboration with context and caution.
+    sections:
+      - type: story
+        style: narrative
+        topic: A CEO’s first conversation with ChatGPT
+      - type: reflection
+        style: reflective
+        topic: The moment of realization
+
+  - title: Process Automation
+    style: story-then-lesson
+    notes: Use narrative followed by practical analysis.
+    sections:
+      - type: story
+        style: dialogue
+        topic: A procurement team stuck in approvals
+      - type: lesson
+        style: technical
+        topic: Prompt-driven automation
+
+  - title: Prompting Patterns
+    style: modular
+    notes: Show diverse styles of prompt use
+    sections:
+      - type: metaphor
+        style: poetic
+        topic: Prompting is programming for humans
+      - type: example
+        style: bullet
+        topic: Patterns for debugging bad prompts
+      - type: summary
+        style: clear
+        topic: Choosing the right structure for your goal

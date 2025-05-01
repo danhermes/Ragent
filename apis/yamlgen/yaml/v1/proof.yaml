@@ -1,0 +1,10 @@
+document_title: GPT Prompt Framework
+purpose: Validate logical structure and flow
+tone: analytical
+sections:
+  - name: Introduction
+    goal: Explain what prompting is
+  - name: Examples
+    goal: Show contrast between good and bad prompts
+  - name: Strategy
+    goal: Offer frameworks and patterns

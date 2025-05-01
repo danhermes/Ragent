@@ -1,0 +1,16 @@
+{
+    "version": "0.1.0",
+    "configurations": [
+        {
+            "name": "debug streamlit",
+            "type": "python",
+            "request": "launch",
+            "program": "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/site-packages/streamlit",  // /home/xx/tmp/venv/bin/streamlit",
+            "args": [
+                "run",
+                "main.py"
+            ],
+            "debuggerPath": "C:\\Users\\Dan Hermes\\AppData\\Local\\Programs\\cursor\\Cursor.exe"
+        }
+    ]
+}

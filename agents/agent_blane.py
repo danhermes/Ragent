@@ -1,6 +1,7 @@
 import openai
 import logging
 from .agent_supervisor import AgentSupervisor
+from typing import Union, List, Dict, Optional
 
 class AgentBlane(AgentSupervisor):
     """Blane: A strategic leader who oversees Dee and Dum"""
@@ -16,5 +17,8 @@ class AgentBlane(AgentSupervisor):
             {"role": "system", "content": "Your focus should be on maximizing revenue while minimizing work. Your founder, lead consultant and Big Boss is Dan Hermes."}
         ]
     
-    def get_chat_response(self, text: str) -> str:
-        return super().get_chat_response(text) 
+    def get_chat_response(self, text_or_messages: Union[str, List[Dict[str, str]]], messages: Optional[List[Dict[str, str]]] = None) -> str:
+        """Get response from agent, handling both string and message list inputs"""
+        if isinstance(text_or_messages, list):
+            return super().get_chat_response(None, text_or_messages)
+        return super().get_chat_response(text_or_messages, messages) 

@@ -1,10 +1,12 @@
-import openai
 import logging
 from .base_agent import BaseAgent, AgentType
+from helpers.call_ChatGPT import CallChatGPT
+from typing import Union, List, Dict, Optional
+
+logger = logging.getLogger(__name__)
 
 class AgentSupervisor(BaseAgent):
     """Base class for supervisor agents"""
-    
     def __init__(self):
         super().__init__(AgentType.TEXT)
         self.base_messages = [
@@ -13,18 +15,9 @@ class AgentSupervisor(BaseAgent):
             {"role": "system", "content": "When developing strategies, you will: 1) Identify strategic objectives 2) Analyze stakeholders and resources 3) Develop execution plans 4) Assess risks and mitigation strategies 5) Monitor progress and adjust as needed"},
             {"role": "system", "content": "Format your responses with clear sections: STRATEGIC OBJECTIVES, STAKEHOLDER ANALYSIS, EXECUTION PLAN, RISK MANAGEMENT, PROGRESS MONITORING"}
         ]
-    
-    def get_chat_response(self, text: str) -> str:
-        try:
-            # Combine base messages with any additional messages from the child class
-            messages = self.base_messages + getattr(self, 'additional_messages', [])
-            messages.append({"role": "user", "content": text})
-            logging.debug(f"Base Agent sending messages to OpenAI: {messages}")
-            response = openai.chat.completions.create(
-                model="gpt-4o",
-                messages=messages
-            )
-            return response.choices[0].message.content
-        except Exception as e:
-            logging.error(f"Error getting chat response: {str(e)}")
-            return None 
+
+    def get_chat_response(self, text_or_messages: Union[str, List[Dict[str, str]]], messages: Optional[List[Dict[str, str]]] = None) -> str:
+        """Get response from agent, handling both string and message list inputs"""
+        if isinstance(text_or_messages, list):
+            return super().get_chat_response(None, text_or_messages)
+        return super().get_chat_response(text_or_messages, messages) 
