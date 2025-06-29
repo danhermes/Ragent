@@ -21,6 +21,32 @@ User interfaces for RAgent: CLI, web UI, to voice interface.  HQ creates and tra
 - Voice - mic/speaker w/ STT/TTS) - OpenAI Whisper API, Whisper local, and Vosk
 - Text on web browser or mobile device
 
+## Cliff - AI Speech Assistant 🤖
+
+**Cliff** is a real-time AI speech assistant that listens to conversations and provides instant technical term explanations. Built with Streamlit and OpenAI technologies.
+
+### Features
+- **Real-time Speech Recognition**: Continuously listens using OpenAI Whisper
+- **Technical Term Detection**: Automatically identifies and explains AI, ML, LLM, RAG, and software architecture terms
+- **Visual Feedback**: Real-time status updates showing listening, processing, and transcription states
+- **Clean Interface**: Modern UI with clear status indicators and error handling
+
+### Quick Start
+```bash
+cd cliff
+streamlit run main.py --browser.serverAddress=localhost
+```
+Open `http://localhost:8502` in your browser.
+
+### Visual Feedback
+- 🎧 **Green**: Listening for speech
+- 📊 **Blue**: Recording speech chunks
+- ⚙️ **Orange**: Processing speech
+- 🎤 **Blue box**: Shows transcribed text
+- ❌ **Red box**: Error messages
+
+For detailed documentation, see [`docs/cliff.md`](docs/cliff.md) or [`cliff/README.md`](cliff/README.md).
+
 ## RAgents Tools and Adapters: APIs
 - AutoCoder - codes (Python), tests (pytest), and debugs (in temp Docker containers) against a technical spec
 - LitLegos - writes a book given a book title and Table of Contents
@@ -38,5 +64,5 @@ Deliverables:
 - technical specifications
 - automation workflows (implemented and running)
 - python modules and scripts
-- publications (post, article, book)# RAgent (Robot Agent)
+- publications (post, article, book)
 - business strategy or plan for anything

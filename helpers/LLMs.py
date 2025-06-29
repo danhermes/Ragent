@@ -39,8 +39,29 @@ class ChatGPTLLM(BaseLLM):
             from openai import OpenAI
             if not self.api_key:
                 raise ValueError("OpenAI API key not provided")
-            self.client = OpenAI(api_key=self.api_key)
-            print(f"ChatGPT initialized with model: {self.model}")
+            
+            # Handle SSL certificate issues on Windows
+            import os
+            original_ssl_cert_file = os.environ.get('SSL_CERT_FILE')
+            original_ssl_cert_dir = os.environ.get('SSL_CERT_DIR')
+            
+            try:
+                # Temporarily unset SSL certificate environment variables that might cause issues
+                if 'SSL_CERT_FILE' in os.environ:
+                    del os.environ['SSL_CERT_FILE']
+                if 'SSL_CERT_DIR' in os.environ:
+                    del os.environ['SSL_CERT_DIR']
+                
+                self.client = OpenAI(api_key=self.api_key)
+                print(f"ChatGPT initialized with model: {self.model}")
+                
+            finally:
+                # Restore original SSL environment variables
+                if original_ssl_cert_file:
+                    os.environ['SSL_CERT_FILE'] = original_ssl_cert_file
+                if original_ssl_cert_dir:
+                    os.environ['SSL_CERT_DIR'] = original_ssl_cert_dir
+                    
         except ImportError:
             raise ImportError("openai package not installed. Run: pip install openai")
             

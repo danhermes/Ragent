@@ -1,0 +1,57 @@
+The Agentic Playbook: Focused Prompting Through RAG Architecture
+=================================================================
+
+This 5-part guide organizes the most critical knowledge for designing and prompting agent-based AI systems using Retrieval-Augmented Generation (RAG) principles, agentic workflows, foundational ML/LLM infrastructure, and emerging 2025 trends.
+
+I. Business Use Cases
+---------------------
+- Customer Experience: GPT-powered onboarding, triage, and reporting using Assistants API, Azure RAG, Speech Services.
+- Process Automation: LangGraph + Foundry flows for SOPs, document automation, retry logic.
+- Decision Support: Dashboard-to-dialogue agents with Tool Calling, RAG pipelines, and cosine similarity ranking.
+- Workforce Enablement: Async agents using Semantic Kernel, Assistants API for onboarding, documentation, training.
+- Risk & Compliance: Guardrail-bound agents with Entra ID, audit logging, and Content Safety.
+- Monitoring & Observability: Langfuse, App Insights, LangSmith for trace replay and performance metrics.
+- Multi-modal Interfaces: GPT-4o, Azure Vision/Speech to process and respond to image/audio input.
+- Enterprise Architecture: Foundry, LangGraph, LlamaIndex, and Kernel integration to manage tools, memory, retrieval.
+
+II. Agentic Frameworks
+----------------------
+- Agents are autonomous deciders/adapters, not static programs.
+- Agent Components: Tool use, LLM APIs, memory (short/long), reasoning core.
+- Orchestration: LangGraph, LangChain Hub, Assistants API, LCEL.
+- Agent Types: ReAct, plan-and-execute, action agents, generative agents.
+- Techniques: Chain of Thought, Tree of Thoughts, callbacks, embedded function execution.
+- Examples: AutoGPT, BabyAGI, LangChain agents, OpenAI Assistants.
+- Memory & Retrieval: FAISS, Pinecone, LangChain + LlamaIndex integrations.
+
+III. LLMs / GenAI
+-----------------
+- Transformer architecture: attention, tokenization, encoder/decoder stacks.
+- Generation Parameters: temperature, top-k/p, frequency penalties, stop sequences.
+- Prompt Engineering: ICL (zero/one/few-shot), format prompting, role prompting, self-consistency.
+- RAG vs Fine-tuning: RAG enables dynamic, real-time grounding; LoRA/PEFT for parametric tuning.
+- RAG Stack: Retriever → Generator → Evaluator. Pipelines include embedding, chunking, cosine similarity.
+- Evaluation: MRR, MAP, NDCG, context relevancy, hallucination metrics, Ragas/ARES/DeepEval.
+- Tooling: LangChain, PromptFlow, LangSmith, Haystack, LlamaIndex, LangChain Hub.
+- LLMOps: CI/CD/CT for LLMs, prompt latency tracking, inference cost optimization, caching (vLLM, Ray).
+
+IV. Machine Learning Foundations
+--------------------------------
+- Supervised/Unsupervised Learning: classification, clustering, dimensionality reduction.
+- Reinforcement Learning: MDPs, Q-learning, policy gradients.
+- Deep Learning: CNNs, RNNs, LSTMs, GANs, Transformers.
+- Bayesian & Probabilistic Methods: inference, graphical models, Gaussian processes.
+- Optimization: SGD, Adam, momentum; backpropagation; gradient descent.
+- Evaluation: Precision, recall, ROC, generalization, overfitting.
+- MLOps: Model versioning, drift detection, reproducibility, feature stores, deployment orchestration.
+
+V. 2025 Trends & Emerging Tech
+------------------------------
+- Multimodal Models: GPT-4o, DALL-E 3, Gemini for cross-modal input/output.
+- Edge AI: TinyLlama, federated learning for privacy-first on-device LLMs.
+- Explainability: XAI, interpretable embeddings, fair retrieval.
+- Robotics + Agents: Task-based decision making in physical environments (e.g., Nevil).
+- Quantum + Neuro-Inspired AI: SNNs and quantum AI for high-efficiency models.
+- Sustainability: Green AI techniques, carbon-conscious training & deployment.
+- Generative Media: Text-to-image/video via Stable Diffusion, Midjourney, Runway.
+- AI Ethics & Regulation: Alignment, differential privacy, fairness, policy enforcement via NeMo, OpenAI Moderation.
