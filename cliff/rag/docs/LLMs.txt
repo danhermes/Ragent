@@ -1,0 +1,519 @@
+LLM/GenAI Topics: A Comprehensive Outline
+Dan Hermes
+    1. LLMs
+a. Generalized models lacking specialized knowledge
+i. Transformers ("Attention Is All You Need")
+ii. Text Generation Properties
+1. Temperature
+2. Frequency Penalty
+3. Presence Penalty
+4. Top-p
+5. Stop Sequences
+iii. Prompt Engineering
+iv. RAG
+v. Fine Tuning
+b. Language Modeling
+c. Tokenization
+d. Embeddings
+e. Context Size
+f. Scaling Laws
+i. Number of parameters (N)
+ii. Size of the training dataset (D)
+g. Use Cases (p.60)
+ 
+
+
+
+2.  Prompt Engineering
+a. Approaches
+i. Give Direction
+1. Explain what and how to answer
+ii. Specify Format
+1. Definitions
+2. Lists
+3. Topics
+4. Summaries
+5. Detailed text
+iii. Provide Examples
+1. In-Context Learning: zero, one, few-shot
+iv. Evaluate Quality
+1. Specificity, applicability
+v. Divide Labor
+1. Architect prompt into pieces 
+b.  Strategies (p. 89)
+i. Provide References
+ii. Give GPTs time to think
+iii. Role prompting – LLM is a .... 
+iv. Chain prompting – leading the LLM
+1. Least to Most Technique
+v. Chain of Thought – LLM explaining thought process
+c. In-Context Learning (ICL) 
+i. Zero-shot Prompting (no context)
+ii. One-shot Learning
+iii. Few-shot Prompting (ex. p.25)
+d. Prompt Injection / Security
+i. Guardrails 
+ii. Safeguards
+e. Self-consistency
+f. Estimating GPT tokens
+g. Chunking
+i. Strategies: 
+1. Document
+2. Page 
+3. Paragraph
+4. Sentence
+5. Length
+ii. Aggregating 
+1. Summaries
+2. Topics
+3. Analysis
+
+ 
+
+
+      3. Transformers ("Attention Is All You Need")
+1. Vanishing Gradient
+2. Encoder / Decoder architecture (ex. p.38)  - BLLM p.8+
+i. Encoder-only (p.41)
+1. Masked Language Modeling (MLM)
+2. Next Sentence Prediction (NSP)
+ii. Decoder-only (p. 44)
+iii. Encoder/Decoder
+3. Other Common Architectures (p. 50)
+i. Instruction-tuned
+ii. Chatbots (p.212, 244, 345)
+4. Input Embedding
+5. Tokenizing Text  - BLLM p.21, 25
+i. Tokenized Text
+1. Token IDs
+2. Embedding (vectors)
+3. Positional Encoding
+6. Optimization Techniques (p.47)
+7. Attention Mechanism (ex. p.33)
+i. Query Vector
+ii. Key Vector
+iii. Value Vector
+8. Generative Pre-trained Transformer (GPT)
+i. Masked Self-Attention
+ 
+
+
+4. Retrieval-Augmented Generation (RAG) (p.100, 252) (LLMEH Ch. 4)
+Solves: "Most probable results, not most accurate ones."
+1. RAG vs. Fine Tune LLM
+2. Parametric (pre-trained & fine tuned) vs. Non-parametric(RAG/dynamic) Knowledge
+3. Embeddings (BLP p.101 , RAGD p.31)
+i. Vector Databases (ex. Deep Lake p.339)
+ii. Vector Stores
+4. RAG configurations  - RAGD
+i. Naïve RAG (keyword)
+ii. Advanced RAG (vector search and index) 
+iii. Modular/Hybrid RAG (both)
+5. Retriever, Generator, Evaluator (Trainer) - RAGD
+6. Cosine Similarity - How good are the answers? - RAGD
+i. Relevance metric
+ii. Input vs. Output
+iii. Augmented Input vs. Output
+7. RAG from Scratch (p.103)
+i. Preprocessing Dataset
+ii. Generate Embeddings
+iii. Find Related Chunks
+iv. Testing Cosine Similarity
+v. Calculate Similarity in Action
+vi. Augmenting the Prompt
+8. RAG Pipelines (RAGD p.35 get image)
+i. Data Collection and Prep
+ii. Data Embedding and Storage (chunk, embed, store)
+iii. Augmented Input Generation
+9. Retriever Architectures
+i. Decoder architecture
+ii. Decoding Methods
+1. Greedy Search
+2. Beam Search
+3. Sampling
+a. Top-k
+b. Top-p 
+
+
+5. Agents (p.288) - RESEARCH
+1. What is an Agent?
+i. Agent is a Decider and Adapter – an autonomous component
+ii. Program is just a Tool – static sequence of instructions
+iii. Agents run the gamut between a program and a Decider/Adapter
+2. Agent Components
+i. Data extraction and indexing
+ii. Tool use
+iii. LLM API calls
+3. Reasoning Engine / Core
+i. Query Processing (p.320, 323)
+ii. Tool Utilization
+iii. Information Processing
+iv. Synthesis and Response
+v. Custom Functions (p.326)
+vi. Using LLMs (as APIs)
+4. Agent Orchestration
+5. Autonomous Agents
+6. Agent Simulations (p.308)
+7. Generative Agents (p.310)
+8. Agent Types
+i. Action Agent
+ii. Plan-and-execute Agent (p.311, 315)
+iii. Reason and Act (ReAct)?? Same thing as ii?
+9. Memory
+i. Short term
+ii. Long Term 
+10. Using LangChain for State and Conversation Memory
+11. Agent Examples (p.294)
+i. AutoGPT (p.294) - Agent Memory Setup (p.296)
+ii. BabyAGI (p.303)
+iii. OpenAI Assistants (p.329)
+iv. LangChain OpenGPT (p.332)
+12. Agent Techniqes
+1. Chain-of-thought – LLM describing its process
+2. Tree-of-Thoughts – multi-threaded logic
+3. Callbacks (Global, request specific, verbose argument) 
+4. Customizing agents on LCEL?
+4. Vector Databases
+1. Embeddings
+2. Document Loading
+3. RAG with LangChain
+4. Memory Retrieval with FAISS
+5. Hosted Vector DBs with Pinecone
+5. MLOps and LLMOps (LLMEH Ch. 11)
+1) DevOps
+a) Continuous Integration (CI)
+b) Continuous Deployment (CD)
+c) Continuous Testing (CT)
+
+2) MLOps (LLMEH Appendix)
+a) Steps
+i) Continuous Integration (CI)
+ii) Continuous Deployment (CD)
+iii) Continuous Training (CT)
+
+b) Automation
+c) Versioning
+d) Experiment Tracking
+e) Testing
+f) Reproducability
+g) Monitoring
+i) Logs
+ii) Metrics
+iii) System Metrics
+iv) Model Metrics
+v) Drifts
+vi) Monitoring vs. Observability?
+vii) Alerts
+h) Tools
+i) Model Registry
+(1) Hugging Face
+(2) Comet ML
+(3) W&B
+(4) MLFlow
+(5) ZenML
+ii) Feature Store
+(1) Hopswork
+(2) Tecton
+(3) FeatureForm
+iii) ML Metadata store
+(1) Comet ML
+(2) W&B
+(3) MLFlow
+(4) ZenML
+iv) ML Pipeline orchestrator 
+(1) ZenML
+(2) AirFlow
+(3) Prefect
+(4) Dagster
+v) Testing?
+vi) Experiment tracker 
+(1) Comet ML
+
+3) LLMOps
+a) Steps – same as MLOps (CI, CD, CT)
+b) LLM over ML considerations
+i) Scalability
+ii) Retrieval-augmented generation (RAG)
+iii) Prompt engineering
+iv) Fine-tuning
+v) Model inference costs
+c) Prompt monitoring
+i) Time to First Token (TTFT)
+ii) Time Between Tokens (TBT)
+iii) Tokens per Second (TPS)
+iv) Time Per Output Token (TPOT)
+v) Total Latency
+
+d) LLMOps Tools by Category
+i) Model Deployment & Serving
+(1) Scalability & Optimization:
+(a) Ray Serve
+(b) vLLM
+(c) Triton Inference Server
+(2) Model Management & Tracking:
+(a) MLflow
+(b) SageMaker JumpStart
+ii)  Retrieval-Augmented Generation (RAG) & Knowledge Integration
+(1) Vector Databases:
+(a) Pinecone
+(b) Weaviate
+(c) FAISS
+(2) RAG Pipelines:
+(a) LlamaIndex
+(b) Haystack
+iii) Fine-Tuning & Model Adaptation
+(1) Frameworks:
+(a) Hugging Face Transformers
+(b) Axolotl
+(c) DeepSpeed
+(2) Cloud-Based Training:
+(a) SageMaker Training
+(b) Azure OpenAI Fine-Tuning
+iv) Prompt Engineering & Optimization
+(1) Versioning & Debugging:
+(a) PromptLayer
+(b) LangSmith
+(2) Workflow Automation:
+(a) LangChain
+(b) PromptFlow (Azure)
+(c) Opik – Prompt Monitoring
+v) Cost & Performance Optimization
+(1) Efficient Inference:
+(a) vLLM
+(b) DeepSpeed
+(c) OctoML
+(2) Caching & Acceleration:
+(a) TensorRT-LLM
+(b) Hugging Face Optimum
+vi) Monitoring, Logging & Governance
+(1) Observability & Bias Detection:
+(a) Arize AI
+(b) WhyLabs
+(2) Experiment Tracking:
+(a) Weights & Biases (W&B)
+(b) LangSmith
+vii) Security & Guardrails
+(1) Policy & Content Moderation:
+(a) NeMo Guardrails
+(b) OpenAI Moderation API
+(2) Enterprise AI Compliance:
+(a) AWS AI Guardrails
+(b) Google Vertex AI Guardrails
+viii) End-to-End LLMOps Platforms
+(1) Fully Managed Solutions:
+(a) Databricks Mosaic AI
+(b) Vertex AI
+(c) Azure OpenAI Service
+(2) Cloud-Based LLMOps:
+(a) SageMaker LLMOps
+(b) Google Cloud AI
+
+
+
+
+6. Advanced RAG
+1. Queries with LlamaIndex (p.252)
+i. Retrievers
+ii. Query Engines
+iii. Query Transform
+iv. Query Construction
+v. Query Expansion
+vi. Query Transformation
+vii. Subqueries
+2. Human Feedback(HF) (Adaptive RAG) - RAGD p.115
+i. Evaluator 
+1. Metrics - ranking
+2. Human Feedback(HF)
+1. Entered by human - flashcards or snippets
+2. Stored in RAG
+3. Consumed in Retriever
+3. Reranking Documents
+4. Retriever Architectures (p.264)
+i. Recursive
+ii. Small-to-big
+5. RAG/LLM Metrics (p.265)
+i. Correctness
+ii. Faithfulness
+iii. Context Relevancy (Cosine Similarity)
+iv. Guideline Adherence
+v. Embedding Semantic Similarity (Cosine Similarity)
+vi. Retrieval Metrics (p.268)
+1. Mean Reciprocal Rank (MRR)
+2. Hit Rate
+3. Mean Average Precision (MAP)
+4. Normalized Discounted Cumulative Gain (NDCG)
+vii. Evaluation Tools (Open Source in LlamaIndex)
+1. Ragas
+2. DeepEval
+3. ARES
+viii. Custom Evaluation (p.273)
+ix. LangChain, LangSmith, LangChain Hub (p.280)
+
+ 7. LangChain (p.118)  (PE GenAI p.125-184)
+1. Prompt Templates p.118 + p.144 (ex. p.122)
+i. Few shot Prompts (ex. p.152)
+ii. Example Selectors  (ex. p.153)
+2. Output Parsers (p.164)
+3. Indexes & Retrievers (p.190)
+i. Data Ingestion / Document Loaders
+1. PDF Files
+2. Webpages
+3. Google Drive
+ii. Data Preparation
+iii. Text Splitters
+1. By number of characters
+2. At Logical End Points
+3. Foreign Linguistic Structures
+4. Markdown Format
+5. Tokens
+iv. Similarity Search (p.207)
+4. Embedding models
+i. Vector Embedding (p.207)
+ii. Vector databases
+iii. Knowledge Graphs (p.182)
+iv. Open Source (p.209)
+v. Cohere Embeddings (p.210)
+
+5. Features
+i. Agents
+1. Zero shot ReAct
+2. Structured  Input ReAct
+3. OpenAI Functions Agent
+4. Self-Ask with Search Agent
+5. ReAct Document Store Agent
+6. Plan-and-Execute Agents
+ii. Chains (ex. p.124-125+)
+1. Generating Text (ex. p.158)
+2. Adding Memory (p.160)
+3. Concatenating Chains (p.161)
+4. Debugging Chains (p.161)
+5. Custom Chain (p.162)
+iii. Tools
+iv. Memory
+v. Callbacks
+ 
+8. LlamaIndex (p.139 for comparison with LangChain)
+1. Data Connectors
+2. Nodes
+3. Indices
+4. Summary Index
+5. Vector Store Index
+6. Routers
+7. Saving and Loading Indexes Locally
+ 
+9. Fine-Tuning LLMs (p.350, p.341)
+1. Full Fine Tuning
+2. Low-Rank Adaptation (LoRA)
+3. Training Hyperparameters
+4. OPT Parameters
+5. Inference – Inference Optimization (LLMEH Ch. 8)
+1. Model Optimization 
+2. Model Parallelism
+3. Model Quantization
+6. Supervised Fine Tuning (SFT)  (LLMEH Ch. 5)
+7. Reinforcement Learning from Human Feedback (RLHF) (p.381, 384, 393)
+8. Constitutional AI (RLAIF)
+9. Cohere LLM (p.372)
+10. Evaluating LLMS (LLMEH Ch. 7)
+1. ML & LLM evaluation
+2. Genral purpose LLM evaluation
+3. Domain specific LLM evaluation
+4. Task specific LLM evaluation
+5. RAG evaluation: Ragas, ARES
+         11. Performance
+i. Objective / Loss Function
+ii. Evaluation Metrics
+1. Intrinsic/Extrinsic metrics
+2. The Perplexity Evaluation Metric
+
+
+
+11. Deployment (p.406)
+1. Model Distillation
+2. Teacher-Student Models
+3. Deployment Optimization
+i. Quantization (ex. p.419)
+1. Scalar
+2. Product
+3. LLM
+ii. Pruning
+1. Magnitude Based (Unstructured Pruning)
+2. Structured Pruning
+iii. Speculative Decoding
+
+12. Enforcing Policy, Censoring, and Minimizing Bias
+1. Guardrails – Input
+i. Ensure AI stays within scope
+ii. Prevent AI from hallucinating or going off-topic
+iii. Restrict user queries to ethical and legal boundaries
+2. Safeguards – Output
+i. Detect bias, misinformation, or hate speech after AI generates a response
+ii. Moderate AI-generated content dynamically
+iii. Implement human oversight to correct AI mistakes
+
+Self-critique Chain (p.240, 244)
+
+
+Bibliography
+1. Bouchard, Louis-François, and Louie Peters. Building LLMs for Production: Enhancing LLM Abilities and Reliability with Prompting, Fine-Tuning, and RAG. Independently Published, 2024.  (BLP abbrev. but default text for outline page numbers)
+2. Rothman, Denis. RAG-Driven Generative AI: Build Custom Retrieval Augmented Generation Pipelines with LlamaIndex, Deep Lake, and Pinecone. Packt Publishing, 2024. (RAGD abbrev.)
+3. Raschka, Sebastian. Build a Large Language Model (From Scratch). Manning, 2025.
+4. Phoenix, James, and Mike Taylor. Prompt Engineering for Generative AI: Future-Proof Inputs for Reliable AI Outputs. 1st ed., O'Reilly Media, 2024. (PEGenAI abbrev)
+5. Iusztin, Paul, and Maxime Labonne. LLM Engineer's Handbook: Master the Art of Engineering Large Language Models from Concept to Production. Packt Publishing, 2024. (LLMEH abbrev.)
+6. Alammar, Jay, and Maarten Grootendorst. Hands-On Large Language Models: Language Understanding and Generation. 1st ed., 2024.
+7. Chip Huyen, AI Engineering: Building Applications with Foundation Models. O’Reilly, 2025.
+
+Page references in the outline refer to Bouchard/Peters unless otherwise noted.
+
+
+
+Missing Topics (per ChatGPT)
+1. Alignment Techniques:
+* Further emphasis on Reinforcement Learning from AI Feedback (RLAIF).
+* Discussion of "AI alignment" to ensure model safety and adherence to human values.
+2. Foundation Models:
+* Details on emergent behaviors of foundation models.
+* Ethical implications of scaling large models.
+3. Energy Efficiency:
+* Techniques to reduce the carbon footprint of training large LLMs.
+* Eco-friendly alternatives in deployment (e.g., model distillation optimizations).
+4. Context Window Limitations:
+* Advances in addressing or extending the context window limits (e.g., Sparse Attention, Memory Models).
+5. Open-Source Alternatives:
+* Deeper exploration of open-source LLMs like Falcon, MosaicML, and their capabilities.
+ 
+   RAG Overview
+1. Dynamic Retrieval Techniques:
+* Context-adaptive retrieval mechanisms that evolve with user queries.
+* Active learning techniques integrated with RAG.
+2. Federated RAG Systems:
+* Handling distributed datasets in secure environments using RAG principles.
+3. Data Quality for RAG:
+* Emphasis on ensuring data quality in embedding databases.
+* Techniques for deduplication, preprocessing, and data augmentation.
+ 
+   Advanced Evaluation Metrics
+1. Hallucination Detection:
+* Metrics for identifying and mitigating hallucinations in LLMs and RAG responses.
+2. Bias and Fairness:
+* Techniques to measure and mitigate bias in LLM/RAG systems.
+3. Explainability and Interpretability:
+* Advances in interpretability for outputs, embeddings, and retrieval steps.
+
+
+Per Me
+
+Enterprise
+* Governance
+* Bias Removal
+* Scalability
+* Measurability
+* Micro-Transformation - (Agile)
+
+Diffusion Models for Image Generation
+* OpenAI DALL-E
+* Midjourney
+* Stable Diffusion
+* Google Gemini
+* Text to Video
+
