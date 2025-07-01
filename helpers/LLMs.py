@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 import os
 import time
 from typing import List, Optional, Dict, Any, Tuple
+import logging
 
 class BaseLLM(ABC):
     """Base class for Large Language Model implementations"""
@@ -40,27 +41,12 @@ class ChatGPTLLM(BaseLLM):
             if not self.api_key:
                 raise ValueError("OpenAI API key not provided")
             
-            # Handle SSL certificate issues on Windows
-            import os
-            original_ssl_cert_file = os.environ.get('SSL_CERT_FILE')
-            original_ssl_cert_dir = os.environ.get('SSL_CERT_DIR')
-            
-            try:
-                # Temporarily unset SSL certificate environment variables that might cause issues
-                if 'SSL_CERT_FILE' in os.environ:
-                    del os.environ['SSL_CERT_FILE']
-                if 'SSL_CERT_DIR' in os.environ:
-                    del os.environ['SSL_CERT_DIR']
-                
-                self.client = OpenAI(api_key=self.api_key)
-                print(f"ChatGPT initialized with model: {self.model}")
-                
-            finally:
-                # Restore original SSL environment variables
-                if original_ssl_cert_file:
-                    os.environ['SSL_CERT_FILE'] = original_ssl_cert_file
-                if original_ssl_cert_dir:
-                    os.environ['SSL_CERT_DIR'] = original_ssl_cert_dir
+            # Kill broken SSL overrides permanently - hack to fix the SSL certificate issues on Windows allowing system default to be used
+            os.environ.pop("SSL_CERT_FILE", None)
+            os.environ.pop("SSL_CERT_DIR", None)
+               
+            self.client = OpenAI(api_key=self.api_key)
+            print(f"ChatGPT initialized with model: {self.model}")
                     
         except ImportError:
             raise ImportError("openai package not installed. Run: pip install openai")
@@ -71,7 +57,7 @@ class ChatGPTLLM(BaseLLM):
             raise RuntimeError("ChatGPT not initialized. Call initialize() first.")
             
         if not file_path or not os.path.exists(file_path):
-            print(f"File not found: {file_path}")
+            logging.warning(f"File not found: {file_path}")
             return False
             
         try:
@@ -81,16 +67,16 @@ class ChatGPTLLM(BaseLLM):
                     file=file,
                     purpose="assistants"
                 )
-                print(f"File uploaded with ID: {file_obj.id}")
+                logging.info(f"File uploaded with ID: {file_obj.id}")
                 
             # Attach file to assistant
-            self.client.beta.assistants.files.create(
+            self.client.beta.assistants.update(
                 assistant_id=self.assistant_id,
-                file_id=file_obj.id
+                file_ids=[file_obj.id]
             )
             return True
         except Exception as e:
-            print(f"Error uploading file: {str(e)}")
+            logging.warning(f"Error uploading file: {str(e)}")
             return False
             
     def generate_response(self, text: str, messages: Optional[List[Dict[str, str]]] = None, file_path: Optional[str] = None) -> Tuple[str, float]:
