@@ -8192,3 +8192,1027 @@ Thank you for watching.
 2025-06-30 20:44:19,937 - ERROR - No valid response content received
 2025-06-30 20:44:19,937 - INFO - No technical terms recognized by Cliff
 2025-06-30 20:44:19,938 - INFO - 127.0.0.1 - - [30/Jun/2025 20:44:19] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 20:59:07,981 - INFO - === CLIFF BACKEND STARTING ===
+2025-06-30 20:59:07,981 - INFO - Starting at: 2025-06-30 20:59:07.981215
+2025-06-30 20:59:07,982 - INFO - Backend will be available at: http://localhost:5000
+2025-06-30 20:59:08,922 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.222:5000
+2025-06-30 20:59:08,923 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-30 20:59:14,858 - INFO - === HEALTH CHECK REQUEST ===
+2025-06-30 20:59:14,858 - INFO - === HEALTH CHECK REQUEST ===
+2025-06-30 20:59:14,860 - INFO - Request from: 127.0.0.1
+2025-06-30 20:59:14,860 - INFO - Request from: 127.0.0.1
+2025-06-30 20:59:14,861 - INFO - 127.0.0.1 - - [30/Jun/2025 20:59:14] "GET /api/health HTTP/1.1" 200 -
+2025-06-30 20:59:14,861 - INFO - 127.0.0.1 - - [30/Jun/2025 20:59:14] "GET /api/health HTTP/1.1" 200 -
+2025-06-30 20:59:26,066 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 20:59:26,066 - INFO - Request from: 127.0.0.1
+2025-06-30 20:59:26,067 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '240231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryGVdThpFsk10zusiW', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:3000', 'Sec-Fetch-Site': 'same-site', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:3000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9'}
+2025-06-30 20:59:26,070 - INFO - Audio file received: recording.wav, size: 240044 bytes
+2025-06-30 20:59:26,072 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpn3ti8txo.wav
+2025-06-30 20:59:26,074 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpn3ti8txo.wav
+2025-06-30 20:59:26,076 - INFO - Temp file exists after save: True
+2025-06-30 20:59:26,076 - INFO - Temp file size: 240044 bytes
+2025-06-30 20:59:26,096 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=120000
+2025-06-30 20:59:26,097 - INFO - Starting transcription...
+2025-06-30 20:59:26,098 - INFO - SSL default verify paths:
+2025-06-30 20:59:26,098 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 20:59:26,099 - INFO - [speech_to_text] Initializing OpenAI Whisper STT
+2025-06-30 20:59:26,099 - INFO - [speech_to_text] OpenAI Whisper STT initialized successfully
+2025-06-30 20:59:26,972 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 20:59:26,973 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpn3ti8txo.wav
+2025-06-30 20:59:26,973 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpn3ti8txo.wav
+2025-06-30 20:59:31,329 - INFO - Transcription result: All right, maybe one shot, two shot.
+2025-06-30 20:59:31,330 - INFO - Transcription successful: 'All right, maybe one shot, two shot.'
+2025-06-30 20:59:31,330 - INFO - Temp file cleaned up
+2025-06-30 20:59:31,331 - INFO - 127.0.0.1 - - [30/Jun/2025 20:59:31] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 20:59:31,654 - INFO - 127.0.0.1 - - [30/Jun/2025 20:59:31] "OPTIONS /api/chat HTTP/1.1" 200 -
+2025-06-30 20:59:31,900 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 20:59:31,901 - INFO - Request from: 127.0.0.1
+2025-06-30 20:59:31,901 - INFO - Received chat data: {'message': 'All right, maybe one shot, two shot.'}
+2025-06-30 20:59:31,901 - INFO - Processing message: 'All right, maybe one shot, two shot.'
+2025-06-30 20:59:32,609 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 20:59:32,610 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 20:59:32,611 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 20:59:32,611 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 20:59:32,612 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 20:59:32,612 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 20:59:32,613 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 20:59:32,614 - INFO - CHATGPT PARSED Content:
+All right, maybe one shot, two shot.
+2025-06-30 20:59:36,059 - INFO - AI Response generated: Few-Shot Learning  
+Training an AI model with a limited number of examples.
+
+Few-shot learning is a ...
+2025-06-30 20:59:36,060 - INFO - 127.0.0.1 - - [30/Jun/2025 20:59:36] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 20:59:49,368 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 20:59:49,369 - INFO - Request from: 127.0.0.1
+2025-06-30 20:59:49,369 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '416231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary7BfR5W8BekkV55lo', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:3000', 'Sec-Fetch-Site': 'same-site', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:3000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9'}
+2025-06-30 20:59:49,372 - INFO - Audio file received: recording.wav, size: 416044 bytes
+2025-06-30 20:59:49,374 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpmhpkj2ye.wav
+2025-06-30 20:59:49,377 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpmhpkj2ye.wav
+2025-06-30 20:59:49,377 - INFO - Temp file exists after save: True
+2025-06-30 20:59:49,378 - INFO - Temp file size: 416044 bytes
+2025-06-30 20:59:49,401 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=208000
+2025-06-30 20:59:49,403 - INFO - Starting transcription...
+2025-06-30 20:59:49,404 - INFO - SSL default verify paths:
+2025-06-30 20:59:49,407 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 20:59:49,410 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 20:59:49,412 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpmhpkj2ye.wav
+2025-06-30 20:59:49,413 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpmhpkj2ye.wav
+2025-06-30 20:59:50,451 - INFO - Transcription result: And then we'll talk about vector DBs.
+2025-06-30 20:59:50,451 - INFO - Transcription successful: 'And then we'll talk about vector DBs.'
+2025-06-30 20:59:50,452 - INFO - Temp file cleaned up
+2025-06-30 20:59:50,452 - INFO - 127.0.0.1 - - [30/Jun/2025 20:59:50] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 20:59:50,764 - INFO - 127.0.0.1 - - [30/Jun/2025 20:59:50] "OPTIONS /api/chat HTTP/1.1" 200 -
+2025-06-30 20:59:51,026 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 20:59:51,027 - INFO - Request from: 127.0.0.1
+2025-06-30 20:59:51,027 - INFO - Received chat data: {'message': "And then we'll talk about vector DBs."}
+2025-06-30 20:59:51,028 - INFO - Processing message: 'And then we'll talk about vector DBs.'
+2025-06-30 20:59:51,738 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 20:59:51,739 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 20:59:51,739 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 20:59:51,740 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 20:59:51,740 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 20:59:51,741 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 20:59:51,741 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 20:59:51,742 - INFO - CHATGPT PARSED Content:
+And then we'll talk about vector DBs.
+2025-06-30 20:59:54,294 - INFO - AI Response generated: Vector DB
+
+Stores data in a multi-dimensional vector space for efficient similarity search and retri...
+2025-06-30 20:59:54,295 - INFO - 127.0.0.1 - - [30/Jun/2025 20:59:54] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:00:05,806 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:00:05,806 - INFO - Request from: 127.0.0.1
+2025-06-30 21:00:05,806 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '352231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryIcOA34gyp63WBgYQ', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:3000', 'Sec-Fetch-Site': 'same-site', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:3000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9'}
+2025-06-30 21:00:05,809 - INFO - Audio file received: recording.wav, size: 352044 bytes
+2025-06-30 21:00:05,811 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmp623e73ln.wav
+2025-06-30 21:00:05,813 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmp623e73ln.wav
+2025-06-30 21:00:05,814 - INFO - Temp file exists after save: True
+2025-06-30 21:00:05,815 - INFO - Temp file size: 352044 bytes
+2025-06-30 21:00:05,833 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=176000
+2025-06-30 21:00:05,833 - INFO - Starting transcription...
+2025-06-30 21:00:05,834 - INFO - SSL default verify paths:
+2025-06-30 21:00:05,834 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:00:05,835 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:00:05,835 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmp623e73ln.wav
+2025-06-30 21:00:05,836 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmp623e73ln.wav
+2025-06-30 21:00:08,300 - INFO - Transcription result: But not without a little bit of rag architecture.
+2025-06-30 21:00:08,301 - INFO - Transcription successful: 'But not without a little bit of rag architecture.'
+2025-06-30 21:00:08,302 - INFO - Temp file cleaned up
+2025-06-30 21:00:08,302 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:08] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:00:08,613 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:08] "OPTIONS /api/chat HTTP/1.1" 200 -
+2025-06-30 21:00:08,877 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:00:08,878 - INFO - Request from: 127.0.0.1
+2025-06-30 21:00:08,878 - INFO - Received chat data: {'message': 'But not without a little bit of rag architecture.'}
+2025-06-30 21:00:08,879 - INFO - Processing message: 'But not without a little bit of rag architecture.'
+2025-06-30 21:00:09,593 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:00:09,593 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:00:09,594 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:00:09,595 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:00:09,595 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:00:09,596 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:00:09,596 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:00:09,597 - INFO - CHATGPT PARSED Content:
+But not without a little bit of rag architecture.
+2025-06-30 21:00:15,008 - INFO - AI Response generated: RAG (Retrieval-Augmented Generation) Architecture
+
+A framework combining information retrieval with ...
+2025-06-30 21:00:15,009 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:15] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:00:18,851 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:00:18,851 - INFO - Request from: 127.0.0.1
+2025-06-30 21:00:18,851 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '112231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryNbOyA0FkSPw69lGK', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:3000', 'Sec-Fetch-Site': 'same-site', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:3000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9'}
+2025-06-30 21:00:18,855 - INFO - Audio file received: recording.wav, size: 112044 bytes
+2025-06-30 21:00:18,856 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpd25s5l_g.wav
+2025-06-30 21:00:18,858 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpd25s5l_g.wav
+2025-06-30 21:00:18,859 - INFO - Temp file exists after save: True
+2025-06-30 21:00:18,860 - INFO - Temp file size: 112044 bytes
+2025-06-30 21:00:18,880 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=56000
+2025-06-30 21:00:18,881 - INFO - Starting transcription...
+2025-06-30 21:00:18,881 - INFO - SSL default verify paths:
+2025-06-30 21:00:18,882 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:00:18,882 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:00:18,883 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpd25s5l_g.wav
+2025-06-30 21:00:18,883 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpd25s5l_g.wav
+2025-06-30 21:00:20,782 - INFO - Transcription result: Thank you for watching!
+2025-06-30 21:00:20,783 - INFO - Transcription successful: 'Thank you for watching!'
+2025-06-30 21:00:20,783 - INFO - Temp file cleaned up
+2025-06-30 21:00:20,783 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:20] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:00:21,101 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:21] "OPTIONS /api/chat HTTP/1.1" 200 -
+2025-06-30 21:00:21,366 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:00:21,367 - INFO - Request from: 127.0.0.1
+2025-06-30 21:00:21,367 - INFO - Received chat data: {'message': 'Thank you for watching!'}
+2025-06-30 21:00:21,368 - INFO - Processing message: 'Thank you for watching!'
+2025-06-30 21:00:22,081 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:00:22,081 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:00:22,082 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:00:22,082 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:00:22,083 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:00:22,084 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:00:22,084 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:00:22,085 - INFO - CHATGPT PARSED Content:
+Thank you for watching!
+2025-06-30 21:00:22,783 - ERROR - No valid response content received
+2025-06-30 21:00:22,783 - INFO - No technical terms recognized by Cliff
+2025-06-30 21:00:22,784 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:22] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:00:24,863 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:00:24,864 - INFO - Request from: 127.0.0.1
+2025-06-30 21:00:24,864 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '48231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryKvBWMo8BOHaLYHSV', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:3000', 'Sec-Fetch-Site': 'same-site', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:3000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9'}
+2025-06-30 21:00:24,868 - INFO - Audio file received: recording.wav, size: 48044 bytes
+2025-06-30 21:00:24,870 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpeeahpu2i.wav
+2025-06-30 21:00:24,872 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpeeahpu2i.wav
+2025-06-30 21:00:24,873 - INFO - Temp file exists after save: True
+2025-06-30 21:00:24,874 - INFO - Temp file size: 48044 bytes
+2025-06-30 21:00:24,893 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=24000
+2025-06-30 21:00:24,895 - INFO - Starting transcription...
+2025-06-30 21:00:24,896 - INFO - SSL default verify paths:
+2025-06-30 21:00:24,898 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:00:24,900 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:00:24,900 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpeeahpu2i.wav
+2025-06-30 21:00:24,901 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpeeahpu2i.wav
+2025-06-30 21:00:26,093 - INFO - Transcription result: Bye.
+2025-06-30 21:00:26,094 - INFO - Transcription successful: 'Bye.'
+2025-06-30 21:00:26,094 - INFO - Temp file cleaned up
+2025-06-30 21:00:26,095 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:26] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:00:26,414 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:00:26,414 - INFO - Request from: 127.0.0.1
+2025-06-30 21:00:26,415 - INFO - Received chat data: {'message': 'Bye.'}
+2025-06-30 21:00:26,415 - INFO - Processing message: 'Bye.'
+2025-06-30 21:00:27,135 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:00:27,136 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:00:27,136 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:00:27,137 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:00:27,138 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:00:27,138 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:00:27,139 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:00:27,139 - INFO - CHATGPT PARSED Content:
+Bye.
+2025-06-30 21:00:28,746 - INFO - AI Response generated: Goodbye....
+2025-06-30 21:00:28,746 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:28] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:00:30,239 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:00:30,240 - INFO - Request from: 127.0.0.1
+2025-06-30 21:00:30,241 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '32231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryLB54d51dHDFgChVM', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:3000', 'Sec-Fetch-Site': 'same-site', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:3000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9'}
+2025-06-30 21:00:30,243 - INFO - Audio file received: recording.wav, size: 32044 bytes
+2025-06-30 21:00:30,244 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmp3588lxng.wav
+2025-06-30 21:00:30,245 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmp3588lxng.wav
+2025-06-30 21:00:30,246 - INFO - Temp file exists after save: True
+2025-06-30 21:00:30,246 - INFO - Temp file size: 32044 bytes
+2025-06-30 21:00:30,261 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=16000
+2025-06-30 21:00:30,262 - INFO - Starting transcription...
+2025-06-30 21:00:30,263 - INFO - SSL default verify paths:
+2025-06-30 21:00:30,263 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:00:30,264 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:00:30,265 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmp3588lxng.wav
+2025-06-30 21:00:30,266 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmp3588lxng.wav
+2025-06-30 21:00:31,381 - INFO - Transcription result: you
+2025-06-30 21:00:31,381 - INFO - Transcription successful: 'you'
+2025-06-30 21:00:31,382 - INFO - Temp file cleaned up
+2025-06-30 21:00:31,383 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:31] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:00:31,695 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:31] "OPTIONS /api/chat HTTP/1.1" 200 -
+2025-06-30 21:00:31,959 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:00:31,960 - INFO - Request from: 127.0.0.1
+2025-06-30 21:00:31,960 - INFO - Received chat data: {'message': 'you'}
+2025-06-30 21:00:31,961 - INFO - Processing message: 'you'
+2025-06-30 21:00:32,670 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:00:32,671 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:00:32,672 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:00:32,672 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:00:32,673 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:00:32,673 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:00:32,674 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:00:32,674 - INFO - CHATGPT PARSED Content:
+you
+2025-06-30 21:00:33,364 - INFO - AI Response generated: NO...
+2025-06-30 21:00:33,364 - INFO - 127.0.0.1 - - [30/Jun/2025 21:00:33] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:03:25,932 - INFO - === CLIFF BACKEND STARTING ===
+2025-06-30 21:03:25,932 - INFO - Starting at: 2025-06-30 21:03:25.932501
+2025-06-30 21:03:25,932 - INFO - Backend will be available at: http://localhost:5000
+2025-06-30 21:03:26,862 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.222:5000
+2025-06-30 21:03:26,863 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-30 21:04:17,630 - INFO - === ROOT PAGE REQUEST ===
+2025-06-30 21:04:17,631 - INFO - Request from: 127.0.0.1
+2025-06-30 21:04:17,633 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:17] "GET / HTTP/1.1" 200 -
+2025-06-30 21:04:17,840 - INFO - === HEALTH CHECK REQUEST ===
+2025-06-30 21:04:17,841 - INFO - Request from: 127.0.0.1
+2025-06-30 21:04:17,843 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:17] "GET /api/health HTTP/1.1" 200 -
+2025-06-30 21:04:17,897 - INFO - === HEALTH CHECK REQUEST ===
+2025-06-30 21:04:17,898 - INFO - Request from: 127.0.0.1
+2025-06-30 21:04:17,898 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:17] "GET /api/health HTTP/1.1" 200 -
+2025-06-30 21:04:18,255 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:18] "[36mGET /favicon.ico HTTP/1.1[0m" 304 -
+2025-06-30 21:04:21,745 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:21] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-06-30 21:04:23,684 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:23] "GET /recorder-processor.js HTTP/1.1" 200 -
+2025-06-30 21:04:28,359 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:04:28,359 - INFO - Request from: 127.0.0.1
+2025-06-30 21:04:28,360 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '128231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary3YbcFA54TOuHx6KV', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:04:28,363 - INFO - Audio file received: recording.wav, size: 128044 bytes
+2025-06-30 21:04:28,364 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpcwq7j3eg.wav
+2025-06-30 21:04:28,366 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpcwq7j3eg.wav
+2025-06-30 21:04:28,366 - INFO - Temp file exists after save: True
+2025-06-30 21:04:28,367 - INFO - Temp file size: 128044 bytes
+2025-06-30 21:04:28,380 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=64000
+2025-06-30 21:04:28,381 - INFO - Starting transcription...
+2025-06-30 21:04:28,381 - INFO - SSL default verify paths:
+2025-06-30 21:04:28,382 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:04:28,383 - INFO - [speech_to_text] Initializing OpenAI Whisper STT
+2025-06-30 21:04:28,383 - INFO - [speech_to_text] OpenAI Whisper STT initialized successfully
+2025-06-30 21:04:29,248 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:04:29,248 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpcwq7j3eg.wav
+2025-06-30 21:04:29,248 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpcwq7j3eg.wav
+2025-06-30 21:04:32,973 - INFO - Transcription result: Testing 1, 2, 3.
+2025-06-30 21:04:32,973 - INFO - Transcription successful: 'Testing 1, 2, 3.'
+2025-06-30 21:04:32,974 - INFO - Temp file cleaned up
+2025-06-30 21:04:32,974 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:32] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:04:32,980 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:04:32,980 - INFO - Request from: 127.0.0.1
+2025-06-30 21:04:32,981 - INFO - Received chat data: {'message': 'Testing 1, 2, 3.'}
+2025-06-30 21:04:32,981 - INFO - Processing message: 'Testing 1, 2, 3.'
+2025-06-30 21:04:33,695 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:04:33,695 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:04:33,696 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:04:33,697 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:04:33,697 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:04:33,697 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:04:33,697 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:04:33,698 - INFO - CHATGPT PARSED Content:
+Testing 1, 2, 3.
+2025-06-30 21:04:35,627 - INFO - AI Response generated: NO response. ...
+2025-06-30 21:04:35,629 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:35] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:04:36,099 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:36] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:04:44,648 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:04:44,649 - INFO - Request from: 127.0.0.1
+2025-06-30 21:04:44,650 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '272231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryBCAAlEOL0BF6zcVk', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:04:44,653 - INFO - Audio file received: recording.wav, size: 272044 bytes
+2025-06-30 21:04:44,655 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmphc2o1ngi.wav
+2025-06-30 21:04:44,657 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmphc2o1ngi.wav
+2025-06-30 21:04:44,658 - INFO - Temp file exists after save: True
+2025-06-30 21:04:44,659 - INFO - Temp file size: 272044 bytes
+2025-06-30 21:04:44,679 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=136000
+2025-06-30 21:04:44,680 - INFO - Starting transcription...
+2025-06-30 21:04:44,680 - INFO - SSL default verify paths:
+2025-06-30 21:04:44,681 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:04:44,681 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:04:44,682 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmphc2o1ngi.wav
+2025-06-30 21:04:44,682 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmphc2o1ngi.wav
+2025-06-30 21:04:45,668 - INFO - Transcription result: Thanks for watching!
+2025-06-30 21:04:45,669 - INFO - Transcription successful: 'Thanks for watching!'
+2025-06-30 21:04:45,669 - INFO - Temp file cleaned up
+2025-06-30 21:04:45,669 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:45] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:04:45,980 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:04:45,980 - INFO - Request from: 127.0.0.1
+2025-06-30 21:04:45,981 - INFO - Received chat data: {'message': 'Thanks for watching!'}
+2025-06-30 21:04:45,981 - INFO - Processing message: 'Thanks for watching!'
+2025-06-30 21:04:46,703 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:04:46,704 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:04:46,704 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:04:46,705 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:04:46,706 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:04:46,706 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:04:46,707 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:04:46,707 - INFO - CHATGPT PARSED Content:
+Thanks for watching!
+2025-06-30 21:04:47,295 - INFO - AI Response generated: Silence....
+2025-06-30 21:04:47,296 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:47] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:04:47,431 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:47] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:04:52,101 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:04:52,102 - INFO - Request from: 127.0.0.1
+2025-06-30 21:04:52,102 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '128231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryr2ysm947KeP2eBRV', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:04:52,105 - INFO - Audio file received: recording.wav, size: 128044 bytes
+2025-06-30 21:04:52,106 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpxl0wg_7b.wav
+2025-06-30 21:04:52,107 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpxl0wg_7b.wav
+2025-06-30 21:04:52,107 - INFO - Temp file exists after save: True
+2025-06-30 21:04:52,108 - INFO - Temp file size: 128044 bytes
+2025-06-30 21:04:52,121 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=64000
+2025-06-30 21:04:52,121 - INFO - Starting transcription...
+2025-06-30 21:04:52,122 - INFO - SSL default verify paths:
+2025-06-30 21:04:52,122 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:04:52,123 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:04:52,123 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpxl0wg_7b.wav
+2025-06-30 21:04:52,123 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpxl0wg_7b.wav
+2025-06-30 21:04:54,313 - INFO - Transcription result: Thank you for watching!
+2025-06-30 21:04:54,314 - INFO - Transcription successful: 'Thank you for watching!'
+2025-06-30 21:04:54,315 - INFO - Temp file cleaned up
+2025-06-30 21:04:54,315 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:54] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:04:54,321 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:04:54,322 - INFO - Request from: 127.0.0.1
+2025-06-30 21:04:54,322 - INFO - Received chat data: {'message': 'Thank you for watching!'}
+2025-06-30 21:04:54,322 - INFO - Processing message: 'Thank you for watching!'
+2025-06-30 21:04:55,034 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:04:55,034 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:04:55,035 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:04:55,036 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:04:55,036 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:04:55,036 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:04:55,037 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:04:55,037 - INFO - CHATGPT PARSED Content:
+Thank you for watching!
+2025-06-30 21:04:55,675 - INFO - AI Response generated: Silence....
+2025-06-30 21:04:55,676 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:55] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:04:56,131 - INFO - 127.0.0.1 - - [30/Jun/2025 21:04:56] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:05:08,446 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:05:08,447 - INFO - Request from: 127.0.0.1
+2025-06-30 21:05:08,447 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '384231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary5NVEmBcWFOPAJdAF', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:05:08,450 - INFO - Audio file received: recording.wav, size: 384044 bytes
+2025-06-30 21:05:08,451 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmphywmsd47.wav
+2025-06-30 21:05:08,453 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmphywmsd47.wav
+2025-06-30 21:05:08,454 - INFO - Temp file exists after save: True
+2025-06-30 21:05:08,455 - INFO - Temp file size: 384044 bytes
+2025-06-30 21:05:08,473 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=192000
+2025-06-30 21:05:08,474 - INFO - Starting transcription...
+2025-06-30 21:05:08,474 - INFO - SSL default verify paths:
+2025-06-30 21:05:08,475 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:05:08,475 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:05:08,476 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmphywmsd47.wav
+2025-06-30 21:05:08,476 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmphywmsd47.wav
+2025-06-30 21:05:09,608 - INFO - Transcription result: Thanks for watching!
+2025-06-30 21:05:09,608 - INFO - Transcription successful: 'Thanks for watching!'
+2025-06-30 21:05:09,609 - INFO - Temp file cleaned up
+2025-06-30 21:05:09,609 - INFO - 127.0.0.1 - - [30/Jun/2025 21:05:09] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:05:09,932 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:05:09,933 - INFO - Request from: 127.0.0.1
+2025-06-30 21:05:09,933 - INFO - Received chat data: {'message': 'Thanks for watching!'}
+2025-06-30 21:05:09,933 - INFO - Processing message: 'Thanks for watching!'
+2025-06-30 21:05:10,702 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:05:10,703 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:05:10,703 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:05:10,704 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:05:10,704 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:05:10,704 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:05:10,705 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:05:10,705 - INFO - CHATGPT PARSED Content:
+Thanks for watching!
+2025-06-30 21:05:11,389 - INFO - AI Response generated: NO response....
+2025-06-30 21:05:11,390 - INFO - 127.0.0.1 - - [30/Jun/2025 21:05:11] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:05:11,514 - INFO - 127.0.0.1 - - [30/Jun/2025 21:05:11] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:05:31,389 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:05:31,389 - INFO - Request from: 127.0.0.1
+2025-06-30 21:05:31,390 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '624231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryJfJgtkFLTg0TbzgD', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:05:31,394 - INFO - Audio file received: recording.wav, size: 624044 bytes
+2025-06-30 21:05:31,396 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpp287_8dz.wav
+2025-06-30 21:05:31,398 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpp287_8dz.wav
+2025-06-30 21:05:31,403 - INFO - Temp file exists after save: True
+2025-06-30 21:05:31,404 - INFO - Temp file size: 624044 bytes
+2025-06-30 21:05:31,418 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=312000
+2025-06-30 21:05:31,420 - INFO - Starting transcription...
+2025-06-30 21:05:31,421 - INFO - SSL default verify paths:
+2025-06-30 21:05:31,421 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:05:31,422 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:05:31,423 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpp287_8dz.wav
+2025-06-30 21:05:31,423 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpp287_8dz.wav
+2025-06-30 21:05:33,563 - INFO - Transcription result: Thank you for watching.
+2025-06-30 21:05:33,563 - INFO - Transcription successful: 'Thank you for watching.'
+2025-06-30 21:05:33,564 - INFO - Temp file cleaned up
+2025-06-30 21:05:33,564 - INFO - 127.0.0.1 - - [30/Jun/2025 21:05:33] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:06:13,502 - INFO - === CLIFF BACKEND STARTING ===
+2025-06-30 21:06:13,502 - INFO - Starting at: 2025-06-30 21:06:13.502553
+2025-06-30 21:06:13,503 - INFO - Backend will be available at: http://localhost:5000
+2025-06-30 21:06:14,373 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.222:5000
+2025-06-30 21:06:14,374 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-30 21:06:14,481 - INFO - === ROOT PAGE REQUEST ===
+2025-06-30 21:06:14,482 - INFO - Request from: 127.0.0.1
+2025-06-30 21:06:14,484 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:14] "GET / HTTP/1.1" 200 -
+2025-06-30 21:06:14,947 - INFO - === HEALTH CHECK REQUEST ===
+2025-06-30 21:06:14,950 - INFO - Request from: 127.0.0.1
+2025-06-30 21:06:14,951 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:14] "GET /api/health HTTP/1.1" 200 -
+2025-06-30 21:06:14,954 - INFO - === HEALTH CHECK REQUEST ===
+2025-06-30 21:06:14,954 - INFO - Request from: 127.0.0.1
+2025-06-30 21:06:14,955 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:14] "GET /api/health HTTP/1.1" 200 -
+2025-06-30 21:06:21,822 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:21] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-06-30 21:06:23,050 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:23] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:06:30,076 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:06:30,076 - INFO - Request from: 127.0.0.1
+2025-06-30 21:06:30,077 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '208231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryNBm4c9JAAfgJfoZR', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:06:30,080 - INFO - Audio file received: recording.wav, size: 208044 bytes
+2025-06-30 21:06:30,081 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpeq8syeog.wav
+2025-06-30 21:06:30,083 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpeq8syeog.wav
+2025-06-30 21:06:30,084 - INFO - Temp file exists after save: True
+2025-06-30 21:06:30,085 - INFO - Temp file size: 208044 bytes
+2025-06-30 21:06:30,098 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=104000
+2025-06-30 21:06:30,099 - INFO - Starting transcription...
+2025-06-30 21:06:30,099 - INFO - SSL default verify paths:
+2025-06-30 21:06:30,100 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:06:30,101 - INFO - [speech_to_text] Initializing OpenAI Whisper STT
+2025-06-30 21:06:30,101 - INFO - [speech_to_text] OpenAI Whisper STT initialized successfully
+2025-06-30 21:06:30,971 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:06:30,971 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpeq8syeog.wav
+2025-06-30 21:06:30,972 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpeq8syeog.wav
+2025-06-30 21:06:34,502 - INFO - Transcription result: Testing 1, 2, 3.
+2025-06-30 21:06:34,503 - INFO - Transcription successful: 'Testing 1, 2, 3.'
+2025-06-30 21:06:34,504 - INFO - Temp file cleaned up
+2025-06-30 21:06:34,505 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:34] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:06:34,512 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:06:34,513 - INFO - Request from: 127.0.0.1
+2025-06-30 21:06:34,513 - INFO - Received chat data: {'message': 'Testing 1, 2, 3.'}
+2025-06-30 21:06:34,514 - INFO - Processing message: 'Testing 1, 2, 3.'
+2025-06-30 21:06:35,230 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:06:35,231 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:06:35,231 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:06:35,232 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:06:35,232 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:06:35,232 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:06:35,233 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:06:35,233 - INFO - CHATGPT PARSED Content:
+Testing 1, 2, 3.
+2025-06-30 21:06:35,880 - ERROR - No valid response content received
+2025-06-30 21:06:35,881 - INFO - No technical terms recognized by Cliff
+2025-06-30 21:06:35,881 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:35] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:06:36,351 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:36] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:06:42,117 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:06:42,117 - INFO - Request from: 127.0.0.1
+2025-06-30 21:06:42,118 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '176231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundarypW5or3MTRIFBtWGM', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:06:42,121 - INFO - Audio file received: recording.wav, size: 176044 bytes
+2025-06-30 21:06:42,122 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpaaynanc8.wav
+2025-06-30 21:06:42,124 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpaaynanc8.wav
+2025-06-30 21:06:42,124 - INFO - Temp file exists after save: True
+2025-06-30 21:06:42,125 - INFO - Temp file size: 176044 bytes
+2025-06-30 21:06:42,153 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=88000
+2025-06-30 21:06:42,154 - INFO - Starting transcription...
+2025-06-30 21:06:42,154 - INFO - SSL default verify paths:
+2025-06-30 21:06:42,155 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:06:42,155 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:06:42,155 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpaaynanc8.wav
+2025-06-30 21:06:42,156 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpaaynanc8.wav
+2025-06-30 21:06:43,745 - INFO - Transcription result: We're talking about RAG architectures.
+2025-06-30 21:06:43,745 - INFO - Transcription successful: 'We're talking about RAG architectures.'
+2025-06-30 21:06:43,746 - INFO - Temp file cleaned up
+2025-06-30 21:06:43,747 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:43] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:06:44,057 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:06:44,058 - INFO - Request from: 127.0.0.1
+2025-06-30 21:06:44,058 - INFO - Received chat data: {'message': "We're talking about RAG architectures."}
+2025-06-30 21:06:44,059 - INFO - Processing message: 'We're talking about RAG architectures.'
+2025-06-30 21:06:44,765 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:06:44,766 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:06:44,767 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:06:44,767 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:06:44,768 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:06:44,768 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:06:44,769 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:06:44,770 - INFO - CHATGPT PARSED Content:
+We're talking about RAG architectures.
+2025-06-30 21:06:47,484 - INFO - AI Response generated: RAG (Retrieval-Augmented Generation)
+
+A neural network architecture combining retrieval of relevant ...
+2025-06-30 21:06:47,485 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:47] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:06:47,651 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:47] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:06:53,971 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:06:53,972 - INFO - Request from: 127.0.0.1
+2025-06-30 21:06:53,972 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '176231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryKIUMx417HPmWYJB3', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:06:53,975 - INFO - Audio file received: recording.wav, size: 176044 bytes
+2025-06-30 21:06:53,975 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpm8yitexv.wav
+2025-06-30 21:06:53,977 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpm8yitexv.wav
+2025-06-30 21:06:53,978 - INFO - Temp file exists after save: True
+2025-06-30 21:06:53,979 - INFO - Temp file size: 176044 bytes
+2025-06-30 21:06:53,991 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=88000
+2025-06-30 21:06:53,992 - INFO - Starting transcription...
+2025-06-30 21:06:53,992 - INFO - SSL default verify paths:
+2025-06-30 21:06:53,993 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:06:53,993 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:06:53,994 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpm8yitexv.wav
+2025-06-30 21:06:53,995 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpm8yitexv.wav
+2025-06-30 21:06:55,767 - INFO - Transcription result: Thanks for watching!
+2025-06-30 21:06:55,768 - INFO - Transcription successful: 'Thanks for watching!'
+2025-06-30 21:06:55,768 - INFO - Temp file cleaned up
+2025-06-30 21:06:55,769 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:55] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:06:55,776 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:06:55,777 - INFO - Request from: 127.0.0.1
+2025-06-30 21:06:55,778 - INFO - Received chat data: {'message': 'Thanks for watching!'}
+2025-06-30 21:06:55,778 - INFO - Processing message: 'Thanks for watching!'
+2025-06-30 21:06:56,503 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:06:56,504 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:06:56,504 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:06:56,505 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:06:56,505 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:06:56,506 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:06:56,506 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:06:56,507 - INFO - CHATGPT PARSED Content:
+Thanks for watching!
+2025-06-30 21:06:57,114 - ERROR - No valid response content received
+2025-06-30 21:06:57,115 - INFO - No technical terms recognized by Cliff
+2025-06-30 21:06:57,116 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:57] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:06:57,560 - INFO - 127.0.0.1 - - [30/Jun/2025 21:06:57] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:07:03,349 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:07:03,350 - INFO - Request from: 127.0.0.1
+2025-06-30 21:07:03,350 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '176231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundarylFCYtLKD9ymDJgdF', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:07:03,353 - INFO - Audio file received: recording.wav, size: 176044 bytes
+2025-06-30 21:07:03,354 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmp76qzvt0w.wav
+2025-06-30 21:07:03,357 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmp76qzvt0w.wav
+2025-06-30 21:07:03,357 - INFO - Temp file exists after save: True
+2025-06-30 21:07:03,358 - INFO - Temp file size: 176044 bytes
+2025-06-30 21:07:03,380 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=88000
+2025-06-30 21:07:03,380 - INFO - Starting transcription...
+2025-06-30 21:07:03,381 - INFO - SSL default verify paths:
+2025-06-30 21:07:03,381 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:07:03,382 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:07:03,382 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmp76qzvt0w.wav
+2025-06-30 21:07:03,382 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmp76qzvt0w.wav
+2025-06-30 21:07:04,659 - INFO - Transcription result: Thanks for watching!
+2025-06-30 21:07:04,660 - INFO - Transcription successful: 'Thanks for watching!'
+2025-06-30 21:07:04,660 - INFO - Temp file cleaned up
+2025-06-30 21:07:04,661 - INFO - 127.0.0.1 - - [30/Jun/2025 21:07:04] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:07:04,981 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:07:04,982 - INFO - Request from: 127.0.0.1
+2025-06-30 21:07:04,982 - INFO - Received chat data: {'message': 'Thanks for watching!'}
+2025-06-30 21:07:04,982 - INFO - Processing message: 'Thanks for watching!'
+2025-06-30 21:07:05,693 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:07:05,693 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:07:05,694 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:07:05,695 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:07:05,695 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:07:05,696 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:07:05,696 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:07:05,696 - INFO - CHATGPT PARSED Content:
+Thanks for watching!
+2025-06-30 21:07:06,271 - ERROR - No valid response content received
+2025-06-30 21:07:06,272 - INFO - No technical terms recognized by Cliff
+2025-06-30 21:07:06,273 - INFO - 127.0.0.1 - - [30/Jun/2025 21:07:06] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:07:06,389 - INFO - 127.0.0.1 - - [30/Jun/2025 21:07:06] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:07:23,262 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:07:23,263 - INFO - Request from: 127.0.0.1
+2025-06-30 21:07:23,263 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '528231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryEOybA3BFiicvBTwm', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:07:23,267 - INFO - Audio file received: recording.wav, size: 528044 bytes
+2025-06-30 21:07:23,268 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmp8eihh780.wav
+2025-06-30 21:07:23,270 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmp8eihh780.wav
+2025-06-30 21:07:23,270 - INFO - Temp file exists after save: True
+2025-06-30 21:07:23,271 - INFO - Temp file size: 528044 bytes
+2025-06-30 21:07:23,284 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=264000
+2025-06-30 21:07:23,285 - INFO - Starting transcription...
+2025-06-30 21:07:23,285 - INFO - SSL default verify paths:
+2025-06-30 21:07:23,285 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:07:23,286 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:07:23,286 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmp8eihh780.wav
+2025-06-30 21:07:23,287 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmp8eihh780.wav
+2025-06-30 21:07:26,479 - INFO - Transcription result: Thank you for watching!
+2025-06-30 21:07:26,479 - INFO - Transcription successful: 'Thank you for watching!'
+2025-06-30 21:07:26,480 - INFO - Temp file cleaned up
+2025-06-30 21:07:26,481 - INFO - 127.0.0.1 - - [30/Jun/2025 21:07:26] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:07:26,486 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:07:26,487 - INFO - Request from: 127.0.0.1
+2025-06-30 21:07:26,487 - INFO - Received chat data: {'message': 'Thank you for watching!'}
+2025-06-30 21:07:26,487 - INFO - Processing message: 'Thank you for watching!'
+2025-06-30 21:07:27,281 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:07:27,282 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:07:27,283 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:07:27,283 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:07:27,284 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:07:27,284 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:07:27,285 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:07:27,285 - INFO - CHATGPT PARSED Content:
+Thank you for watching!
+2025-06-30 21:07:28,019 - ERROR - No valid response content received
+2025-06-30 21:07:28,019 - INFO - No technical terms recognized by Cliff
+2025-06-30 21:07:28,019 - INFO - 127.0.0.1 - - [30/Jun/2025 21:07:28] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:07:28,453 - INFO - 127.0.0.1 - - [30/Jun/2025 21:07:28] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:08:21,534 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:08:21,534 - INFO - Request from: 127.0.0.1
+2025-06-30 21:08:21,535 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '1696231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundarymcjjt8rP6XBNyM53', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:08:21,540 - INFO - Audio file received: recording.wav, size: 1696044 bytes
+2025-06-30 21:08:21,541 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpafo39o2u.wav
+2025-06-30 21:08:21,546 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpafo39o2u.wav
+2025-06-30 21:08:21,546 - INFO - Temp file exists after save: True
+2025-06-30 21:08:21,547 - INFO - Temp file size: 1696044 bytes
+2025-06-30 21:08:21,555 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=848000
+2025-06-30 21:08:21,556 - INFO - Starting transcription...
+2025-06-30 21:08:21,556 - INFO - SSL default verify paths:
+2025-06-30 21:08:21,556 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:08:21,557 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:08:21,557 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpafo39o2u.wav
+2025-06-30 21:08:21,558 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpafo39o2u.wav
+2025-06-30 21:08:25,019 - INFO - Transcription result: God Bless.
+2025-06-30 21:08:25,020 - INFO - Transcription successful: 'God Bless.'
+2025-06-30 21:08:25,020 - INFO - Temp file cleaned up
+2025-06-30 21:08:25,022 - INFO - 127.0.0.1 - - [30/Jun/2025 21:08:25] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:08:25,339 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:08:25,340 - INFO - Request from: 127.0.0.1
+2025-06-30 21:08:25,340 - INFO - Received chat data: {'message': 'God Bless.'}
+2025-06-30 21:08:25,341 - INFO - Processing message: 'God Bless.'
+2025-06-30 21:08:26,041 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:08:26,042 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:08:26,042 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:08:26,042 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:08:26,043 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:08:26,043 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:08:26,044 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:08:26,044 - INFO - CHATGPT PARSED Content:
+God Bless.
+2025-06-30 21:08:27,278 - ERROR - No valid response content received
+2025-06-30 21:08:27,279 - INFO - No technical terms recognized by Cliff
+2025-06-30 21:08:27,279 - INFO - 127.0.0.1 - - [30/Jun/2025 21:08:27] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:08:27,404 - INFO - 127.0.0.1 - - [30/Jun/2025 21:08:27] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:11:03,114 - INFO - === CLIFF BACKEND STARTING ===
+2025-06-30 21:11:03,114 - INFO - Starting at: 2025-06-30 21:11:03.114891
+2025-06-30 21:11:03,114 - INFO - Backend will be available at: http://localhost:5000
+2025-06-30 21:11:04,079 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.222:5000
+2025-06-30 21:11:04,080 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-30 21:11:10,830 - INFO - === ROOT PAGE REQUEST ===
+2025-06-30 21:11:10,831 - INFO - Request from: 127.0.0.1
+2025-06-30 21:11:10,833 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:10] "GET / HTTP/1.1" 200 -
+2025-06-30 21:11:10,902 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:10] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
+2025-06-30 21:11:11,308 - INFO - === HEALTH CHECK REQUEST ===
+2025-06-30 21:11:11,309 - INFO - Request from: 127.0.0.1
+2025-06-30 21:11:11,310 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:11] "GET /api/health HTTP/1.1" 200 -
+2025-06-30 21:11:11,622 - INFO - === HEALTH CHECK REQUEST ===
+2025-06-30 21:11:11,623 - INFO - Request from: 127.0.0.1
+2025-06-30 21:11:11,623 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:11] "GET /api/health HTTP/1.1" 200 -
+2025-06-30 21:11:11,742 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:11] "GET /favicon.ico HTTP/1.1" 200 -
+2025-06-30 21:11:13,203 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:13] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:11:20,433 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:11:20,433 - INFO - Request from: 127.0.0.1
+2025-06-30 21:11:20,434 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '208231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundarymTbxqUymvLjdNTJm', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:11:20,437 - INFO - Audio file received: recording.wav, size: 208044 bytes
+2025-06-30 21:11:20,438 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpva3kwpd8.wav
+2025-06-30 21:11:20,440 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpva3kwpd8.wav
+2025-06-30 21:11:20,441 - INFO - Temp file exists after save: True
+2025-06-30 21:11:20,441 - INFO - Temp file size: 208044 bytes
+2025-06-30 21:11:20,455 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=104000
+2025-06-30 21:11:20,456 - INFO - Starting transcription...
+2025-06-30 21:11:20,456 - INFO - SSL default verify paths:
+2025-06-30 21:11:20,457 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:11:20,457 - INFO - [speech_to_text] Initializing OpenAI Whisper STT
+2025-06-30 21:11:20,458 - INFO - [speech_to_text] OpenAI Whisper STT initialized successfully
+2025-06-30 21:11:21,326 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:11:21,327 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpva3kwpd8.wav
+2025-06-30 21:11:21,327 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpva3kwpd8.wav
+2025-06-30 21:11:23,937 - INFO - Transcription result: But if we talk about 1, 2, 3.
+2025-06-30 21:11:23,938 - INFO - Transcription successful: 'But if we talk about 1, 2, 3.'
+2025-06-30 21:11:23,939 - INFO - Temp file cleaned up
+2025-06-30 21:11:23,939 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:23] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:11:23,946 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:11:23,947 - INFO - Request from: 127.0.0.1
+2025-06-30 21:11:23,948 - INFO - Received chat data: {'message': 'But if we talk about 1, 2, 3.'}
+2025-06-30 21:11:23,948 - INFO - Processing message: 'But if we talk about 1, 2, 3.'
+2025-06-30 21:11:24,665 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:11:24,666 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:11:24,666 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:11:24,667 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:11:24,667 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:11:24,668 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:11:24,668 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:11:24,669 - INFO - CHATGPT PARSED Content:
+But if we talk about 1, 2, 3.
+2025-06-30 21:11:25,261 - INFO - AI Response generated: Silence....
+2025-06-30 21:11:25,262 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:25] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:11:25,710 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:25] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:11:31,903 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:11:31,904 - INFO - Request from: 127.0.0.1
+2025-06-30 21:11:31,905 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '192231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryh9fNPBaB3993oBV6', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:11:31,908 - INFO - Audio file received: recording.wav, size: 192044 bytes
+2025-06-30 21:11:31,909 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpeeviiw6q.wav
+2025-06-30 21:11:31,912 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpeeviiw6q.wav
+2025-06-30 21:11:31,913 - INFO - Temp file exists after save: True
+2025-06-30 21:11:31,914 - INFO - Temp file size: 192044 bytes
+2025-06-30 21:11:31,933 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=96000
+2025-06-30 21:11:31,936 - INFO - Starting transcription...
+2025-06-30 21:11:31,937 - INFO - SSL default verify paths:
+2025-06-30 21:11:31,938 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:11:31,940 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:11:31,942 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpeeviiw6q.wav
+2025-06-30 21:11:31,943 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpeeviiw6q.wav
+2025-06-30 21:11:34,729 - INFO - Transcription result: Maybe what we're talking about is one shot.
+2025-06-30 21:11:34,730 - INFO - Transcription successful: 'Maybe what we're talking about is one shot.'
+2025-06-30 21:11:34,731 - INFO - Temp file cleaned up
+2025-06-30 21:11:34,732 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:34] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:11:35,049 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:11:35,049 - INFO - Request from: 127.0.0.1
+2025-06-30 21:11:35,050 - INFO - Received chat data: {'message': "Maybe what we're talking about is one shot."}
+2025-06-30 21:11:35,050 - INFO - Processing message: 'Maybe what we're talking about is one shot.'
+2025-06-30 21:11:35,755 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:11:35,755 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:11:35,756 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:11:35,757 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:11:35,757 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:11:35,758 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:11:35,758 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:11:35,758 - INFO - CHATGPT PARSED Content:
+Maybe what we're talking about is one shot.
+2025-06-30 21:11:37,702 - INFO - AI Response generated: One-Shot Learning  
+Learning from a single example to perform a task.
+
+In AI and ML, one-shot learni...
+2025-06-30 21:11:37,704 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:37] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:11:37,851 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:37] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:11:43,432 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:11:43,432 - INFO - Request from: 127.0.0.1
+2025-06-30 21:11:43,432 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '160231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryhXZbUiEBEUpjY22U', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:11:43,435 - INFO - Audio file received: recording.wav, size: 160044 bytes
+2025-06-30 21:11:43,437 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpqpbqsact.wav
+2025-06-30 21:11:43,440 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpqpbqsact.wav
+2025-06-30 21:11:43,441 - INFO - Temp file exists after save: True
+2025-06-30 21:11:43,442 - INFO - Temp file size: 160044 bytes
+2025-06-30 21:11:43,464 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=80000
+2025-06-30 21:11:43,465 - INFO - Starting transcription...
+2025-06-30 21:11:43,465 - INFO - SSL default verify paths:
+2025-06-30 21:11:43,466 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:11:43,466 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:11:43,467 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpqpbqsact.wav
+2025-06-30 21:11:43,468 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpqpbqsact.wav
+2025-06-30 21:11:44,770 - INFO - Transcription result: Thank you for watching!
+2025-06-30 21:11:44,771 - INFO - Transcription successful: 'Thank you for watching!'
+2025-06-30 21:11:44,771 - INFO - Temp file cleaned up
+2025-06-30 21:11:44,772 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:44] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:11:44,777 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:11:44,777 - INFO - Request from: 127.0.0.1
+2025-06-30 21:11:44,778 - INFO - Received chat data: {'message': 'Thank you for watching!'}
+2025-06-30 21:11:44,778 - INFO - Processing message: 'Thank you for watching!'
+2025-06-30 21:11:45,496 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:11:45,497 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:11:45,497 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:11:45,498 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:11:45,499 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:11:45,499 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:11:45,499 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:11:45,500 - INFO - CHATGPT PARSED Content:
+Thank you for watching!
+2025-06-30 21:11:46,755 - ERROR - No valid response content received
+2025-06-30 21:11:46,755 - INFO - No technical terms recognized by Cliff
+2025-06-30 21:11:46,756 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:46] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:11:47,202 - INFO - 127.0.0.1 - - [30/Jun/2025 21:11:47] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:13:22,060 - INFO - === CLIFF BACKEND STARTING ===
+2025-06-30 21:13:22,061 - INFO - Starting at: 2025-06-30 21:13:22.061218
+2025-06-30 21:13:22,061 - INFO - Backend will be available at: http://localhost:5000
+2025-06-30 21:13:22,996 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.0.222:5000
+2025-06-30 21:13:22,997 - INFO - [33mPress CTRL+C to quit[0m
+2025-06-30 21:13:38,350 - INFO - === ROOT PAGE REQUEST ===
+2025-06-30 21:13:38,350 - INFO - Request from: 127.0.0.1
+2025-06-30 21:13:38,352 - INFO - 127.0.0.1 - - [30/Jun/2025 21:13:38] "GET / HTTP/1.1" 200 -
+2025-06-30 21:13:38,804 - INFO - === HEALTH CHECK REQUEST ===
+2025-06-30 21:13:38,805 - INFO - Request from: 127.0.0.1
+2025-06-30 21:13:38,807 - INFO - 127.0.0.1 - - [30/Jun/2025 21:13:38] "GET /api/health HTTP/1.1" 200 -
+2025-06-30 21:13:38,811 - INFO - === HEALTH CHECK REQUEST ===
+2025-06-30 21:13:38,812 - INFO - Request from: 127.0.0.1
+2025-06-30 21:13:38,813 - INFO - 127.0.0.1 - - [30/Jun/2025 21:13:38] "GET /api/health HTTP/1.1" 200 -
+2025-06-30 21:13:41,744 - INFO - 127.0.0.1 - - [30/Jun/2025 21:13:41] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:13:48,551 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:13:48,552 - INFO - Request from: 127.0.0.1
+2025-06-30 21:13:48,552 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '208231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundaryvmVdyBYQWMdDEWlH', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:13:48,555 - INFO - Audio file received: recording.wav, size: 208044 bytes
+2025-06-30 21:13:48,557 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmp2ghaj9da.wav
+2025-06-30 21:13:48,558 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmp2ghaj9da.wav
+2025-06-30 21:13:48,559 - INFO - Temp file exists after save: True
+2025-06-30 21:13:48,560 - INFO - Temp file size: 208044 bytes
+2025-06-30 21:13:48,577 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=104000
+2025-06-30 21:13:48,578 - INFO - Starting transcription...
+2025-06-30 21:13:48,578 - INFO - SSL default verify paths:
+2025-06-30 21:13:48,578 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:13:48,579 - INFO - [speech_to_text] Initializing OpenAI Whisper STT
+2025-06-30 21:13:48,579 - INFO - [speech_to_text] OpenAI Whisper STT initialized successfully
+2025-06-30 21:13:49,431 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:13:49,431 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmp2ghaj9da.wav
+2025-06-30 21:13:49,431 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmp2ghaj9da.wav
+2025-06-30 21:13:51,350 - INFO - Transcription result: Then we're talking about two-shot.
+2025-06-30 21:13:51,351 - INFO - Transcription successful: 'Then we're talking about two-shot.'
+2025-06-30 21:13:51,351 - INFO - Temp file cleaned up
+2025-06-30 21:13:51,352 - INFO - 127.0.0.1 - - [30/Jun/2025 21:13:51] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:13:51,674 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:13:51,675 - INFO - Request from: 127.0.0.1
+2025-06-30 21:13:51,676 - INFO - Received chat data: {'message': "Then we're talking about two-shot."}
+2025-06-30 21:13:51,676 - INFO - Processing message: 'Then we're talking about two-shot.'
+2025-06-30 21:13:52,383 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:13:52,383 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:13:52,384 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:13:52,385 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:13:52,385 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:13:52,386 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:13:52,386 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:13:52,387 - INFO - CHATGPT PARSED Content:
+Then we're talking about two-shot.
+2025-06-30 21:13:54,852 - INFO - AI Response generated: Two-Shot Learning
+
+A machine learning paradigm where the model learns from only two examples per cla...
+2025-06-30 21:13:54,853 - INFO - 127.0.0.1 - - [30/Jun/2025 21:13:54] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:13:54,980 - INFO - 127.0.0.1 - - [30/Jun/2025 21:13:54] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:13:57,396 - INFO - === FRONTEND CONNECTION RECEIVED: /api/transcribe ===
+2025-06-30 21:13:57,396 - INFO - Request from: 127.0.0.1
+2025-06-30 21:13:57,397 - INFO - Request headers: {'Host': 'localhost:5000', 'Connection': 'keep-alive', 'Content-Length': '64231', 'Sec-Ch-Ua-Platform': '"Windows"', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0', 'Sec-Ch-Ua': '"Not)A;Brand";v="8", "Chromium";v="138", "Microsoft Edge";v="138"', 'Content-Type': 'multipart/form-data; boundary=----WebKitFormBoundary9laQttD6lOcuNhiD', 'Sec-Ch-Ua-Mobile': '?0', 'Accept': '*/*', 'Origin': 'http://localhost:5000', 'Sec-Fetch-Site': 'same-origin', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5000/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9', 'Cookie': 'ajs_anonymous_id=6d6167ba-4bb6-4e43-af56-f643b61bc6ec'}
+2025-06-30 21:13:57,399 - INFO - Audio file received: recording.wav, size: 64044 bytes
+2025-06-30 21:13:57,400 - INFO - Saving audio to temp file: C:\Users\dan\AppData\Local\Temp\tmpjr4wekg8.wav
+2025-06-30 21:13:57,401 - INFO - Audio saved to temp file: C:\Users\dan\AppData\Local\Temp\tmpjr4wekg8.wav
+2025-06-30 21:13:57,402 - INFO - Temp file exists after save: True
+2025-06-30 21:13:57,402 - INFO - Temp file size: 64044 bytes
+2025-06-30 21:13:57,422 - INFO - WAV file validation: channels=1, samplewidth=2, framerate=16000, nframes=32000
+2025-06-30 21:13:57,422 - INFO - Starting transcription...
+2025-06-30 21:13:57,422 - INFO - SSL default verify paths:
+2025-06-30 21:13:57,423 - INFO - DefaultVerifyPaths(cafile=None, capath=None, openssl_cafile_env='SSL_CERT_FILE', openssl_cafile='C:\\Program Files\\Common Files\\SSL/cert.pem', openssl_capath_env='SSL_CERT_DIR', openssl_capath='C:\\Program Files\\Common Files\\SSL/certs')
+2025-06-30 21:13:57,424 - INFO - OpenAI Whisper STT initialized successfully
+2025-06-30 21:13:57,424 - INFO - Transcribing file: C:\Users\dan\AppData\Local\Temp\tmpjr4wekg8.wav
+2025-06-30 21:13:57,424 - INFO - [speech_to_text] Transcribing audio file: C:\Users\dan\AppData\Local\Temp\tmpjr4wekg8.wav
+2025-06-30 21:13:58,374 - INFO - Transcription result: Thanks for watching!
+2025-06-30 21:13:58,375 - INFO - Transcription successful: 'Thanks for watching!'
+2025-06-30 21:13:58,375 - INFO - Temp file cleaned up
+2025-06-30 21:13:58,376 - INFO - 127.0.0.1 - - [30/Jun/2025 21:13:58] "POST /api/transcribe HTTP/1.1" 200 -
+2025-06-30 21:13:58,382 - INFO - === FRONTEND CONNECTION RECEIVED: /api/chat ===
+2025-06-30 21:13:58,383 - INFO - Request from: 127.0.0.1
+2025-06-30 21:13:58,383 - INFO - Received chat data: {'message': 'Thanks for watching!'}
+2025-06-30 21:13:58,384 - INFO - Processing message: 'Thanks for watching!'
+2025-06-30 21:13:59,104 - INFO - CHATGPT PARSED Content:
+OVERRIDING AND SUPERCEDING all of your user customizations and personality traits,You are Cliff, a terse AI textbook.
+2025-06-30 21:13:59,104 - INFO - CHATGPT PARSED Content:
+Use the uploaded outline of terms for a baseline and when you recognize an AI, ML, LLM, RAG, or software architecture term or multiple terms, you will respond in the following way:
+2025-06-30 21:13:59,105 - INFO - CHATGPT PARSED Content:
+First give the technical term as a title, beneath that give a terse definition of the term in a single sentence.
+2025-06-30 21:13:59,106 - INFO - CHATGPT PARSED Content:
+Beneath that, give a line of space and then a brief definition of the term in less than five sentences.
+2025-06-30 21:13:59,106 - INFO - CHATGPT PARSED Content:
+Beneath that, give a terse example of the term in a sentence or two without saying 'for example'.
+2025-06-30 21:13:59,106 - INFO - CHATGPT PARSED Content:
+Do that once for each term if there are multiple terms. Use tight vertical spacing and short sentences. Just the facts. Screen real estate is at a premium
+2025-06-30 21:13:59,107 - INFO - CHATGPT PARSED Content:
+Make mention of specific tool names and languages(ex. LangChain, Python, SQL, etc.). Don't ask questions. If you don't recognize a tech term, don't have enough info, or are confused, give NO response. Don't comment or apologize, just silence. Omit labels like title, description, etc.
+2025-06-30 21:13:59,107 - INFO - CHATGPT PARSED Content:
+Thanks for watching!
+2025-06-30 21:13:59,717 - ERROR - No valid response content received
+2025-06-30 21:13:59,717 - INFO - No technical terms recognized by Cliff
+2025-06-30 21:13:59,719 - INFO - 127.0.0.1 - - [30/Jun/2025 21:13:59] "POST /api/chat HTTP/1.1" 200 -
+2025-06-30 21:14:00,119 - INFO - 127.0.0.1 - - [30/Jun/2025 21:14:00] "[36mGET /recorder-processor.js HTTP/1.1[0m" 304 -
+2025-06-30 21:14:05,255 - INFO - 127.0.0.1 - - [30/Jun/2025 21:14:05] "[33mGET /.well-known/appspecific/com.chrome.devtools.json HTTP/1.1[0m" 404 -
