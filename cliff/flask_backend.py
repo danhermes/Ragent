@@ -120,7 +120,7 @@ def transcribe_audio():
         finally:
             # Clean up temporary file
             try:
-                #os.unlink(temp_path)
+                os.unlink(temp_path)
                 logger.info("Temp file cleaned up")
             except Exception as cleanup_err:
                 logger.error(f"Temp file cleanup error: {cleanup_err}")
