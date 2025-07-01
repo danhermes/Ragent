@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import io
 import torch
 import os
 import time
@@ -108,6 +109,7 @@ class OpenAIWhisperSTT(SpeechToText):
         
     def initialize(self):
         """Initialize the STT service"""
+        logger.info("[speech_to_text] Initializing OpenAI Whisper STT")
         if not self.initialized:
             try:
                 # Verify API key is set
@@ -115,27 +117,65 @@ class OpenAIWhisperSTT(SpeechToText):
                     raise ValueError("OPENAI_API_KEY environment variable not set")
                     
                 self.initialized = True
-                logger.info("OpenAI Whisper STT initialized successfully")
+                logger.info("[speech_to_text] OpenAI Whisper STT initialized successfully")
             except Exception as e:
-                logger.error(f"Error initializing OpenAI Whisper STT: {str(e)}")
+                logger.error(f"[speech_to_text] Error initializing OpenAI Whisper STT: {str(e)}")
                 raise
                 
     def transcribe(self, audio_file: str) -> Tuple[str, float]:
         """Transcribe audio file using OpenAI's Whisper API"""
         if not self.initialized:
             self.initialize()
-            
+
+        logger.info(f"[speech_to_text] Transcribing audio file: {audio_file}")
         start_time = time.time()
+
+        if not os.path.exists(audio_file):
+            logger.error(f"[speech_to_text] File not found: {audio_file}")
+            return None, 0
+        
+        if os.path.getsize(audio_file) == 0:
+            logger.error(f"[speech_to_text] File is empty: {audio_file}")
+            return None, 0
+
+
         try:
-            with open(audio_file, "rb") as file:
+
+           # Handle SSL certificate issues on Windows
+           #Solution 1:  # import certifi
+           #Solution 2: # openai._client_kwargs = { # not sure this works
+            #     "verify": certifi.where()
+            # }
+            # logger.info(f"Using CA bundle from: {certifi.where()}")
+           # Solution 3: unset SSL_CERT_FILE # this works but is not a good solution
+
+            # Solution 4: unset SSL_CERT_FILE and SSL_CERT_DIR - works
+            # original_ssl_cert_file = os.environ.get('SSL_CERT_FILE')
+            # original_ssl_cert_dir = os.environ.get('SSL_CERT_DIR')
+        
+            # try:
+                # # Temporarily unset SSL certificate environment variables that might cause issues
+                # if 'SSL_CERT_FILE' in os.environ:
+                #     del os.environ['SSL_CERT_FILE']
+                # if 'SSL_CERT_DIR' in os.environ:
+                #     del os.environ['SSL_CERT_DIR']
+                
+            with open(audio_file, "rb") as f:
                 response = openai.audio.transcriptions.create(
                     model=self.model,
-                    file=file,
+                    file=f,
                     language="en",
                     response_format="text"
                 )
-                process_time = time.time() - start_time
-                return response, process_time
+            # finally:
+            #     # Restore original SSL environment variables
+            #     if original_ssl_cert_file:
+            #         os.environ['SSL_CERT_FILE'] = original_ssl_cert_file
+            #     if original_ssl_cert_dir:
+            #         os.environ['SSL_CERT_DIR'] = original_ssl_cert_dir
+
+            process_time = time.time() - start_time
+            return response, process_time
                 
         except Exception as e:
             logger.error(f"Error in OpenAI Whisper transcription: {str(e)}")

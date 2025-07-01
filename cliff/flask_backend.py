@@ -1,13 +1,18 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 from flask_cors import CORS
 import os
 import logging
 from dotenv import load_dotenv
+import sys
+from pathlib import Path
+
+# Add parent directory to Python path for agents import
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
 from agents.agent_cliff import AgentCliff
 import tempfile
 import wave
 import numpy as np
-from pathlib import Path
 import datetime
 import traceback
 
@@ -25,7 +30,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='public', static_url_path='')
 CORS(app)  # Enable CORS for React frontend
 
 # Initialize Cliff agent
@@ -37,6 +42,15 @@ def get_cliff_agent():
     if cliff_agent is None:
         cliff_agent = AgentCliff()
     return cliff_agent
+
+@app.route('/recorder-processor.js')
+def serve_worklet():
+    """Serve the AudioWorklet processor with correct MIME type and CORS headers"""
+    response = send_from_directory('public', 'recorder-processor.js', mimetype='application/javascript')
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, OPTIONS'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    return response
 
 @app.route('/api/transcribe', methods=['POST'])
 def transcribe_audio():
@@ -70,9 +84,26 @@ def transcribe_audio():
         logger.info(f"Temp file exists after save: {os.path.exists(temp_path)}")
         logger.info(f"Temp file size: {os.path.getsize(temp_path)} bytes")
         
+        # Validate WAV file format
+        try:
+            with wave.open(temp_path, 'rb') as wav_file:
+                logger.info(f"WAV file validation: channels={wav_file.getnchannels()}, "
+                          f"samplewidth={wav_file.getsampwidth()}, "
+                          f"framerate={wav_file.getframerate()}, "
+                          f"nframes={wav_file.getnframes()}")
+        except Exception as wav_err:
+            logger.error(f"WAV file validation failed: {wav_err}")
+            return jsonify({'error': 'Invalid audio file format'}), 400
+        
         try:
             # Get Cliff agent and transcribe
             logger.info("Starting transcription...")
+
+            import ssl
+            logger.info("SSL default verify paths:")
+            logger.info(ssl.get_default_verify_paths())
+
+
             agent = get_cliff_agent()
             logger.info("OpenAI Whisper STT initialized successfully")
             logger.info(f"Transcribing file: {temp_path}")
@@ -89,7 +120,7 @@ def transcribe_audio():
         finally:
             # Clean up temporary file
             try:
-                os.unlink(temp_path)
+                #os.unlink(temp_path)
                 logger.info("Temp file cleaned up")
             except Exception as cleanup_err:
                 logger.error(f"Temp file cleanup error: {cleanup_err}")
@@ -130,8 +161,9 @@ def chat():
             logger.info(f"AI Response generated: {response[:100]}...")
             return jsonify({'response': response})
         else:
-            logger.error("No response from AI")
-            return jsonify({'error': 'No response from AI'}), 500
+            # Cliff didn't recognize any technical terms in the message
+            logger.info("No technical terms recognized by Cliff")
+            return jsonify({'response': "I didn't recognize any technical terms in your message. Try asking about AI, ML, LLM, RAG, or software architecture concepts."})
             
     except Exception as e:
         logger.error(f"Chat error: {str(e)}")

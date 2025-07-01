@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AudioWorklet Test</title>
+</head>
+<body>
+    <h1>AudioWorklet Test</h1>
+    <button onclick="testWorklet()">Test Recorder Worklet</button>
+    <div id="status"></div>
+
+    <script>
+        async function testWorklet() {
+            const statusDiv = document.getElementById('status');
+            try {
+                statusDiv.textContent = 'Testing recorder worklet...';
+                
+                const audioContext = new AudioContext({ sampleRate: 16000 });
+                await audioContext.audioWorklet.addModule('/recorder-processor.js');
+                
+                statusDiv.textContent = 'Recorder worklet loaded successfully!';
+                console.log('Recorder worklet loaded successfully');
+            } catch (error) {
+                statusDiv.textContent = 'Error: ' + error.message;
+                console.error('Recorder worklet error:', error);
+            }
+        }
+    </script>
+</body>
+</html> 

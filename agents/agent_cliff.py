@@ -22,13 +22,16 @@ class AgentCliff(BaseAgent):
         self.llm = ChatGPTLLM(model="", assistant_id=self.assistant_id)
         self.llm.initialize()
         
-        # Load RAG files
-        rag_file_path = "./cliff/rag/cliff_rag.txt"  # Updated path to cliff RAG file
-        if os.path.exists(rag_file_path):
-            if not self.llm.load_RAG_files(rag_file_path):
-                logging.error(f"Failed to load RAG file: {rag_file_path}")
-        else:
-            logging.warning(f"RAG file not found: {rag_file_path}")
+        # # Load RAG files - JUST USE OPENAI WEB UI - because they persist
+        # #rag_file_path = "../cliff/rag/cliff_rag.txt"  # Updated path to cliff RAG file
+        # script_root = os.path.dirname(os.path.abspath(__file__))
+        # rag_file_path = os.path.abspath(os.path.join(script_root, "..", "cliff", "rag", "cliff_rag.txt"))
+
+        # if os.path.exists(rag_file_path):
+        #     if not self.llm.load_RAG_files(rag_file_path):
+        #         logging.error(f"Failed to load RAG file: {rag_file_path}")
+        # else:
+        #     logging.warning(f"RAG file not found: {rag_file_path}")
         
         # Initialize base agent with only agent_type
         super().__init__(AgentType.TEXT)
