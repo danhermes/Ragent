@@ -16,6 +16,31 @@ function App() {
   const workletNodeRef = useRef(null);
   const audioChunksRef = useRef([]);
 
+  // Function to format GPT response with line-by-line styling
+  const formatGPTResponse = (responseText) => {
+    const lines = responseText.split('\n').filter(line => line.trim());
+    
+    if (lines.length === 0) return responseText;
+    
+    // Check if it's a Cliff-style response (title, definition, body)
+    if (lines.length >= 3) {
+      const title = lines[0];
+      const definition = lines[1];
+      const body = lines.slice(2).join('\n');
+      
+      return (
+        <div className="message-content">
+          <div className="response-title">{title}</div>
+          <div className="response-definition">{definition}</div>
+          <div className="response-body">{body}</div>
+        </div>
+      );
+    }
+    
+    // Fallback to simple formatting
+    return <div className="message-content">{responseText}</div>;
+  };
+
   useEffect(() => {
     const checkBackendHealth = async () => {
       console.log("=== FRONTEND: Testing backend connection on app load ===");
@@ -77,10 +102,29 @@ function App() {
     }
   };
 
-  const stopRecording = async () => {
+  const stopRecording = async (isManualStop = false) => {
     console.log("🛑 Stopping recording...");
     setIsListening(false);
     isListeningRef.current = false;
+    
+    if (isManualStop) {
+      setStatusText('Stopped');
+      setIsProcessing(false);
+      isProcessingRef.current = false;
+      
+      // Clean up audio resources without processing
+      const audioContext = audioContextRef.current;
+      const stream = micStreamRef.current;
+      const processorNode = workletNodeRef.current;
+
+      if (processorNode) processorNode.disconnect();
+      if (stream) stream.getTracks().forEach(track => track.stop());
+      if (audioContext) audioContext.close();
+      
+      audioChunksRef.current = [];
+      return; // Exit early - don't process audio
+    }
+    
     setStatusText('Processing...');
     setIsProcessing(true);
     isProcessingRef.current = true;
@@ -209,14 +253,22 @@ function App() {
       console.log("=== FRONTEND: AI response successful ===");
       console.log("AI response:", data.response);
       
-      // Add AI response to the conversation
+      // Add AI response to the conversation with formatted content
       if (data.response && data.response.trim()) {
         setMessages(prev => [...prev, {
           id: Date.now() + 1,
           type: 'ai',
           text: data.response,
+          formattedContent: formatGPTResponse(data.response),
           timestamp: new Date().toLocaleTimeString()
         }]);
+        
+        // Auto-restart listening immediately after GPT response is displayed
+        setTimeout(() => {
+          if (!isListeningRef.current) {
+            startRecording();
+          }
+        }, 100); // Small delay to ensure the message is rendered
       }
     } catch (error) {
       console.error("=== FRONTEND: Chat request failed ===");
@@ -226,10 +278,7 @@ function App() {
       setIsProcessing(false);
       isProcessingRef.current = false;
       
-      // Auto-restart listening after GPT response is complete
-      if (!isListeningRef.current) {
-        startRecording();
-      }
+      // No auto-restart - user must manually start listening again
     }
   };
 
@@ -247,7 +296,7 @@ function App() {
           </button>
           <button 
             className="control-btn stop" 
-            onClick={stopRecording} 
+            onClick={() => stopRecording(true)} 
             disabled={!isListening}
           >
             Stop Listening
@@ -266,9 +315,13 @@ function App() {
       <div className="messages-container">
         {messages.map((message) => (
           <div key={message.id} className={`message ${message.type === 'transcription' ? 'transcription' : 'response'}`}>
-            <div className="message-content">
-              {message.text}
-            </div>
+            {message.type === 'ai' && message.formattedContent ? (
+              message.formattedContent
+            ) : (
+              <div className="message-content">
+                {message.text}
+              </div>
+            )}
           </div>
         ))}
       </div>
