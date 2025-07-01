@@ -15,6 +15,14 @@ function App() {
   const micStreamRef = useRef(null);
   const workletNodeRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const messagesContainerRef = useRef(null);
+
+  // Function to scroll to bottom of messages
+  const scrollToBottom = () => {
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+    }
+  };
 
   // Function to format GPT response with line-by-line styling
   const formatGPTResponse = (responseText) => {
@@ -213,6 +221,8 @@ function App() {
           text: transcribedText,
           timestamp: new Date().toLocaleTimeString()
         }]);
+        // Scroll to bottom after adding transcription
+        setTimeout(scrollToBottom, 50);
       }
       
       sendToGPT(transcribedText);
@@ -263,6 +273,9 @@ function App() {
           timestamp: new Date().toLocaleTimeString()
         }]);
         
+        // Scroll to bottom after adding GPT response
+        setTimeout(scrollToBottom, 50);
+        
         // Auto-restart listening immediately after GPT response is displayed
         setTimeout(() => {
           if (!isListeningRef.current) {
@@ -312,7 +325,7 @@ function App() {
         {isProcessing && <span className="processing-spinner">⏳</span>}
       </div>
       
-      <div className="messages-container">
+      <div className="messages-container" ref={messagesContainerRef}>
         {messages.map((message) => (
           <div key={message.id} className={`message ${message.type === 'transcription' ? 'transcription' : 'response'}`}>
             {message.type === 'ai' && message.formattedContent ? (
