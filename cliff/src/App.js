@@ -1,6 +1,51 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 
+const ListMicsAndPick = ({ onMicrophoneSelected }) => {
+  const [availableMicrophones, setAvailableMicrophones] = useState([]);
+
+  useEffect(() => {
+    navigator.mediaDevices.enumerateDevices()
+      .then(devices => {
+        const mics = devices.filter(device => device.kind === 'audioinput');
+
+        // Create a map to store unique microphone entries by deviceId
+        const uniqueMics = new Map();
+        mics.forEach(mic => {
+          uniqueMics.set(mic.deviceId, mic);
+        });
+
+        // Convert the map back to an array
+        setAvailableMicrophones(Array.from(uniqueMics.values()));
+      })
+      .catch(err => console.error("Error getting microphones:", err));
+  }, []);
+
+
+  const handleMicSelect = (deviceId) => {
+    if (onMicrophoneSelected) {
+      onMicrophoneSelected(deviceId);
+    }
+  };
+
+  return (
+    <div>
+      <label htmlFor="microphoneSelect">Select Microphone:</label>
+      <select
+        id="microphoneSelect"
+        onChange={e => handleMicSelect(e.target.value)}
+      >
+        {availableMicrophones.map(mic => (
+          <option key={mic.deviceId} value={mic.deviceId}>
+            {mic.label || `Microphone ${mic.deviceId}`}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
+
+
 function App() {
   const [isListening, setIsListening] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -16,6 +61,7 @@ function App() {
   const workletNodeRef = useRef(null);
   const audioChunksRef = useRef([]);
   const messagesContainerRef = useRef(null);
+  const [selectedMicrophoneId, setSelectedMicrophoneId] = useState(null);
 
   // Function to scroll to bottom of messages
   const scrollToBottom = () => {
@@ -73,7 +119,12 @@ function App() {
   const startRecording = async () => {
     console.log("Attempting to start recording with AudioWorklet...");
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const constraints = {
+        audio: selectedMicrophoneId ? { deviceId: { exact: selectedMicrophoneId } } : true,
+      };
+      const stream = await navigator.mediaDevices.getUserMedia(constraints);
+
+      // const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       console.log("🎤 Microphone access granted.");
       micStreamRef.current = stream;
 
@@ -297,6 +348,7 @@ function App() {
 
   return (
     <div className="cliff-app">
+      <ListMicsAndPick onMicrophoneSelected={setSelectedMicrophoneId} />
       <div className="cliff-header">
         <h1>🎤 Cliff - AI Voice Assistant</h1>
         <div className="header-controls">
