@@ -1,0 +1,99 @@
+Machine Learning Topics: A Comprehensive Outline
+Dan Hermes
+1. Introduction to Machine Learning
+What is Machine Learning?
+History and Trends in ML
+Relationship with Other Fields (Statistics, AI, Optimization)
+ML Use Cases in Research and Production
+2. Mathematics for Machine Learning
+Linear Algebra
+  - Scalars, Vectors, Matrices, and Tensors
+  - Matrix Decompositions (Eigenvalues, SVD, Cholesky)
+  - Basis, Rank, and Orthogonality
+Probability and Information Theory
+  - Probability Distributions
+  - Bayes’ Theorem
+  - Entropy, Mutual Information, and KL Divergence
+Vector Calculus and Optimization
+  - Gradients and Differentiation
+  - Convex Optimization
+  - Lagrange Multipliers
+Decision Theory and Statistical Learning
+  - Bias-Variance Tradeoff
+  - Generalization and Overfitting
+  - No Free Lunch Theorem
+3. Core Machine Learning Concepts
+Supervised Learning
+  - Regression (Linear, Logistic, Probit)
+  - Classification (SVMs, Decision Trees, Neural Networks)
+Unsupervised Learning
+  - Clustering (K-means, Hierarchical)
+  - Dimensionality Reduction (PCA, Autoencoders)
+Reinforcement Learning
+  - Markov Decision Processes
+  - Policy Gradients and Q-Learning
+4. Model Development and Evaluation
+Training Data Preparation
+  - Sampling Techniques
+  - Handling Missing Data
+  - Data Augmentation
+Feature Engineering
+  - Encoding Categorical Features
+  - Feature Selection and Extraction
+Model Training
+  - Optimization Techniques (SGD, Adam, Momentum)
+  - Hyperparameter Tuning
+Model Evaluation
+  - Cross-Validation and Generalization
+  - Performance Metrics (ROC, Precision-Recall)
+5. Deep Learning
+Neural Network Foundations
+  - Feedforward Networks
+  - Activation Functions
+Convolutional Networks
+  - CNN Architectures
+  - Image Recognition
+Sequence Modeling
+  - RNNs, LSTMs, Transformers
+  - Sequence-to-Sequence Models
+Generative Models
+  - GANs, Variational Autoencoders
+6. Probabilistic and Bayesian Methods
+Bayesian Inference
+Gaussian Processes
+Monte Carlo Methods
+Graphical Models (Bayesian Networks, Markov Fields)
+7. Machine Learning Deployment
+Model Deployment Strategies
+Monitoring and Maintenance
+Data Distribution Shifts
+MLOps and Infrastructure
+8. Advanced Topics
+Self-Supervised Learning
+Continual Learning and Meta Learning
+Ethical AI and Bias Mitigation
+Interpretability and Explainability
+
+
+Bibliography
+
+1. Ng, Andrew. Machine Learning Yearning. deeplearning.ai, 2018
+
+2. Bishop, Christopher M. Pattern Recognition and Machine Learning. Springer, 2006.
+ 
+3. Burkov, Andriy. The Hundred-Page Machine Learning Book. Andriy Burkov, 2019.
+ 
+4. Chollet, François. Deep Learning with Python. 2nd ed., Manning, 2021.
+ 
+5. Deisenroth, Marc Peter, A. Aldo Faisal, and Cheng Soon Ong. Mathematics for Machine Learning. Cambridge University Press, 2020.
+ 
+6. Goodfellow, Ian, Yoshua Bengio, and Aaron Courville. Deep Learning. MIT Press, 2016.
+ 
+7. Huyen, Chip. AI Engineering: Building Applications with Foundation Models. 1st ed., 2024.
+ 
+8. Huyen, Chip. Machine Learning Systems Design. Chip Huyen, 2022.
+ 
+9. Kevin P. Murphy, Probabilistic Machine Learning: An Introduction, MIT Press, 2022.
+
+10. Stuart Russell and Peter Norvig, Artificial Intelligence: A Modern Approach. Pearson, 1st Edition 2010, Eleventh Impression 2018.
+

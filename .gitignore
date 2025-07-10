@@ -79,3 +79,6 @@ Nevil/gpt_examples/img_input.jpg
 
 agent_workflows/logs/code_tasker_*.log
 agent_workflows/generated_code/generated_code_*.py
+
+cliff/old_frontend/
+cliff/cliff_backend.log

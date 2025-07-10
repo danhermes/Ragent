@@ -6,9 +6,17 @@ import logging
 import wave
 from typing import Optional, Tuple
 import time
+import threading
+
+# Suppress verbose debug logging from external libraries
+logging.getLogger("httpcore").setLevel(logging.WARNING)
+logging.getLogger("httpx").setLevel(logging.WARNING)
+logging.getLogger("openai").setLevel(logging.WARNING)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+logging.getLogger("requests").setLevel(logging.WARNING)
 
 logger = logging.getLogger("streamlit")
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)  # Changed from DEBUG to INFO
 
 class AudioHandler:
     """Handles audio input/output operations"""
@@ -20,7 +28,7 @@ class AudioHandler:
         self.is_speaking = False
         self.silence_frames = 0
         self.max_silence_frames = 30  # 1.5 seconds of silence
-        self.speech_threshold = 0.005  # Lowered from 0.01 to be more sensitive
+        self.speech_threshold = 0.001  # Lowered from 0.005 to be more sensitive
         self.stream = None
         self.audio_buffer = []
         self.processing_lock = False
@@ -84,6 +92,10 @@ class AudioHandler:
             # Calculate RMS using a more numerically stable method
             rms = np.sqrt(np.mean(np.square(audio_data.astype(np.float64))))
             
+            # Debug: log audio levels occasionally
+            if len(self.audio_buffer) % 100 == 0:  # Log every 100 chunks
+                logger.info(f"Audio RMS: {rms:.6f}, Threshold: {self.speech_threshold:.6f}")
+            
             if rms > self.speech_threshold:
                 self.is_speaking = True
                 self.silence_frames = 0
@@ -125,28 +137,28 @@ class AudioHandler:
             logger.error(f"Error saving audio chunk: {str(e)}")
             return False
             
-    def process_audio(self, audio_data: np.ndarray, sample_rate: int, agent) -> Optional[str]:
+    def process_audio(self, audio_data: np.ndarray, sample_rate: int, agent, on_transcription=None) -> Optional[str]:
         """Process audio data through STT and LLM"""
-        logger.info(f"\nStarting processing of audio: {len(audio_data)/sample_rate:.2f}s")
+        duration = len(audio_data)/sample_rate
+        logger.info(f"Processing {duration:.1f}s of audio...")
+        
+        # Initialize temp_file at the start
+        temp_file = "temp_chunk.wav"
         
         # Safety check for invalid audio data
         try:
             max_amp = np.max(np.abs(audio_data))
             mean_amp = np.mean(np.abs(audio_data))
             if max_amp > 1.0 or np.isnan(max_amp) or np.isinf(max_amp):
-                logger.error("Invalid audio data detected (amplitude out of bounds)")
+                logger.error("Invalid audio data detected")
                 return None
                 
-            logger.info(f"Audio stats - Max amplitude: {max_amp:.6f}, Mean: {mean_amp:.6f}")
-            
             # Check if audio is long enough
-            duration = len(audio_data)/sample_rate
             if duration < 0.1:  # Minimum 0.1 seconds
                 logger.error(f"Audio too short ({duration:.2f}s < 0.1s)")
                 return None
                 
             # Save chunk to temporary file
-            temp_file = "temp_chunk.wav"
             try:
                 if not self.save_audio_chunk(audio_data, sample_rate, temp_file):
                     logger.error("Failed to save audio chunk")
@@ -158,42 +170,45 @@ class AudioHandler:
                     return None
                     
                 file_size = os.path.getsize(temp_file)
-                logger.info(f"Saved audio file size: {file_size} bytes")
-                
                 if file_size == 0:
                     logger.error("Saved audio file is empty")
                     return None
                 
                 # Transcribe audio
-                logger.info("Starting speech-to-text transcription...")
+                logger.info("Transcribing speech...")
                 text = agent.transcribe_audio(temp_file)
-                logger.info(f"Transcription result: '{text}'")
                 
                 if text:  # Only process if there's actual text
+                    logger.info(f"Transcribed: '{text}'")
+                    
+                    # Call transcription callback
+                    if on_transcription:
+                        on_transcription(text)
+                    
                     # Get LLM response
-                    logger.info("\nStarting LLM processing...")
-                    logger.info("=" * 50)
-                    logger.info(f"Sending prompt to LLM: {text}")
-                    logger.info("=" * 50)
+                    logger.info("Getting AI response...")
                     
                     try:
                         response = agent.get_chat_response(text)
                         
-                        logger.info("\nLLM Response:")
-                        logger.info("=" * 50)
-                        logger.info(response)
-                        logger.info("=" * 50)
-                        
-                        return response
+                        if response:
+                            logger.info("Response received")
+                            return response
+                        else:
+                            logger.error("No response from AI")
+                            return None
                     except Exception as e:
                         logger.error(f"Error in LLM processing: {str(e)}")
                         return None
                 else:
-                    logger.error("No text detected in audio")
+                    logger.info("No speech detected")
+                    # Report no speech to UI
+                    if on_transcription:
+                        on_transcription("No speech detected")
                     return None
                     
             except Exception as e:
-                logger.error(f"Error in speech-to-text transcription: {str(e)}")
+                logger.error(f"Error in transcription: {str(e)}")
                 return None
             
         except Exception as e:
@@ -201,20 +216,43 @@ class AudioHandler:
             return None
             
         finally:
+            # Clean up temporary file with retry logic
+            self._cleanup_temp_file(temp_file)
+    
+    def _cleanup_temp_file(self, temp_file: str):
+        """Clean up temporary file with retry logic for Windows file locks"""
+        if not os.path.exists(temp_file):
+            return
+            
+        max_retries = 3
+        for attempt in range(max_retries):
             try:
-                if os.path.exists(temp_file):
-                    os.remove(temp_file)
-                    logger.info("Cleaned up temporary audio file")
+                os.remove(temp_file)
+                break
+            except PermissionError:
+                if attempt < max_retries - 1:
+                    time.sleep(0.1)  # Wait a bit before retrying
+                    continue
+                else:
+                    logger.warning(f"Could not remove {temp_file} after {max_retries} attempts")
             except Exception as e:
-                logger.error(f"Error cleaning up temporary file: {str(e)}")
-                
-    def process_audio_stream(self, agent, on_response):
+                logger.warning(f"Error cleaning up {temp_file}: {str(e)}")
+                break
+            
+    def process_audio_stream(self, agent, on_response, on_status=None, on_transcription=None):
         """Process continuous audio stream and handle responses"""
         try:
+            if on_status:
+                on_status("listening", "Listening for speech...")
+            
             self.stream.start()
             
             while not self.should_stop:
                 try:
+                    # Check stop flag more frequently
+                    if self.should_stop:
+                        break
+                        
                     # Get audio chunk
                     chunk, fs = self.record_audio_chunk(duration=0.05)
                     if chunk is None:
@@ -223,7 +261,9 @@ class AudioHandler:
                     # Process audio
                     if self.is_speech(chunk):
                         if len(self.audio_buffer) % 50 == 0:
-                            logger.info(f"Recording... ({len(self.audio_buffer)} chunks)")
+                            logger.info(f"Recording speech... ({len(self.audio_buffer)} chunks)")
+                            if on_status:
+                                on_status("listening", f"Recording speech... ({len(self.audio_buffer)} chunks)")
                         self.audio_buffer.append(chunk)
                     elif self.is_speaking and self.silence_frames >= self.max_silence_frames:
                         # Check if we're already processing
@@ -231,37 +271,92 @@ class AudioHandler:
                             logger.warning("Already processing audio, skipping...")
                             continue
                             
-                        logger.info(f"\nProcessing speech - {len(self.audio_buffer)} chunks collected")
+                        # Check if processing has been locked for too long (safety check)
+                        if hasattr(self, 'processing_start_time') and time.time() - self.processing_start_time > 20:
+                            logger.warning("Processing lock timeout, resetting...")
+                            self.processing_lock = False
+                            
+                        logger.info(f"Processing {len(self.audio_buffer)} chunks of speech...")
+                        if on_status:
+                            on_status("processing", "Processing speech...")
+                            
                         if self.audio_buffer:
                             try:
                                 self.processing_lock = True
+                                self.processing_start_time = time.time()
                                 combined_audio = np.concatenate(self.audio_buffer)
-                                response = self.process_audio(combined_audio, fs, agent)
+                                
+                                # Add timeout to prevent hanging
+                                response = None
+                                processing_error = None
+                                
+                                def process_with_timeout():
+                                    nonlocal response, processing_error
+                                    try:
+                                        response = self.process_audio(combined_audio, fs, agent, on_transcription)
+                                    except Exception as e:
+                                        processing_error = e
+                                
+                                # Start processing in a separate thread with timeout
+                                processing_thread = threading.Thread(target=process_with_timeout)
+                                processing_thread.daemon = True
+                                processing_thread.start()
+                                
+                                # Wait for processing with timeout (15 seconds)
+                                processing_thread.join(timeout=15)
+                                
+                                if processing_thread.is_alive():
+                                    logger.error("Audio processing timed out - killing thread")
+                                    if on_status:
+                                        on_status("error", "Processing timed out")
+                                    processing_error = Exception("Processing timed out")
+                                    # Force stop the thread
+                                    self.should_stop = True
+                                
+                                if processing_error:
+                                    raise processing_error
+                                    
                                 if response:
                                     on_response(response)
+                                    
                             except Exception as e:
                                 logger.error(f"Error during audio processing: {str(e)}")
-                                import traceback
-                                logger.error(traceback.format_exc())
+                                if on_status:
+                                    on_status("error", f"Processing error: {str(e)}")
                             finally:
                                 # Clear buffer and reset state after processing
                                 self.audio_buffer = []
                                 self.last_process_time = time.time()
                                 self.is_speaking = False
                                 self.processing_lock = False
+                                # Reset stop flag
+                                self.should_stop = False
                                 
                 except KeyboardInterrupt:
-                    logger.info("\nReceived KeyboardInterrupt, stopping audio recording...")
+                    logger.info("Stopping audio recording...")
                     self.should_stop = True
                     break
                 except Exception as e:
                     logger.error(f"Error in audio loop: {str(e)}")
+                    if on_status:
+                        on_status("error", f"Audio error: {str(e)}")
+                    # Add small delay to prevent rapid error loops
+                    time.sleep(1)
                     continue
                 
+        except Exception as e:
+            logger.error(f"Fatal error in audio stream: {str(e)}")
+            if on_status:
+                on_status("error", f"Fatal audio error: {str(e)}")
         finally:
+            # Force stop the stream
+            self.should_stop = True
             if self.stream:
-                self.stream.stop()
-                self.stream.close()
+                try:
+                    self.stream.stop()
+                    self.stream.close()
+                except:
+                    pass
                 self.stream = None
             self.audio_buffer = []
             self.processing_lock = False
