@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 import os
 from datetime import datetime
-from main import ProjectMain
+from ragers.main import ProjectMain
 
 # Create logs directory if it doesn't exist
 os.makedirs('logs', exist_ok=True)

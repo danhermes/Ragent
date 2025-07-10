@@ -1,0 +1,212 @@
+project_type: plan
+description: Plan-mode projects produce strategic planning documents, project roadmaps, and analysis reports. Managed via structured meetings and validated against strategic planning deliverables.
+
+# Project structure configuration
+project_structure:
+  base_folder: projects/{project_name}/
+  subfolders:
+    - goals/
+    - charters/
+    - meetings/
+    - questions/
+    - deliverables/
+    - analysis/
+    - strategy/
+
+templates:
+  # Project-wide templates
+  goal: project_template.goal
+  charter: project_charter.md
+  
+  # Reference documents for all meetings
+  references:
+    - project_template.goal
+    - project_charter.md
+
+  # Document types
+  document_types:
+    deliverables:
+      - strategy_execution_plan_template.md
+      - meeting_doc_high.md
+      - meeting_doc_low.md
+    charters:
+      - project_charter.md
+
+  # Meeting configurations
+  meetings:
+    discovery:
+      description: Initial project discovery and requirements gathering
+      agenda: meeting_topics_high.md
+      input_files: project_template.goal
+      output_files: project_charter.md
+      attending:
+        - Supervisor
+        - Strategist
+      agenda_sections:
+        - goals
+        - requirements
+        - constraints
+        - stakeholders
+        - resources
+        - risks
+        - blockers
+        - next_steps
+      success_criteria:
+        - "project_charter.md is created and saved to disk"
+        - "All agenda sections are addressed in the output"
+
+    analysis:
+      description: Data analysis and findings
+      agenda: meeting_topics_low.md
+      input_files: project_charter.md
+      output_files: meeting_doc_low.md
+      attending:
+        - Supervisor
+        - Strategist
+        - Analyst
+      agenda_sections:
+        - goals
+        - data_analysis
+        - findings
+        - recommendations
+        - risks
+        - blockers
+        - next_steps
+      success_criteria:
+        - "meeting_doc_low.md is created and saved to disk"
+        - "All agenda sections are addressed in the output"
+
+    strategy:
+      description: Strategic planning and approach definition
+      agenda: meeting_topics_high.md
+      input_files: meeting_doc_low.md
+      output_files: meeting_doc_high.md
+      attending:
+        - Strategist
+        - Analyst
+      agenda_sections:
+        - goals
+        - strategic_approach
+        - key_initiatives
+        - success_metrics
+        - risks_constraints
+        - blockers_decisions
+        - next_steps
+      success_criteria:
+        - "meeting_doc_high.md is created and saved to disk"
+        - "All agenda sections are addressed in the output"
+
+    roadmap:
+      description: Detailed roadmap and implementation planning
+      agenda: meeting_topics_low.md
+      input_files: meeting_doc_high.md
+      output_files: strategy_execution_plan_template.md
+      attending:
+        - Planner
+        - Analyst
+      agenda_sections:
+        - timeline
+        - milestones
+        - resources
+        - dependencies
+        - implementation_plan
+        - monitoring_evaluation
+      success_criteria:
+        - "strategy_execution_plan_template.md is created and saved to disk"
+        - "All agenda sections are addressed in the output"
+
+    review:
+      description: Final strategy review and approval
+      agenda: meeting_topics_review.md
+      input_files: strategy_execution_plan_template.md
+      output_files: strategy_execution_plan_template.md
+      attending:
+        - Supervisor
+        - Strategist
+        - Analyst
+        - Planner
+      agenda_sections:
+        - goals
+        - final_review
+        - implementation_verification
+        - monitoring_plan
+        - risks_constraints
+        - blockers_decisions
+        - next_steps
+      success_criteria:
+        - "strategy_execution_plan_template.md is updated and saved to disk"
+        - "All agenda sections are addressed in the output"
+
+# Project phases
+phases:
+  discovery:
+    name: "Discovery"
+    description: "Initial project discovery and requirements gathering"
+    order: 1
+    required: true
+
+  analysis:
+    name: "Analysis"
+    description: "Data analysis and findings"
+    order: 2
+    required: true
+
+  strategy:
+    name: "Strategy Development"
+    description: "Strategic planning and approach definition"
+    order: 3
+    required: true
+
+  roadmap:
+    name: "Roadmap Creation"
+    description: "Detailed roadmap and implementation planning"
+    order: 4
+    required: true
+
+  review:
+    name: "Final Review"
+    description: "Final strategy review and approval"
+    order: 5
+    required: true
+
+# Required roles for the project
+required_roles:
+  Supervisor:
+    name: Blane
+  Strategist:
+    name: Dee
+  Analyst:
+    name: Dum
+  Planner:
+    name: Steinbeck
+
+# Output files
+output_files:
+  discovery:
+    - project_charter.md
+  analysis:
+    - meeting_doc_low.md
+  strategy:
+    - meeting_doc_high.md
+  roadmap:
+    - strategy_execution_plan_template.md
+  review:
+    - strategy_execution_plan_template.md
+  common:
+    - conversations_*.md
+    - questions_*.md
+  strategy_plan: deliverables/strategy_execution_plan_template.md
+
+# Completion criteria
+completion_criteria:
+  - All meetings completed
+  - Strategy plan reviewed and approved
+  - Deliverables present in folder
+  - "Strategy document completed"
+  - "Roadmap completed"
+  - "All meetings documented"
+
+# Meeting rules
+meeting_rules:
+  min_attendees: 2
+  documentation_required: true

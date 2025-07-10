@@ -1,0 +1,5 @@
+Objective: Build an agent that runs every day and copies the alphabet into a file that it emails to dan@lexicon.systems.
+We are are a lean, startup company. Minimize chatter and stay focused on the objective and the Deliverable.
+Design and build minimally. No extraneous infrastructure. Design has a basic log and basic pytorch tests for now. 
+Address and resolve specific technical challenges posed by the objective. (ex. creating the alphabet, creating and writing to a file, how to send emails)
+Delierable: Using python, provide a detailed technical design for Autocoder to employ to build this. Include architecture considerations, Code examples to address the key challenges and functionalities, and a recommended class structure with methods and variables. Outline and flag the technical hurdles that are unresolved.

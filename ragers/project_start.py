@@ -8,7 +8,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
-from utils.document_manager import DocumentManager
+from ragers.utils.document_manager import DocumentManager
 
 @dataclass
 class ProjectConfig:

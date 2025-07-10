@@ -1,0 +1,118 @@
+
+================================================================================
+PROJECT GOAL
+================================================================================
+
+# Project Name
+Project Factory System
+
+## Summary
+Develop the Project Factory system with Blane as the AI-powered Office Director. This system will translate high-level directives into structured project plans, activate agents, execute automated workflows, and maintain visibility through real-time dashboards.
+
+## Project Type
+code
+
+## Objectives
+- Create a comprehensive project management system that orchestrates the entire development lifecycle
+- Implement a structured approach to goal setting, project planning, and deliverable generation
+- Develop a dashboard for real-time project visibility and status monitoring
+- Integrate with existing agent systems and n8n workflows
+- Establish clear communication channels between system components
+
+## Deliverables
+- Goal file structure (`.goal.yaml`)
+- Project charter template (`.charter.md`)
+- Project plan generator (`.project_plan.yaml`)
+- Scheduling system (`.schedule.json`)
+- n8n workflow integration (`.workflow.json`)
+- Dashboard interface (`.dashboard.json`)
+- Documentation for system components and interfaces
+
+## Known Constraints
+- Must integrate with existing RAgent and n8n infrastructure
+- System should support multiple concurrent projects
+- Must provide clear visibility for non-technical stakeholders
+- Should minimize human intervention while allowing for escalation when needed
+
+## Definition of Done
+- Complete system can process a goal from initial directive to completed project
+- Dashboard provides real-time visibility into project status
+- All system components communicate effectively
+- Documentation is complete and accessible
+- System can handle error conditions and recovery
+
+## Phases and Milestones
+- Phase 1: PLAN - Transform goals into structured project plans
+- Phase 2: SCHEDULE - Assign resources and create timelines
+- Phase 3: EXECUTE - Trigger workflows and initialize execution
+- Phase 4: PROJECT WORK - Execute tasks and generate artifacts
+- Phase 5: STANDUP - Monitor progress and handle issues
+- Phase 6: DASHBOARD - Provide user interface and status monitoring
+
+## Preferred Meeting Format
+Daily standups with status reports from each system component
+
+## Review Requirements
+Regular milestone reviews at the completion of each phase
+
+================================================================================
+
+
+================================================================================
+PROJECT GOAL
+================================================================================
+
+# Project Name
+Project Factory System
+
+## Summary
+Develop the Project Factory system with Blane as the AI-powered Office Director. This system will translate high-level directives into structured project plans, activate agents, execute automated workflows, and maintain visibility through real-time dashboards.
+
+## Project Type
+code
+
+## Objectives
+- Create a comprehensive project management system that orchestrates the entire development lifecycle
+- Implement a structured approach to goal setting, project planning, and deliverable generation
+- Develop a dashboard for real-time project visibility and status monitoring
+- Integrate with existing agent systems and n8n workflows
+- Establish clear communication channels between system components
+
+## Deliverables
+- Goal file structure (`.goal.yaml`)
+- Project charter template (`.charter.md`)
+- Project plan generator (`.project_plan.yaml`)
+- Scheduling system (`.schedule.json`)
+- n8n workflow integration (`.workflow.json`)
+- Dashboard interface (`.dashboard.json`)
+- Documentation for system components and interfaces
+
+## Known Constraints
+- Must integrate with existing RAgent and n8n infrastructure
+- System should support multiple concurrent projects
+- Must provide clear visibility for non-technical stakeholders
+- Should minimize human intervention while allowing for escalation when needed
+
+## Definition of Done
+- Complete system can process a goal from initial directive to completed project
+- Dashboard provides real-time visibility into project status
+- All system components communicate effectively
+- Documentation is complete and accessible
+- System can handle error conditions and recovery
+
+## Phases and Milestones
+- Phase 1: PLAN - Transform goals into structured project plans
+- Phase 2: SCHEDULE - Assign resources and create timelines
+- Phase 3: EXECUTE - Trigger workflows and initialize execution
+- Phase 4: PROJECT WORK - Execute tasks and generate artifacts
+- Phase 5: STANDUP - Monitor progress and handle issues
+- Phase 6: DASHBOARD - Provide user interface and status monitoring
+
+## Preferred Meeting Format
+Daily standups with status reports from each system component
+
+## Review Requirements
+Regular milestone reviews at the completion of each phase
+
+================================================================================
+

@@ -18,7 +18,7 @@ from helpers.call_ChatGPT import CallChatGPT
 from collections import defaultdict
 from helpers.safe_formatter import formatter
 from agents import AgentBlane, AgentDum, AgentWoz
-from utils.document_manager import DocumentManager
+from ragers.utils.document_manager import DocumentManager
 
 @dataclass
 class Meeting:
