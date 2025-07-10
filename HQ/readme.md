@@ -1,26 +1,26 @@
 # 🧠 Ragent CLI (v0.3) – Dispatch & Task System
 
-This conversational CLI is used to launch and manage Ragent projects via the Blaine assistant. Project types include: `code`, `write`, `plan`.
+This conversational CLI is used to launch and manage Ragent projects via the Blanee assistant. Project types include: `code`, `write`, `plan`.
 
 ---
 
 ## 🧭 Usage
 
 ```bash
-python workflow_cli.py
+python HQ_cli.py
 ```
 
 ### Example Session
 
 ```bash
-(Blaine) > assign
-(Blaine) > What is the type for this task?
+(Blanee) > assign
+(Blanee) > What is the type for this task?
 > set type code
 > set project export_cleaner
 > set deliverables technical_design.md, pipeline.py
 > set constraints No internet access
 
-(Blaine) > Task task_YYYYMMDD_HHMMSS is ready and created.
+(Blanee) > Task task_YYYYMMDD_HHMMSS is ready and created.
 ```
 
 ---
@@ -29,7 +29,7 @@ python workflow_cli.py
 
 | File              | Role                                      |
 |-------------------|-------------------------------------------|
-| `workflow_cli.py` | Entry point and input/output only         |
+| `hq_cli.py` | Entry point and input/output only         |
 | `commands.py`     | Handles dispatching commands              |
 | `tasks.py`        | Manages task metadata, folders, .goal     |
 | `blane_state.py`  | Stores step-by-step session state         |

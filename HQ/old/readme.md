@@ -1,6 +1,6 @@
 # Ragent Dispatch System
 
-The Dispatch System is the executive function of the Ragent ecosystem. It listens to the stakeholder (via Blaine CLI), parses intent, creates structured tasks, coordinates agents and tools, tracks execution, and delivers progress and insights back to the user.
+The Dispatch System is the executive function of the Ragent ecosystem. It listens to the stakeholder (via Blanee CLI), parses intent, creates structured tasks, coordinates agents and tools, tracks execution, and delivers progress and insights back to the user.
 
 ## Quick Start
 
@@ -49,17 +49,17 @@ python HQ/workflow_cli.py
 ### First Run
 1. The system will greet you with:
    ```
-   (Blaine) > Ready to receive tasks. Type 'help' for available commands.
+   (Blanee) > Ready to receive tasks. Type 'help' for available commands.
    ```
 
 2. Try a natural language command:
    ```
-   (Blaine) > I need to create a new email notification system
+   (Blanee) > I need to create a new email notification system
    ```
 
 3. Or use a traditional command:
    ```
-   (Blaine) > assign code email notifier
+   (Blanee) > assign code email notifier
    ```
 
 ## Core Components
@@ -151,28 +151,28 @@ Available commands:
 
 1. Natural language command:
 ```
-(Blaine) > I need to create a new email notification system
-(Blaine) > I'm not very confident about this interpretation. This seems like a coding task.
-(Blaine) > Did you mean: assign code email notification system? (y/n)
+(Blanee) > I need to create a new email notification system
+(Blanee) > I'm not very confident about this interpretation. This seems like a coding task.
+(Blanee) > Did you mean: assign code email notification system? (y/n)
 y
 Task 0001 created: code email notification system
 ```
 
 2. Traditional command:
 ```
-(Blaine) > assign code email notifier
+(Blanee) > assign code email notifier
 Task 0001 created: code email notifier
 ```
 
 3. Check task status:
 ```
-(Blaine) > status 0001
+(Blanee) > status 0001
 pending
 ```
 
 4. Get help:
 ```
-(Blaine) > help
+(Blanee) > help
 Available commands:
   assign (start, run) - Assign a new task
   status (?) - Check current task status

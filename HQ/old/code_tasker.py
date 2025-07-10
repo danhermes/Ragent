@@ -26,7 +26,7 @@ class CodeTasker:
         self.cli = WorkflowCLI(self, self.test_layer)
 
     def get_on_this(self, task: str):
-        logger.info(f"Blaine assigned new task: {task}")
+        logger.info(f"Blanee assigned new task: {task}")
         self.active_task = task
         self.task_history.append({"task": task, "status": "assigned"})
         result = self.woz.handle_task(task)

@@ -1,0 +1,65 @@
+{
+  "nodes": [
+    {
+      "id": "blane",
+      "name": "Blane \u2013 Project Factory",
+      "content": "Top-level orchestrator. Coordinates the entire Project Factory system."
+    },
+    {
+      "id": "plan",
+      "name": "PLAN",
+      "content": "Transform Big Boss goals into structured, actionable project plans.\n\n**Agents:** Blane, Dee, Dum, Steinbeck, Cliff, Documenter\n**Outputs:** project_plan.yaml, charter.md, task_matrix.yaml"
+    },
+    {
+      "id": "schedule",
+      "name": "SCHEDULE",
+      "content": "Assign agents, timeframes, tools, and environments to project tasks.\n\n**Agents:** Bill, Dee, Manager, Supervisor, Cliff\n**Outputs:** schedule.json, resource_map.yaml"
+    },
+    {
+      "id": "execute",
+      "name": "EXECUTE",
+      "content": "Trigger project workflows and initialize execution stack.\n\n**Agents:** Blane, DispatchAgent, Woz, Woz_Mean, Worker, Toby\n**Outputs:** n8n_workflow.json, logs, test_results"
+    },
+    {
+      "id": "project_work",
+      "name": "PROJECT_WORK",
+      "content": "Execute tasks\u2014write code, generate files, run workflows.\n\n**Agents:** Woz, Woz_Mean, Worker, Toby, Nevil, Steve, Documenter\n**Outputs:** task_results.log, execution_artifacts/"
+    },
+    {
+      "id": "standup",
+      "name": "STANDUP",
+      "content": "Monitor progress, log issues, escalate blockers.\n\n**Agents:** ReporterAgent, Blane, Cliff, Supervisor\n**Outputs:** daily_report.md, unblock_requests.yaml"
+    },
+    {
+      "id": "hq_dashboard",
+      "name": "HQ_DASHBOARD",
+      "content": "Provide user interface and live status monitoring.\n\n**Agents:** HQ, Blane, MonitorAgent\n**Interfaces:** CLI, Voice (Whisper API, Whisper.cpp, Vosk), Web UI / Mobile\n**Outputs:** dashboard.json, project_status.yaml"
+    }
+  ],
+  "edges": [
+    {
+      "source": "blane",
+      "target": "plan"
+    },
+    {
+      "source": "plan",
+      "target": "schedule"
+    },
+    {
+      "source": "schedule",
+      "target": "execute"
+    },
+    {
+      "source": "execute",
+      "target": "project_work"
+    },
+    {
+      "source": "project_work",
+      "target": "standup"
+    },
+    {
+      "source": "standup",
+      "target": "hq_dashboard"
+    }
+  ]
+}
