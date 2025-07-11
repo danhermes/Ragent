@@ -41,7 +41,8 @@ def load_project_types() -> dict:
 def find_goal_files(goal_file: str = None) -> list:
     """Find goal files either from command line or default directory"""
     if goal_file:
-        goal_path = Path(goal_file)
+        module_dir = Path(__file__).parent
+        goal_path = module_dir / "goal" / goal_file
         if not goal_path.exists():
             logger.error(f"Goal file not found: {goal_path}")
             return []

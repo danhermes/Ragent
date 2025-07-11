@@ -82,3 +82,5 @@ agent_workflows/generated_code/generated_code_*.py
 
 cliff/old_frontend/
 cliff/cliff_backend.log
+
+logs/

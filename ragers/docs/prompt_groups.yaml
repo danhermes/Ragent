@@ -1,0 +1,148 @@
+# Prompt Groups for Project Alignment
+# This file defines structured prompt groups to ensure alignment between project goals and deliverables
+
+description: "Structured prompt groups to address gaps between original goals and project deliverables"
+
+# Prompt group definitions
+prompt_groups:
+  file_format_specification:
+    name: "File Format Specification Prompts"
+    description: "Ensure detailed specifications for all file formats mentioned in goals"
+    prompts:
+      - "Define the complete schema for {file_format} including all required and optional fields"
+      - "Provide sample JSON/YAML for {file_format} showing typical usage patterns"
+      - "Specify validation rules for {file_format} to ensure data integrity"
+      - "Document the relationship between {file_format} and other system file formats"
+      - "Create a migration path for evolving {file_format} as requirements change"
+    applicable_phases:
+      - kickoff
+      - architecture
+    
+  phase_component_mapping:
+    name: "Phase-to-Component Mapping Prompts"
+    description: "Ensure direct alignment between project phases and technical components"
+    prompts:
+      - "For Phase {phase_name}, identify all required technical components and their interactions"
+      - "Map each component in the technical design to its corresponding project phase"
+      - "Ensure each phase has concrete implementation details in the technical specification"
+      - "Verify that transitions between phases are explicitly defined in the component interfaces"
+      - "Document how each phase's outputs become inputs to subsequent phases"
+    applicable_phases:
+      - architecture
+      - modules
+    
+  integration_specification:
+    name: "Integration Specification Prompts"
+    description: "Create detailed integration specifications for external systems"
+    prompts:
+      - "Define the complete API contract for integration with {external_system}"
+      - "Document authentication and authorization requirements for {external_system} integration"
+      - "Specify data transformation rules between system formats and {external_system} formats"
+      - "Create error handling protocols for {external_system} integration failures"
+      - "Develop monitoring and logging requirements for {external_system} interactions"
+    applicable_phases:
+      - architecture
+      - modules
+    
+  implementation_detail:
+    name: "Implementation Detail Prompts"
+    description: "Move from conceptual design to concrete implementation details"
+    prompts:
+      - "Provide complete method signatures for all classes in the {component_name} component"
+      - "Define internal data structures used by the {component_name} component"
+      - "Document state transitions and persistence requirements for {component_name}"
+      - "Specify performance requirements and optimization strategies for {component_name}"
+      - "Create comprehensive error handling and recovery procedures for {component_name}"
+    applicable_phases:
+      - modules
+    
+  security_model:
+    name: "Security Model Prompts"
+    description: "Ensure comprehensive security considerations"
+    prompts:
+      - "Define the authentication and authorization model for all system interfaces"
+      - "Document data protection requirements for sensitive information"
+      - "Specify audit logging requirements for security-relevant operations"
+      - "Create a threat model identifying potential vulnerabilities and mitigations"
+      - "Define security testing procedures to validate implementation"
+    applicable_phases:
+      - architecture
+      - modules
+    
+  consistency_verification:
+    name: "Consistency Verification Prompts"
+    description: "Ensure consistency across all project documents"
+    prompts:
+      - "Verify that all component names are used consistently across all documents"
+      - "Ensure file paths and directory structures are consistent between design and implementation"
+      - "Confirm that all interfaces mentioned in one document are fully specified in appropriate documents"
+      - "Validate that all requirements from the original goals have corresponding design elements"
+      - "Check that terminology is used consistently throughout all project documentation"
+    applicable_phases:
+      - review
+    
+  deliverable_validation:
+    name: "Concrete Deliverable Validation Prompts"
+    description: "Ensure deliverables are implementation-ready"
+    prompts:
+      - "For each [TODO] item, provide the specific information needed to complete it"
+      - "Replace all placeholder code with actual implementation code"
+      - "Convert all conceptual descriptions to concrete specifications with measurable criteria"
+      - "Ensure each checklist item has a clear definition of done with verification steps"
+      - "Provide actual examples for all file formats, APIs, and interfaces"
+    applicable_phases:
+      - modules
+      - review
+
+# Implementation strategy
+implementation_strategy:
+  - "Integrate prompt groups into the Ragers framework as mandatory checkpoints"
+  - "Apply at each phase transition to ensure completeness"
+  - "Use as validation criteria before considering a deliverable complete"
+  - "Incorporate into review processes to identify gaps early"
+
+# Project type applicability
+project_type_applicability:
+  code: 
+    - file_format_specification
+    - phase_component_mapping
+    - integration_specification
+    - implementation_detail
+    - security_model
+    - consistency_verification
+    - deliverable_validation
+  
+  write:
+    - consistency_verification
+    - deliverable_validation
+  
+  plan:
+    - phase_component_mapping
+    - consistency_verification
+    - deliverable_validation
+  
+  automate:
+    - file_format_specification
+    - integration_specification
+    - implementation_detail
+    - security_model
+    - consistency_verification
+    - deliverable_validation
+
+# Checkpoint configuration
+checkpoints:
+  pre_phase_transition:
+    required: true
+    prompt_groups:
+      - consistency_verification
+  
+  pre_deliverable_completion:
+    required: true
+    prompt_groups:
+      - deliverable_validation
+  
+  post_review:
+    required: true
+    prompt_groups:
+      - consistency_verification
+      - deliverable_validation

@@ -153,6 +153,12 @@ prompts:
       4. **Preliminary Architecture Thoughts**
         - Are there already clear architectural patterns implied?
         - Name any modules/components already known or required.
+        
+      5. **File Format Specifications**
+        - Define the complete schema for all file formats mentioned in goals, including required and optional fields
+        - Provide sample JSON/YAML for each file format showing typical usage patterns
+        - Specify validation rules for each file format to ensure data integrity
+        - Document the relationship between different file formats in the system
 
       ## Output
       Produce a full kickoff notes file capturing:
@@ -195,7 +201,31 @@ prompts:
       - Sketch interfaces (CLI, function signatures, etc.)
       - Map dependencies and control flow
       - Identify constraints (compute, data, auth)
-      - Add `[TODO]` if necessary, but explain what’s missing
+      - Add `[TODO]` if necessary, but explain what's missing
+      
+      6. **File Format Specifications**
+        - Define the complete schema for all file formats mentioned in goals, including required and optional fields
+        - Provide sample JSON/YAML for each file format showing typical usage patterns
+        - Specify validation rules for each file format to ensure data integrity
+        - Document the relationship between different file formats in the system
+        
+      7. **Phase-to-Component Mapping**
+        - For each project phase, identify all required technical components and their interactions
+        - Map each component in the technical design to its corresponding project phase
+        - Ensure each phase has concrete implementation details in the technical specification
+        - Document how each phase's outputs become inputs to subsequent phases
+        
+      8. **Integration Specifications**
+        - Define the complete API contract for integration with external systems
+        - Document authentication and authorization requirements for external system integrations
+        - Specify data transformation rules between system formats and external system formats
+        - Create error handling protocols for external system integration failures
+        
+      9. **Security Model**
+        - Define the authentication and authorization model for all system interfaces
+        - Document data protection requirements for sensitive information
+        - Specify audit logging requirements for security-relevant operations
+        - Create a threat model identifying potential vulnerabilities and mitigations
 
       Do not summarize or condense — this document should be executable by the Implementation agent with no ambiguity.
 
@@ -243,7 +273,7 @@ prompts:
       2. For each method:
         - Write a complete signature with type annotations
         - List internal logic bullets for step-by-step behavior
-        - Add docstring explaining the method’s role
+        - Add docstring explaining the method's role
         - Include `[TODO]` only if logic is truly unknown
       3. Add runtime considerations:
         - Input validation, frequency, errors, fallbacks, retries
@@ -251,6 +281,38 @@ prompts:
       5. Mention testing hooks or stub strategies
 
       You are not done until every module includes this structure.
+      
+      6. **Phase-to-Component Mapping**
+        - For each project phase, identify all required technical components and their interactions
+        - Map each component in the technical design to its corresponding project phase
+        - Ensure each phase has concrete implementation details in the technical specification
+        - Document how each phase's outputs become inputs to subsequent phases
+        
+      7. **Integration Specifications**
+        - Define the complete API contract for integration with external systems
+        - Document authentication and authorization requirements for external system integrations
+        - Specify data transformation rules between system formats and external system formats
+        - Create error handling protocols for external system integration failures
+        
+      8. **Implementation Details**
+        - Provide complete method signatures for all classes in each component
+        - Define internal data structures used by each component
+        - Document state transitions and persistence requirements for each component
+        - Specify performance requirements and optimization strategies for each component
+        - Create comprehensive error handling and recovery procedures for each component
+        
+      9. **Security Model**
+        - Define the authentication and authorization model for all system interfaces
+        - Document data protection requirements for sensitive information
+        - Specify audit logging requirements for security-relevant operations
+        - Create a threat model identifying potential vulnerabilities and mitigations
+        
+      10. **Deliverable Validation**
+        - For each [TODO] item, provide the specific information needed to complete it
+        - Replace all placeholder code with actual implementation code
+        - Convert all conceptual descriptions to concrete specifications with measurable criteria
+        - Ensure each checklist item has a clear definition of done with verification steps
+        - Provide actual examples for all file formats, APIs, and interfaces
 
       Do not include module examples from the template. Do not repeat prior descriptions. Expand and complete any `[TODO]` blocks.
       Leave `[TODO]` only if absolutely necessary, and explain why.
@@ -338,10 +400,126 @@ prompts:
       - Incomplete
 
       Leave no section uninspected.
+      
+      5. **Consistency Verification**
+        - Verify that all component names are used consistently across all documents
+        - Ensure file paths and directory structures are consistent between design and implementation
+        - Confirm that all interfaces mentioned in one document are fully specified in appropriate documents
+        - Validate that all requirements from the original goals have corresponding design elements
+        - Check that terminology is used consistently throughout all project documentation
+        
+      6. **Deliverable Validation**
+        - For each [TODO] item, provide the specific information needed to complete it
+        - Replace all placeholder code with actual implementation code
+        - Convert all conceptual descriptions to concrete specifications with measurable criteria
+        - Ensure each checklist item has a clear definition of done with verification steps
+        - Provide actual examples for all file formats, APIs, and interfaces
 
   document_meeting:
     user: "Template:\n{template}\n\nResponse:\n{response}\n\nPlease merge this Template and Response into a coherent document, maintaining the template structure by replacing the questions and topic definitions, preserving existing goal-related technical content while incorporating the new response content."
 
- 
+  # Prompt groups for ensuring alignment between goals and deliverables
+  alignment_prompt_groups:
+    description: "Structured prompt groups to address gaps between original goals and project deliverables"
+    
+    file_format_specification:
+      name: "File Format Specification Prompts"
+      description: "Ensure detailed specifications for all file formats mentioned in goals"
+      applicable_phases: ["kickoff", "design"]
+      prompts:
+        - "Define the complete schema for {file_format} including all required and optional fields"
+        - "Provide sample JSON/YAML for {file_format} showing typical usage patterns"
+        - "Specify validation rules for {file_format} to ensure data integrity"
+        - "Document the relationship between {file_format} and other system file formats"
+        - "Create a migration path for evolving {file_format} as requirements change"
+    
+    phase_component_mapping:
+      name: "Phase-to-Component Mapping Prompts"
+      description: "Ensure direct alignment between project phases and technical components"
+      applicable_phases: ["design", "implementation"]
+      prompts:
+        - "For Phase {phase_name}, identify all required technical components and their interactions"
+        - "Map each component in the technical design to its corresponding project phase"
+        - "Ensure each phase has concrete implementation details in the technical specification"
+        - "Verify that transitions between phases are explicitly defined in the component interfaces"
+        - "Document how each phase's outputs become inputs to subsequent phases"
+    
+    integration_specification:
+      name: "Integration Specification Prompts"
+      description: "Create detailed integration specifications for external systems"
+      applicable_phases: ["design", "implementation"]
+      prompts:
+        - "Define the complete API contract for integration with {external_system}"
+        - "Document authentication and authorization requirements for {external_system} integration"
+        - "Specify data transformation rules between system formats and {external_system} formats"
+        - "Create error handling protocols for {external_system} integration failures"
+        - "Develop monitoring and logging requirements for {external_system} interactions"
+    
+    implementation_detail:
+      name: "Implementation Detail Prompts"
+      description: "Move from conceptual design to concrete implementation details"
+      applicable_phases: ["implementation"]
+      prompts:
+        - "Provide complete method signatures for all classes in the {component_name} component"
+        - "Define internal data structures used by the {component_name} component"
+        - "Document state transitions and persistence requirements for {component_name}"
+        - "Specify performance requirements and optimization strategies for {component_name}"
+        - "Create comprehensive error handling and recovery procedures for {component_name}"
+    
+    security_model:
+      name: "Security Model Prompts"
+      description: "Ensure comprehensive security considerations"
+      applicable_phases: ["design", "implementation"]
+      prompts:
+        - "Define the authentication and authorization model for all system interfaces"
+        - "Document data protection requirements for sensitive information"
+        - "Specify audit logging requirements for security-relevant operations"
+        - "Create a threat model identifying potential vulnerabilities and mitigations"
+        - "Define security testing procedures to validate implementation"
+    
+    consistency_verification:
+      name: "Consistency Verification Prompts"
+      description: "Ensure consistency across all project documents"
+      applicable_phases: ["review"]
+      prompts:
+        - "Verify that all component names are used consistently across all documents"
+        - "Ensure file paths and directory structures are consistent between design and implementation"
+        - "Confirm that all interfaces mentioned in one document are fully specified in appropriate documents"
+        - "Validate that all requirements from the original goals have corresponding design elements"
+        - "Check that terminology is used consistently throughout all project documentation"
+    
+    deliverable_validation:
+      name: "Concrete Deliverable Validation Prompts"
+      description: "Ensure deliverables are implementation-ready"
+      applicable_phases: ["implementation", "review"]
+      prompts:
+        - "For each [TODO] item, provide the specific information needed to complete it"
+        - "Replace all placeholder code with actual implementation code"
+        - "Convert all conceptual descriptions to concrete specifications with measurable criteria"
+        - "Ensure each checklist item has a clear definition of done with verification steps"
+        - "Provide actual examples for all file formats, APIs, and interfaces"
 
-  
+  # Checkpoint configuration for alignment validation
+  alignment_checkpoints:
+    pre_phase_transition:
+      required: true
+      prompt_groups:
+        - consistency_verification
+    
+    pre_deliverable_completion:
+      required: true
+      prompt_groups:
+        - deliverable_validation
+    
+    post_review:
+      required: true
+      prompt_groups:
+        - consistency_verification
+        - deliverable_validation
+
+  # Implementation strategy for alignment prompt groups
+  alignment_implementation_strategy:
+    - "Integrate prompt groups into the Ragers framework as mandatory checkpoints"
+    - "Apply at each phase transition to ensure completeness"
+    - "Use as validation criteria before considering a deliverable complete"
+    - "Incorporate into review processes to identify gaps early"

@@ -14,7 +14,8 @@ import sys
 project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(project_root)
 
-from helpers.call_ChatGPT import CallChatGPT
+# Import our custom ChatGPT client instead of the one from helpers
+from ragers.utils.chatgpt_client import ChatGPTClient
 from collections import defaultdict
 from helpers.safe_formatter import formatter
 from agents import AgentBlane, AgentDum, AgentWoz
@@ -348,11 +349,18 @@ class ProjectWork:
         try:
             module_dir = Path(__file__).parent
             prompts_path = module_dir / "templates" / self.project_type / f"{self.project_type}_prompts.yaml"
+            
+            # If the file with underscore doesn't exist, try without underscore
+            if not prompts_path.exists():
+                prompts_path = module_dir / "templates" / self.project_type / f"{self.project_type}prompts.yaml"
+                self.logger.info(f"Using alternative prompts path: {prompts_path}")
+                
             with open(prompts_path, 'r', encoding='utf-8') as f:
                 prompts_config = yaml.safe_load(f)
                 
             self.document_meeting_prompt = prompts_config['prompts']['document_meeting']
-            #self.logger.info("Loaded document meeting prompt")
+            self.logger.info("Loaded document meeting prompt successfully")
+            self.logger.info(f"Document meeting prompt: {self.document_meeting_prompt}")
         except Exception as e:
             self.logger.error(f"Failed to load document meeting prompt: {str(e)}")
             raise
