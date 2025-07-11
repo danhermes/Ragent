@@ -13,7 +13,7 @@ class CallChatGPT:
     def __init__(self):
         self.api_key = os.getenv("OPENAI_API_KEY")
         self.org_id = os.getenv("OPENAI_ORG_ID")
-        logger.info(f"API Key retrieved. {self.api_key}")
+
         # Disable OpenAI's built-in retry mechanism
         self.client = OpenAI(api_key=self.api_key, max_retries=0)
     
