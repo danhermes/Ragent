@@ -84,3 +84,5 @@ cliff/old_frontend/
 cliff/cliff_backend.log
 
 logs/
+bfg.jar
+api_keys_pattern.txt
